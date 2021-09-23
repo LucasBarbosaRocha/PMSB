@@ -20,6 +20,9 @@
 #define ins 1
 #define del 1
 #define INF INT_MAX
+string sequence;
+string nameArchive;
+int k;
 
 using namespace std;
 
@@ -246,25 +249,72 @@ int Marschall::getEndNode()
     return this->endNode;
 }
 
-int main()
+int verificaEntrada(int argc, char *argv[])
 {
-    string sequence = "CGA";
-    int k = 3;
+    string aux; 
+    if (argc == 1)
+    {
+        cout << "Error: digite -help" << endl;
+        return 0;
+    }
+
+    if (argc == 2)
+    {
+        aux = argv[1];
+        if (aux.compare("-help") == 0)
+            cout << "-s sequence -g graph -k int" << endl;
+        return 0;
+    }
+
+    if (argc == 7)
+    {
+        aux = argv[1];
+        if (aux.compare("-s") == 0)
+            sequence = argv[2];
+        else
+        {
+            cout << "Error: digite -help" << endl;
+            return 1;
+        }
+        aux = argv[3];
+        if (aux.compare("-g") == 0)
+            nameArchive = argv[4];
+        else
+        {
+            cout << "Error: digite -help" << endl;
+            return 1;
+        }
+        aux = argv[5];
+        if (aux.compare("-k") == 0)
+            k = atoi(argv[6]);
+        else
+        {
+            cout << "Error: digite -help" << endl;
+            return 1;
+        }
+        cout << sequence << " " << nameArchive << endl;
+        return 0;
+    }
+
+    cout << "Error: digite -help" << endl;
+    return 1;
+}
+
+int main(int argc, char *argv[])
+{
+    //string sequence = "CGA";
+    //int k = 3;
+    //string nomeArquivo = "kmers4.txt";
+    if(verificaEntrada(argc, argv) == 1)
+        exit (0);
 
     // insert the kmers into the hash table
-    Hash h(k); // 7 is count of buckets in
-                // hash table
-    
-    Marschall m;
-    
-    string nomeArquivo = "kmers4.txt";
-    
-    h.populateGraph(nomeArquivo, false); 
+    Hash h(k);   
+    Marschall m;  
+    h.populateGraph(nameArchive, false); 
     auto grafo = h.dbgToSequenceGraph_1();
     auto m_grafo = m.buildMultilayerGraph(grafo, sequence);
     auto retorno = m.dijkstra(m_grafo, m.getInitialNode(), m.getEndNode());
-
-    // m_grafo.printGraph();
 
     for (auto it = retorno.first.begin(); it != retorno.first.end(); it++)
     {

@@ -304,7 +304,7 @@ void Hash::populateGraph(string nomeArquivo, bool detalhes)
 		cout << "Arquivo " << nomeArquivo << " de kmers não encontrado" << endl;
 	}
 	else {
-        if (detalhes) cout << "Criando o SequenceGraph" << endl;
+        if (detalhes) cout << "Criando o grafo de De Bruijn" << endl;
 
         while (getline(meuArquivo, linha))
         {
@@ -312,7 +312,7 @@ void Hash::populateGraph(string nomeArquivo, bool detalhes)
             insertSequence(linha);
         }
 		meuArquivo.close();
-        cout << "SequenceGraph criado." << endl;
+        if (detalhes) cout << "De Bruijn criado." << endl;
     }    
 }
 
