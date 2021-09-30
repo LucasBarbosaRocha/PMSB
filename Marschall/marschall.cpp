@@ -28,6 +28,9 @@ using namespace std;
 
 class Marschall
 {
+public:
+    vector<int> *sequenceGraphAndMulticamada;
+
 private:
     int initialNode, endNode;
 
@@ -45,7 +48,7 @@ public:
 
     /* a função de dijkstra recebe um grafo e dois vertices de origem e destino
        devolve a sequencia induzida pelo caminho mínimo e seu custo */
-    pair<list<string>, int>  dijkstra(SequenceGraph grafo, int orig, int dest);
+    pair<vector<pair<int,string>>, int>  dijkstra(SequenceGraph grafo, int orig, int dest);
 
     /* a função recebe dois vertices e salva o vertice inicial s 
        e vertice final t para a execução do dijkstra */
@@ -56,6 +59,11 @@ public:
 
     /* devolve o vertice final para rodar no dijkstra */
     int getEndNode();
+
+    void verificaAresta(int u, int v, int tamGraph);
+
+    void mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph);
+
 };
 
 int Marschall::w_sub(string caractere_grafo, string caractere_sequence)
@@ -71,6 +79,7 @@ SequenceGraph Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequen
     int m_v = m * (V + 1) + 2; // quantidade de vertice do grafo multicamadas
     SequenceGraph m_grafo(m_v, grafo.getK());
     int mapeamento[V];
+    this->sequenceGraphAndMulticamada = new vector<int>[m_v];
 
     for (int i = 0; i <= m; i++)
     {      
@@ -89,6 +98,7 @@ SequenceGraph Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequen
                 string base = grafo.getBase(j);
                 m_grafo.insertNode(vertice_atual_aux, base);
                 mapeamento[j] = vertice_atual_aux;
+                sequenceGraphAndMulticamada[vertice_atual_aux].push_back(j);
                 vertice_atual_aux++;               
             }
             
@@ -159,13 +169,12 @@ SequenceGraph Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequen
 }
 
 // Dijkstra
-pair<list<string>, int> Marschall::dijkstra(SequenceGraph grafo, int orig, int dest)
+pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int orig, int dest)
 {
     // vetor de distâncias
     int V = grafo.getV();
     int dist[V];
     int prev[V];
-
     /*
         vetor de visitados serve para caso o vértice já tenha sido
         expandido (visitado), não expandir mais
@@ -223,14 +232,22 @@ pair<list<string>, int> Marschall::dijkstra(SequenceGraph grafo, int orig, int d
     }
 
     list<string> induced_sequence;
+    vector<pair<int,string>> saida;
     induced_sequence.push_back(grafo.getBase(dest));
+    saida.push_back(make_pair(dest,grafo.getBase(dest)));
     for (int j = dest; j > 0; j = prev[j])
     {
         induced_sequence.push_back(grafo.getBase(prev[j]));
+        saida.push_back(make_pair(prev[j],grafo.getBase(prev[j])));
     }
 
+    for (auto it = saida.begin(); it != saida.end(); it++)
+    {
+        cout << (*it).first << ":" << (*it).second << " ";
+    }
+    cout << endl;
     // retorna a distância mínima até o destino
-    return make_pair(induced_sequence, dist[dest]);
+    return make_pair(saida, dist[dest]);
 }
 
 void Marschall::insertInitialAndEndNode(int v_initial, int v_end)
@@ -255,7 +272,7 @@ int verificaEntrada(int argc, char *argv[])
     if (argc == 1)
     {
         cout << "Error: digite -help" << endl;
-        return 0;
+        return 1;
     }
 
     if (argc == 2)
@@ -263,7 +280,7 @@ int verificaEntrada(int argc, char *argv[])
         aux = argv[1];
         if (aux.compare("-help") == 0)
             cout << "-s sequence -g graph -k int" << endl;
-        return 0;
+        return 1;
     }
 
     if (argc == 7)
@@ -300,6 +317,54 @@ int verificaEntrada(int argc, char *argv[])
     return 1;
 }
 
+void Marschall::verificaAresta(int u, int v, int tamGraph)
+{
+    int lim = u + (tamGraph + 1);
+    //cout << u << " " << v << " " <<  lim - (tamGraph/2) << " " << lim << endl;
+    if (v == lim)
+        cout << "(del) ";
+    else if (v >= lim - (tamGraph/2) && v < lim)
+        cout << "(sub) ";
+    else if (v > lim)
+        cout << "(sub) ";
+    else
+        cout << "(ins) ";
+}
+
+void Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph)
+{
+    int primeiro = 0, indice, anterior = 0;
+    string aux;
+    for (auto it = retorno.begin(); it != retorno.end(); it++)
+    {
+        if (it != retorno.begin() and it != retorno.end() - 1)
+        {
+            if (primeiro != 0)
+            {
+                this->verificaAresta((*it).first, anterior, graph.getV());
+            } else
+            {
+                primeiro = 1;
+            }
+            anterior = (*it).first;
+            // +1 por causa dos dummy
+            indice = this->sequenceGraphAndMulticamada[(*it).first].front();            
+            auto kmer = kmerAndNode.at(indice);
+            cout << (*it).second << "(" << kmer << ") <-";
+            aux = (*it).second + aux;
+        } 
+        if (it == retorno.end() - 1)
+        {
+            if (anterior == 1)
+                cout << "(del) ";
+            else
+                cout << "(sub) ";
+        }
+    }
+    cout << endl;
+    cout << aux << endl;
+}
+
 int main(int argc, char *argv[])
 {
     //string sequence = "CGA";
@@ -307,31 +372,32 @@ int main(int argc, char *argv[])
     //string nomeArquivo = "kmers4.txt";
     if(verificaEntrada(argc, argv) == 1)
         exit (0);
+    
+    string aux = "";
 
     // insert the kmers into the hash table
     Hash h(k);   
     Marschall m;  
     h.populateGraph(nameArchive, false); 
     auto grafo = h.dbgToSequenceGraph_1();
-    auto m_grafo = m.buildMultilayerGraph(grafo, sequence);
+    auto m_grafo = m.buildMultilayerGraph(grafo.second, sequence);
     auto retorno = m.dijkstra(m_grafo, m.getInitialNode(), m.getEndNode());
-
-    for (auto it = retorno.first.begin(); it != retorno.first.end(); it++)
-    {
-        cout << (*it) << " <- ";
-    }
-    cout << endl;
+    m.mostraMapeamento(retorno.first, grafo.first, grafo.second);
     cout << "Cost " << retorno.second << endl; 
 
-    auto grafo2 = h.dbgToSequenceGraph_2();
-    auto m_grafo2 = m.buildMultilayerGraph(grafo2, sequence);
+    /* auto grafo2 = h.dbgToSequenceGraph_2();
+    auto m_grafo2 = m.buildMultilayerGraph(grafo2.second, sequence);
+    aux = "";
     retorno = m.dijkstra(m_grafo2,  m.getInitialNode(), m.getEndNode());
     for (auto it = retorno.first.begin(); it != retorno.first.end(); it++)
     {
-        cout << (*it) << " <- ";
+        cout << (*it).second << " <- ";
+        aux = (*it).second + aux;
     }
     cout << endl;
-    cout << "Cost " << retorno.second << endl; 
+    cout << aux << endl;
+    
+    cout << "Cost " << retorno.second << endl;  */
 
 return 0;
 }

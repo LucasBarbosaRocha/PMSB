@@ -47,10 +47,10 @@ public:
     void findAndRemoveKmer(string kmer);
 
     /*  funcao transforma o grafo de De Bruijn em um grafo de sequências simples (um caractere por rótulo) */
-    SequenceGraph dbgToSequenceGraph_1();
+    pair<unordered_map<int, string>,SequenceGraph> dbgToSequenceGraph_1();
 
     /* funcao transforma o grafo de De Bruijn em um grafo de sequências simples reduzido */
-    SequenceGraph dbgToSequenceGraph_2();
+    pair<unordered_map<int, string>,SequenceGraph> dbgToSequenceGraph_2();
 
     /* funcao imprime um grafo de De Bruijn */
 	void displayHash();
@@ -60,6 +60,7 @@ public:
 
     /* funcao recebe um arquivo com sequencias e insere todos os k-mers no grafo */
     void populateGraph(string nomeArquivo, bool detalhes);
+
 };
 
 Hash::Hash(int k)
@@ -185,12 +186,13 @@ bool Hash::containsIn(string kmer, string base)
     return false;
 }
 
-SequenceGraph Hash::dbgToSequenceGraph_1()
+pair<unordered_map<int, string>,SequenceGraph> Hash::dbgToSequenceGraph_1()
 {
     int qtdNodes = 0;
     list<pair<int, string>> list_aux;
     unordered_map<string, list<string>>:: iterator itr;
     string bases[] = {"A", "C", "G", "T"};
+    unordered_map<int, string> kmerAndNode;
 
     for (itr = graph.begin(); itr != graph.end(); itr++)
     {
@@ -207,6 +209,7 @@ SequenceGraph Hash::dbgToSequenceGraph_1()
                 sequenceGraph.alterarValorVerticeInicial(aux.first + i, 1);
             }
             sequenceGraph.insertNode(aux.first + i, aux.second.substr(i, 1)); 
+            kmerAndNode[aux.first + i] = aux.second; // mapeando kmer e node
         }
         for (int i = 0; i < aux.second.length() - 1; i++)
             sequenceGraph.insertEdge(aux.first + i, aux.first + i + 1, 0);
@@ -231,16 +234,23 @@ SequenceGraph Hash::dbgToSequenceGraph_1()
             }
         }     
     }
-    return sequenceGraph;
+
+    /*for (auto &a : kmerAndNode)
+    {
+        cout << a.first << " - " << a.second << endl;
+    }*/
+
+    return make_pair(kmerAndNode,sequenceGraph);
 }
 
 
-SequenceGraph Hash::dbgToSequenceGraph_2()
+pair<unordered_map<int, string>,SequenceGraph> Hash::dbgToSequenceGraph_2()
 {
     int qtdNodes = 0;
     list<pair<int, string>> list_aux;
     unordered_map<string, list<string>>:: iterator itr;
     string bases[] = {"A", "C", "G", "T"};
+    unordered_map<int, string> kmerAndNode;
 
     this->insertSpecialsKmers();
 
@@ -254,6 +264,7 @@ SequenceGraph Hash::dbgToSequenceGraph_2()
     for (auto aux : list_aux)
     {
         sequenceGraph.insertNode(aux.first, aux.second.substr(this->k-1,1));
+        kmerAndNode[aux.first] = aux.second; // mapeando kmer e node
     }
 
     for (auto aux : list_aux)
@@ -277,7 +288,7 @@ SequenceGraph Hash::dbgToSequenceGraph_2()
     }
 
     sequenceGraph.markInitials();
-    return sequenceGraph;
+    return make_pair(kmerAndNode,sequenceGraph);
 }
 
 void Hash::displayHash()
