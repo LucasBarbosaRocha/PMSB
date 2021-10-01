@@ -60,7 +60,7 @@ public:
     /* devolve o vertice final para rodar no dijkstra */
     int getEndNode();
 
-    void verificaAresta(int u, int v, int tamGraph);
+    string verificaAresta(int u, int v, int tamGraph);
 
     void mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph);
 
@@ -317,31 +317,31 @@ int verificaEntrada(int argc, char *argv[])
     return 1;
 }
 
-void Marschall::verificaAresta(int u, int v, int tamGraph)
+string Marschall::verificaAresta(int u, int v, int tamGraph)
 {
     int lim = u + (tamGraph + 1);
-    //cout << u << " " << v << " " <<  lim - (tamGraph/2) << " " << lim << endl;
     if (v == lim)
-        cout << "(del) ";
+        return "del";
     else if (v >= lim - (tamGraph/2) && v < lim)
-        cout << "(sub) ";
+        return "sub";
     else if (v > lim)
-        cout << "(sub) ";
+        return "sub";
     else
-        cout << "(ins) ";
+        return "ins";
 }
 
 void Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph)
 {
     int primeiro = 0, indice, anterior = 0;
-    string aux;
+    string aux, tmp;
     for (auto it = retorno.begin(); it != retorno.end(); it++)
     {
         if (it != retorno.begin() and it != retorno.end() - 1)
         {
             if (primeiro != 0)
             {
-                this->verificaAresta((*it).first, anterior, graph.getV());
+                tmp = this->verificaAresta((*it).first, anterior, graph.getV());
+                cout << "(" << tmp << ") ";
             } else
             {
                 primeiro = 1;
@@ -351,14 +351,18 @@ void Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_map
             indice = this->sequenceGraphAndMulticamada[(*it).first].front();            
             auto kmer = kmerAndNode.at(indice);
             cout << (*it).second << "(" << kmer << ") <-";
-            aux = (*it).second + aux;
+            if (tmp == "del")
+                aux = aux + "-";
+            else
+                aux = (*it).second + aux;           
         } 
         if (it == retorno.end() - 1)
         {
             if (anterior == 1)
-                cout << "(del) ";
+                tmp = "del";
             else
-                cout << "(sub) ";
+                tmp = "sub";
+            cout << "(" << tmp << ") ";
         }
     }
     cout << endl;
