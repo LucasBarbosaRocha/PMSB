@@ -35,6 +35,12 @@ int main (void)
         if (posicoesValidas[0] != 0)
         {
             cout << "(-," << posicoesValidas[0] << ") ";
+            string sequence_aux = sequence.substr(0, k + posicoesValidas[0]);
+            cout << "vamos procurar " << sequence_aux << endl;
+            auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence_aux);
+            auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
+            auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
+            cout << mapeamento << " com custo " << retorno.second << endl;     
         }
 
         for(int i = 0; i < posicoesValidas.size() - 1; i++)
@@ -55,6 +61,13 @@ int main (void)
         if (posicoesValidas[posicoesValidas.size() - 1] != sequence.length() - k)
         {
             cout << "(" << posicoesValidas[posicoesValidas.size() - 1] << ",-)" << endl;
+            int dif = sequence.length() - posicoesValidas[posicoesValidas.size() - 1];
+            string sequence_aux = sequence.substr(posicoesValidas[posicoesValidas.size() - 1], k + dif);
+            cout << "vamos procurar " << sequence_aux << endl;
+            auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence_aux);
+            auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
+            auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
+            cout << mapeamento << " com custo " << retorno.second << endl;     
         }
     } else
     {
