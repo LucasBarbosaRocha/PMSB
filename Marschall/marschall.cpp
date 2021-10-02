@@ -62,7 +62,7 @@ public:
 
     string verificaAresta(int u, int v, int tamGraph);
 
-    void mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph);
+    string mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph);
 
 };
 
@@ -80,7 +80,6 @@ SequenceGraph Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequen
     SequenceGraph m_grafo(m_v, grafo.getK());
     int mapeamento[V];
     this->sequenceGraphAndMulticamada = new vector<int>[m_v];
-
     for (int i = 0; i <= m; i++)
     {      
         if (i == 0) // camada inicial
@@ -90,6 +89,7 @@ SequenceGraph Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequen
         } else {
             vertice_atual_aux = vertice_atual; 
             // dummy
+            sequenceGraphAndMulticamada[vertice_atual_aux].push_back(-1);
             m_grafo.insertNode(vertice_atual_aux, "d");
             vertice_atual_aux++;
             // vertices
@@ -320,66 +320,80 @@ int verificaEntrada(int argc, char *argv[])
 string Marschall::verificaAresta(int u, int v, int tamGraph)
 {
     int lim = u + (tamGraph + 1);
+    //cout << u << " -> " << v << ":" << tamGraph << "lim: " << lim << " "; 
+
     if (v == lim)
         return "del";
-    else if (v >= lim - (tamGraph/2) && v < lim)
+    if (v >= lim - ((tamGraph+1)/2) && v < lim)
         return "sub";
-    else if (v > lim)
+    if (v > lim)
         return "sub";
-    else
-        return "ins";
+    return "ins";
 }
 
-void Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph)
+string Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph)
 {
     int primeiro = 0, indice, anterior = 0;
-    string aux, tmp;
+    string aux, tmp, baseAnterior;
     for (auto it = retorno.begin(); it != retorno.end(); it++)
     {
-        if (it != retorno.begin() and it != retorno.end() - 1)
-        {
-            if (primeiro != 0)
-            {
-                tmp = this->verificaAresta((*it).first, anterior, graph.getV());
-                cout << "(" << tmp << ") ";
-            } else
-            {
-                primeiro = 1;
-            }
-            anterior = (*it).first;
-            // +1 por causa dos dummy
-            indice = this->sequenceGraphAndMulticamada[(*it).first].front();            
-            auto kmer = kmerAndNode.at(indice);
-            cout << (*it).second << "(" << kmer << ") <-";
-            if (tmp == "del")
-                aux = aux + "-";
-            else
-                aux = (*it).second + aux;           
-        } 
+        tmp = "";
         if (it == retorno.end() - 1)
         {
             if (anterior == 1)
                 tmp = "del";
             else
                 tmp = "sub";
-            cout << "(" << tmp << ") ";
+            aux = baseAnterior + aux;
+            //cout << "(" << tmp << ") ";
+        }else if (it == retorno.begin())
+        {
+            anterior = (*it).first;
+            baseAnterior = (*it).second;
         }
+        else
+        {
+
+            tmp = this->verificaAresta((*it).first, anterior, graph.getV());
+            //cout << "(" << tmp << ") ";
+            anterior = (*it).first;    
+            indice = this->sequenceGraphAndMulticamada[(*it).first].front(); 
+
+            if (indice != -1)
+            {   
+                auto kmer = kmerAndNode.at(indice);
+                //cout << (*it).second << "(" << kmer << ") <-";
+            }
+
+            if (tmp == "del")
+            {
+                aux = "-" + aux;
+            }else
+            {
+                aux = baseAnterior + aux;
+                baseAnterior = (*it).second; 
+            } 
+
+            if (indice == -1)
+                baseAnterior = "-";    
+        } 
     }
-    cout << endl;
-    cout << aux << endl;
+    return aux.substr(0, aux.length() - 1);
 }
 
+/*
 int main(int argc, char *argv[])
 {
-    //string sequence = "CGA";
-    //int k = 3;
-    //string nomeArquivo = "kmers4.txt";
-    if(verificaEntrada(argc, argv) == 1)
+    /* string sequence = "CGA";
+    int k = 3;
+    string nomeArquivo = "kmers4.txt"; */
+
+    /*if(verificaEntrada(argc, argv) == 1)
         exit (0);
     
     string aux = "";
-
-    // insert the kmers into the hash table
+        */
+    /* insert the kmers into the hash table /*
     Hash h(k);   
     Marschall m;  
     h.populateGraph(nameArchive, false); 
@@ -403,5 +417,5 @@ int main(int argc, char *argv[])
     
     cout << "Cost " << retorno.second << endl;  */
 
-return 0;
-}
+//return 0;
+//}
