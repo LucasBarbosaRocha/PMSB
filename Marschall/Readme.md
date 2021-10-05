@@ -13,6 +13,8 @@
 
 ### Ideia 2 (função dbgToSequenceGraph_2)
 
+## Mapeando uma sequência s no grafo de sequência simples
+
 ## Começando
 
 ### Pré-requisitos
