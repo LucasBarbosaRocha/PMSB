@@ -241,11 +241,11 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
         saida.push_back(make_pair(prev[j],grafo.getBase(prev[j])));
     }
 
-    for (auto it = saida.begin(); it != saida.end(); it++)
+    /*for (auto it = saida.begin(); it != saida.end(); it++)
     {
         cout << (*it).first << ":" << (*it).second << " ";
     }
-    cout << endl;
+    cout << endl;*/
     // retorna a distância mínima até o destino
     return make_pair(saida, dist[dest]);
 }
@@ -333,8 +333,20 @@ string Marschall::verificaAresta(int u, int v, int tamGraph)
 
 string Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph)
 {
-    int primeiro = 0, indice, anterior = 0;
+    int primeiro = 0, indice, anterior = 0, details = 0;
     string aux, tmp, baseAnterior;
+
+    if (details == 1)
+    {
+        for (auto it = retorno.begin(); it != retorno.end(); it++)
+        {
+            cout << (*it).second << " <- ";
+            aux = (*it).second + aux;
+        }
+        cout << endl;
+        cout << aux << endl; 
+    }
+
     for (auto it = retorno.begin(); it != retorno.end(); it++)
     {
         tmp = "";
@@ -345,7 +357,8 @@ string Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_m
             else
                 tmp = "sub";
             aux = baseAnterior + aux;
-            //cout << "(" << tmp << ") ";
+            if (details == 1)
+                cout << "(" << tmp << ") ";
         }else if (it == retorno.begin())
         {
             anterior = (*it).first;
@@ -355,14 +368,16 @@ string Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_m
         {
 
             tmp = this->verificaAresta((*it).first, anterior, graph.getV());
-            //cout << "(" << tmp << ") ";
+            if (details == 1)
+                cout << "(" << tmp << ") ";
             anterior = (*it).first;    
             indice = this->sequenceGraphAndMulticamada[(*it).first].front(); 
 
             if (indice != -1)
             {   
-                auto kmer = kmerAndNode.at(indice);
-                //cout << (*it).second << "(" << kmer << ") <-";
+                auto kmer = kmerAndNode.at(indice);      
+                if (details == 1)
+                    cout << (*it).second << "(" << kmer << ") <-";
             }
 
             if (tmp == "del")
@@ -381,41 +396,3 @@ string Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_m
     return aux.substr(0, aux.length() - 1);
 }
 
-/*
-int main(int argc, char *argv[])
-{
-    /* string sequence = "CGA";
-    int k = 3;
-    string nomeArquivo = "kmers4.txt"; */
-
-    /*if(verificaEntrada(argc, argv) == 1)
-        exit (0);
-    
-    string aux = "";
-        */
-    /* insert the kmers into the hash table /*
-    Hash h(k);   
-    Marschall m;  
-    h.populateGraph(nameArchive, false); 
-    auto grafo = h.dbgToSequenceGraph_1();
-    auto m_grafo = m.buildMultilayerGraph(grafo.second, sequence);
-    auto retorno = m.dijkstra(m_grafo, m.getInitialNode(), m.getEndNode());
-    m.mostraMapeamento(retorno.first, grafo.first, grafo.second);
-    cout << "Cost " << retorno.second << endl; 
-
-    /* auto grafo2 = h.dbgToSequenceGraph_2();
-    auto m_grafo2 = m.buildMultilayerGraph(grafo2.second, sequence);
-    aux = "";
-    retorno = m.dijkstra(m_grafo2,  m.getInitialNode(), m.getEndNode());
-    for (auto it = retorno.first.begin(); it != retorno.first.end(); it++)
-    {
-        cout << (*it).second << " <- ";
-        aux = (*it).second + aux;
-    }
-    cout << endl;
-    cout << aux << endl;
-    
-    cout << "Cost " << retorno.second << endl;  */
-
-//return 0;
-//}

@@ -77,14 +77,15 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
         cout << "Nenhum kmer encontrado no grafo. A sequência vai ser toda mapeada." << endl;
         auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence);
         auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
-        auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
+        auto resposta = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
+        return resposta;
     }
     return resposta;
 }
 
 int main (void)
 {
-    string sequence = "TTACGTAACGACG", nomeArquivo = "kmers4.txt";
+    string sequence = "AAGACGTGTAGACGTGA", nomeArquivo = "kmers4.txt";
     // AAGACGTGTAGACGTGA
     map<string, int> kmersInTheGraph;
     int k = 3;
