@@ -28,7 +28,7 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
             auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence_aux);
             auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
             auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
-            resposta = mapeamento.substr(0,posicoesValidas[0]) + sequence.substr(posicoesValidas[0], k); 
+            resposta = mapeamento.second.substr(0,posicoesValidas[0]) + sequence.substr(posicoesValidas[0], k); 
             posicao++;
         }
 
@@ -42,9 +42,9 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
                 auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence_aux);
                 auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
                 auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
-                if (mapeamento.length() >= k)      
+                if (mapeamento.second.length() >= k)      
                 {
-                    resposta = resposta + mapeamento.substr(k, mapeamento.length() - (2 * k));   
+                    resposta = resposta + mapeamento.second.substr(k, mapeamento.second.length() - (2 * k));   
                     //resposta = resposta + mapeamento.substr(mapeamento.length()- (k), k);   
                     resposta = resposta + sequence.substr(posicoesValidas[i+1], k);                 
                     posicao = 1;
@@ -68,8 +68,8 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
                 auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence_aux);
                 auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
                 auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
-                if (mapeamento.length() >= k)      
-                    resposta = resposta + mapeamento.substr(k, mapeamento.length() - k);  
+                if (mapeamento.second.length() >= k)      
+                    resposta = resposta + mapeamento.second.substr(k, mapeamento.second.length() - k);  
             }
         }
     } else
@@ -78,7 +78,7 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
         auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence);
         auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
         auto resposta = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
-        return resposta;
+        return resposta.second;
     }
     return resposta;
 }
