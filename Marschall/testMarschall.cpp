@@ -22,14 +22,24 @@ int main(int argc, char *argv[])
     auto m_grafo = m.buildMultilayerGraph(grafo.second, sequence);
     auto retorno = m.dijkstra(m_grafo, m.getInitialNode(), m.getEndNode());
     auto saida = m.mostraMapeamento(retorno.first, grafo.first, grafo.second);   
-    cout << "Mapeamento: " << saida << " cost " << retorno.second << endl; 
+    cout << "Percurso: ";
+    for (auto it : saida.first)
+    {
+        cout << it << " ";
+    }
+    cout << "Mapeamento: " << saida.second << " cost: " << retorno.second << endl;  
 
     auto grafo2 = h.dbgToSequenceGraph_2();
     auto m_grafo2 = m.buildMultilayerGraph(grafo2.second, sequence);
     aux = "";
     retorno = m.dijkstra(m_grafo2,  m.getInitialNode(), m.getEndNode());
-    auto saida2 = m.mostraMapeamento(retorno.first, grafo2.first, grafo2.second);
-    cout << "Mapeamento: " << saida2 << " cost: " << retorno.second << endl;  
+    auto saida2 = m.mostraMapeamento_2(retorno.first, grafo2.first, h.getKmerSpecialAndKmer(), grafo2.second);
+    cout << "Percurso: ";
+    for (auto it : saida2.first)
+    {
+        cout << it << " ";
+    }
+    cout << "Mapeamento: " << saida2.second << " cost: " << retorno.second << endl;  
 
 return 0;
 }

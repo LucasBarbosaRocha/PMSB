@@ -21,6 +21,7 @@ class Hash
 private:
     int k; /* comprimento do k-mer */
     unordered_map<string, list<string>> graph; /* buckets */
+    unordered_map<string, string> kmerSpecialAndKmer;
 public:
     /*  funcao construtor do grafo */
 	Hash(int k); 
@@ -57,6 +58,8 @@ public:
 
     /* funcao devolve o comprimento k  */
     int getK();
+
+    unordered_map<string, string> getKmerSpecialAndKmer();
 
     /* funcao recebe um arquivo com sequencias e insere todos os k-mers no grafo */
     void populateGraph(string nomeArquivo, bool detalhes);
@@ -97,6 +100,7 @@ void Hash::insertSpecialsKmers()
                 for (int j = 0; j < i; j++)
                     kmer_aux = kmer_aux + "$";                
                 kmer_aux = kmer_aux + kmer.substr(0,this->k-i);
+                kmerSpecialAndKmer[kmer_aux] = kmer;
                 insertKmer(kmer_aux);
             }
         }
@@ -305,7 +309,7 @@ void Hash::displayHash()
     }
 }
 
-void Hash::populateGraph(string nomeArquivo, bool detalhes)
+void Hash::populateGraph(string nomeArquivo, bool detalhes = false)
 {
     string linha;
 	fstream meuArquivo;
@@ -325,6 +329,12 @@ void Hash::populateGraph(string nomeArquivo, bool detalhes)
 		meuArquivo.close();
         if (detalhes) cout << "De Bruijn criado." << endl;
     }    
+}
+
+
+unordered_map<string, string> Hash::getKmerSpecialAndKmer()
+{
+    return this->kmerSpecialAndKmer;
 }
 
 /*int main()

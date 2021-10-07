@@ -62,7 +62,9 @@ public:
 
     string verificaAresta(int u, int v, int tamGraph);
 
-    string mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph);
+    pair<list<string>, string> mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph);
+    pair<list<string>, string> mostraMapeamento_2(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, unordered_map<string, string> specialKmerAndKmer, SequenceGraph graph);
+
 
 };
 
@@ -331,10 +333,11 @@ string Marschall::verificaAresta(int u, int v, int tamGraph)
     return "ins";
 }
 
-string Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph)
+pair<list<string>, string> Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph)
 {
-    int primeiro = 0, indice, anterior = 0, details = 0;
-    string aux, tmp, baseAnterior;
+    int primeiro = 0, indice, anterior = 0, details = 0, k = graph.getK(), kmer_count = 0;
+    string aux, tmp, baseAnterior, kmer_aux = "";
+    list<string> kmers;
 
     if (details == 1)
     {
@@ -378,6 +381,14 @@ string Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_m
                 auto kmer = kmerAndNode.at(indice);      
                 if (details == 1)
                     cout << (*it).second << "(" << kmer << ") <-";
+
+                if (kmer.compare(kmer_aux) != 0 || kmer_count == 0)
+                {
+                    kmers.push_front(kmer);
+                    kmer_count = 0;
+                    kmer_aux = kmer;
+                }
+                kmer_count++;
             }
 
             if (tmp == "del")
@@ -393,6 +404,85 @@ string Marschall::mostraMapeamento(vector<pair<int,string>> retorno, unordered_m
                 baseAnterior = "-";    
         } 
     }
-    return aux.substr(0, aux.length() - 1);
+    return  make_pair(kmers,aux.substr(0, aux.length() - 1));
+}
+
+pair<list<string>, string> Marschall::mostraMapeamento_2(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, unordered_map<string, string> specialKmerAndKmer, SequenceGraph graph)
+{
+    int primeiro = 0, indice, anterior = 0, details = 0, k = graph.getK(), kmer_count = 0;
+    string aux, tmp, baseAnterior, kmer_aux = "", kmerMapeado;
+    list<string> kmers;
+
+    if (details == 1)
+    {
+        for (auto it = retorno.begin(); it != retorno.end(); it++)
+        {
+            cout << (*it).second << " <- ";
+            aux = (*it).second + aux;
+        }
+        cout << endl;
+        cout << aux << endl; 
+    }
+
+    for (auto it = retorno.begin(); it != retorno.end(); it++)
+    {
+        tmp = "";
+        if (it == retorno.end() - 1)
+        {
+            if (anterior == 1)
+                tmp = "del";
+            else
+                tmp = "sub";
+            aux = baseAnterior + aux;
+            if (details == 1)
+                cout << "(" << tmp << ") ";
+        }else if (it == retorno.begin())
+        {
+            anterior = (*it).first;
+            baseAnterior = (*it).second;
+        }
+        else
+        {
+
+            tmp = this->verificaAresta((*it).first, anterior, graph.getV());
+            if (details == 1)
+                cout << "(" << tmp << ") ";
+            anterior = (*it).first;    
+            indice = this->sequenceGraphAndMulticamada[(*it).first].front(); 
+
+            if (indice != -1)
+            {   
+                auto kmer = kmerAndNode.at(indice);       
+                if (details == 1)
+                    cout << (*it).second << "(" << kmer << ") <-";
+
+                if (kmer.find("$") == 0)
+                    kmerMapeado = specialKmerAndKmer[kmer]; // mapeando um kmer do G'_k no G_K
+                else
+                    kmerMapeado = kmer;
+
+                if (kmerMapeado.compare(kmer_aux) != 0 || kmer_count == 0)
+                {
+                    kmers.push_front(kmerMapeado);
+                    kmer_count = 0;
+                    kmer_aux = kmerMapeado;
+                }
+                kmer_count++;
+            }
+
+            if (tmp == "del")
+            {
+                aux = "-" + aux;
+            }else
+            {
+                aux = baseAnterior + aux;
+                baseAnterior = (*it).second; 
+            } 
+
+            if (indice == -1)
+                baseAnterior = "-";    
+        } 
+    }
+    return  make_pair(kmers,aux.substr(0, aux.length() - 1));
 }
 
