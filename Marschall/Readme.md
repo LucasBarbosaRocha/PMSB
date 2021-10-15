@@ -45,3 +45,10 @@ A sequência induzida pelo caminho no grafo de De Bruijn tal que a diferença en
 ### Execução
 ```
 ./marschall -s sequence -g graph.txt -k 3
+
+## Resultados
+|   |   |   |   |   |
+|---|---|---|---|---|
+|   |   |   |   |   |
+|   |   |   |   |   |
+|   |   |   |   |   |
