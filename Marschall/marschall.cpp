@@ -60,6 +60,8 @@ public:
     /* devolve o vertice final para rodar no dijkstra */
     int getEndNode();
 
+    void shortestPath(SequenceGraph grafo, int src, int dest, int W);
+
     string verificaAresta(int u, int v, int tamGraph);
 
     pair<list<string>, string> mostraMapeamento(vector<pair<int,string>> retorno, unordered_map<int, string> kmerAndNode, SequenceGraph graph);
@@ -173,8 +175,10 @@ SequenceGraph Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequen
 // Dijkstra
 pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int orig, int dest)
 {
+
     // vetor de distâncias
     int V = grafo.getV();
+
     int dist[V];
     int prev[V];
     /*
@@ -184,15 +188,17 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
     int visitados[V];
 
     // fila de prioridades de pair (distancia, vértice)
-    priority_queue < pair<int, int>,
-                    vector<pair<int, int> >, greater<pair<int, int> > > pq;
+    priority_queue <pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    cout << "bla " << endl;
+
 
     // inicia o vetor de distâncias e visitados
     for(int i = 0; i < V; i++)
     {
         dist[i] = INF;
-        prev[-1];
+        prev[i] = -1;
         visitados[i] = false;
+
     }
 
     // a distância de orig para orig é 0
@@ -266,6 +272,108 @@ int Marschall::getInitialNode()
 int Marschall::getEndNode()
 {
     return this->endNode;
+}
+
+// Prints shortest paths from src to all other vertices.
+// W is the maximum weight of an edge
+void Marschall::shortestPath(SequenceGraph grafo, int src, int dest, int W)
+{
+    /* With each distance, iterator to that vertex in
+       its bucket is stored so that vertex can be deleted
+       in O(1) at time of updation. So
+    dist[i].first = distance of ith vertex from src vertex
+    dits[i].second = iterator to vertex i in bucket number */
+    int V = grafo.getV();
+    vector<pair<int, list<int>::iterator> > dist(V);
+    int prev[V];
+
+  
+    // Initialize all distances as infinite (INF)
+    for (int i = 0; i < V; i++)
+    {
+        dist[i].first = INF;
+        prev[i] = -1;
+    }
+  
+    // Create buckets B[].
+    // B[i] keep vertex of distance label i
+    list<int> B[W * V + 1];
+  
+    B[0].push_back(src);
+    dist[src].first = 0;
+  
+    //
+    int idx = 0;
+    while (1)
+    {
+        // Go sequentially through buckets till one non-empty
+        // bucket is found
+        while (B[idx].size() == 0 && idx < W*V)
+            idx++;
+  
+        // If all buckets are empty, we are done.
+        if (idx == W * V)
+            break;
+  
+        // Take top vertex from bucket and pop it
+        int u = B[idx].front();
+        B[idx].pop_front();
+  
+        // Process all adjacents of extracted vertex 'u' and
+        // update their distanced if required.
+        for (auto i = grafo.getAdjBegin(u); i != grafo.getAdjEnd(u); ++i)
+        {
+            int v = (*i).first;
+            int weight = (*i).second;
+  
+            int du = dist[u].first;
+            int dv = dist[v].first;
+  
+            // If there is shorted path to v through u.
+            if (dv > du + weight)
+            {
+                // If dv is not INF then it must be in B[dv]
+                // bucket, so erase its entry using iterator
+                // in O(1)
+                if (dv != INF)
+                    B[dv].erase(dist[v].second);
+  
+                //  updating the distance
+                dist[v].first = du + weight;
+                dv = dist[v].first;
+                prev[v] = u;
+  
+                // pushing vertex v into updated distance's bucket
+                B[dv].push_front(v);
+  
+                // storing updated iterator in dist[v].second
+                dist[v].second = B[dv].begin();
+            }
+        }
+    }
+  
+    // Print shortest distances stored in dist[]
+    printf("Vertex   Distance from Source\n");
+    for (int i = 0; i < V; ++i)
+        ;//printf("%d     %d\n", i, dist[i].first);
+
+    list<string> induced_sequence;
+    vector<pair<int,string>> saida;
+    induced_sequence.push_back(grafo.getBase(dest));
+    saida.push_back(make_pair(dest,grafo.getBase(dest)));
+    for (int j = dest; j > 0; j = prev[j])
+    {
+        induced_sequence.push_back(grafo.getBase(prev[j]));
+        saida.push_back(make_pair(prev[j],grafo.getBase(prev[j])));
+    }
+
+    for (auto it = saida.begin(); it != saida.end(); it++)
+    {
+        cout << (*it).first << ":" << (*it).second << " ";
+    }
+    cout << endl;
+    cout << "custo " << dist[dest].first << endl;
+
 }
 
 int verificaEntrada(int argc, char *argv[])

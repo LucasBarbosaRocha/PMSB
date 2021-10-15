@@ -64,6 +64,8 @@ public:
     /* funcao recebe um arquivo com sequencias e insere todos os k-mers no grafo */
     void populateGraph(string nomeArquivo, bool detalhes);
 
+    int getQtdKmers();
+
 };
 
 Hash::Hash(int k)
@@ -86,6 +88,7 @@ void Hash::insertSpecialsKmers()
         kmer = *it; val = 1;
         for (auto base : bases)
         {
+            //cout << "teste " << kmer.substr(k-1,1) << " " << base << " r " << kmer.substr(k-1,1).compare(base)<< endl;
             if (containsIn(kmer, base))
             {
                 val = 0;
@@ -94,6 +97,7 @@ void Hash::insertSpecialsKmers()
         }
         if (val == 1)
         {
+            //cout << " vamos inserrir " << kmer << endl;
             for (int i = 1; i < kmer.length(); i++)
             {
                 kmer_aux = "";
@@ -104,7 +108,7 @@ void Hash::insertSpecialsKmers()
                 insertKmer(kmer_aux);
             }
         }
-        if(kmer.substr(0,this->k-1).compare(kmer.substr(1,this->k-1)) == 0)
+        else if(val == 1 && kmer.substr(0,this->k-1).compare(kmer.substr(1,this->k-1)) == 0)
         {
             for (int i = 1; i < kmer.length(); i++)
             {
@@ -156,9 +160,10 @@ void Hash::insertSequence(string sequence)
 {
     int n = sequence.length();
     string kmer;
-    for (int i = 0; i < n - (k-1); i++)
+    for (int i = 0; i <= n - k; i++)
     {
         kmer = sequence.substr(i, k);
+        //cout << "kmer " << kmer << endl;
         insertKmer(kmer);
     }
 }
@@ -335,6 +340,12 @@ void Hash::populateGraph(string nomeArquivo, bool detalhes = false)
 unordered_map<string, string> Hash::getKmerSpecialAndKmer()
 {
     return this->kmerSpecialAndKmer;
+}
+
+
+int Hash::getQtdKmers()
+{
+    return this->graph.size();
 }
 
 /*int main()
