@@ -45,10 +45,26 @@ A sequência induzida pelo caminho no grafo de De Bruijn tal que a diferença en
 ### Execução
 ```
 ./marschall -s sequence -g graph.txt -k 3
+```
 
 ## Resultados
-|   |   |   |   |   |
-|---|---|---|---|---|
-|   |   |   |   |   |
-|   |   |   |   |   |
-|   |   |   |   |   |
+### Coluna 1: inteiro k (comprimento do kmer)
+### Coluna 2: quantidade kmers no grafo de De Bruijn Gk
+### dbgToSequenceGraph_1
+#### Coluna 3:quantidade de vértices do grafo de sequência simples H
+### dbgToSequenceGraph_1
+#### Coluna 4: quantidade de kmers do grafo de De Bruijn G'k
+#### Coluna 5: qantidade de vértices do grafo de sequência simples H'
+
+| k  | Gk  |  H   | G'k | H'  |
+|----|-----|------|-----|-----|
+| 3  | 36  | 108  | 36  | 36  |
+| 4  | 61  | 244  | 61  | 61  |
+| 5  | 82  | 410  | 86  | 86  |
+| 10 | 122 | 1220 | 139 | 139 |
+| 20 | 102 | 2040 | 139 | 139 |
+| 30 | 82  | 2460 | 139 | 139 |
+| 40 | 62  | 2480 | 139 | 139 |
+| 50 | 42  | 2100 | 139 | 139 |
+| 60 | 22  | 1320 | 139 | 139 |
+| 70 | 2   | 140  | 139 | 139 |   
