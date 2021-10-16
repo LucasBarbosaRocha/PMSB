@@ -10,6 +10,7 @@
 ## Trasformando um grafo de De Bruijn em um grafo de sequências simples
 
 ### Ideia 1 (função dbgToSequenceGraph_1)
+![](ideia1.drawio.png)
 
 ### Ideia 2 (função dbgToSequenceGraph_2)
 
