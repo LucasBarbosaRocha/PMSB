@@ -54,8 +54,10 @@ A sequência induzida pelo caminho no grafo de De Bruijn tal que a diferença en
 
 ### Execução
 ```
-./marschall -s sequence -g graph.txt -k 3
+./testMarschall -s sequence -g graph.txt -k 3
+./testMarschall_2 -s sequence -g graph.txt -k 3
 ```
+com testMarschall para a transformação 1 e testMarschall_2 para a transformação 2. 
 
 ## Resultados
 ### Coluna 1: inteiro k (comprimento do kmer)
