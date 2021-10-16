@@ -10,9 +10,18 @@
 ## Trasformando um grafo de De Bruijn em um grafo de sequências simples
 
 ### Ideia 1 (função dbgToSequenceGraph_1)
+A ideia consiste em, dado um grafo de De Bruijn, de ordem k, Gk. Vamos pegar cada kmer e transformar em k vértices e inserir em um grafo de sequências simples com as devidas adjacências.
+
 ![](ideia1.drawio.png)
 
 ### Ideia 2 (função dbgToSequenceGraph_2)
+A ideia consiste em, dado um grafo de De Bruijn, de ordem k, Gk. 
+Vamos pegar cada kmer que possui grau de entrada 0 e inserir k-1 kmers no grafo de De Bruijn como mostra o segundo grafo da imagem e depois converter para um grafo de sequências simples considerando o k-ésimo caractere de cada kmer.
+
+![](ideia2.drawio.png)
+
+### dbgToSequenceGraph_1 vs dbgToSequenceGraph_2
+A principal vantagem entre as duas transformações está no tamanho grafo de sequências simples gerado. Considerando um grafo de De Bruijn, de ordem k, Gk com m kmers e com todos os kmers de comprimento n. A transformação 1 do grafo G_k no grafo de sequência simples com O(m * n * k - m * k^2 + m * k) vértices para 2 <= k <= n. A transformação 2 gera um grafo de sequências simples com O(m * n) vértices.
 
 ## Mapeando uma sequência s no grafo de sequência simples
 
@@ -69,3 +78,6 @@ A sequência induzida pelo caminho no grafo de De Bruijn tal que a diferença en
 | 50 | 42  | 2100 | 139 | 139 |
 | 60 | 22  | 1320 | 139 | 139 |
 | 70 | 2   | 140  | 139 | 139 |   
+
+## Conclusão
+Como podemos observar, a nossa transformação resulta em um grafo bem menor do que o original;
