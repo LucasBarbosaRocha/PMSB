@@ -8,6 +8,7 @@
         construção de um grafo de sequências simples com lista de adjacências
 */
 #include <bits/stdc++.h>
+#define INF INT_MAX
 using namespace std;
 
 class SequenceGraph
@@ -74,6 +75,12 @@ public:
 
 	/* funcao recebe um vertice i e devolve o caractere associado ao vertice (o seu rótulo) */
 	string getBase(int i);
+
+	int verifyLabelExistisAndReturnVerticeIndex(string label);
+
+	pair<vector<pair<int,string>>, int> dijkstra(int orig, int dest);
+
+
 };
 
 SequenceGraph::SequenceGraph(int V, int k)
@@ -212,6 +219,104 @@ vector<pair<int, int>>::iterator SequenceGraph::getAdjEnd(int i)
 string SequenceGraph::getBase(int i)
 {
 	return this->bases[i].front();
+}
+
+// Print adjacency list representation ot graph
+int SequenceGraph::verifyLabelExistisAndReturnVerticeIndex(string label)
+{
+    for (int i = 0; i < this->V; i++)
+    {
+		if (bases[i].front().compare(label) == 0)
+			return i;
+    }
+	return -1;
+}
+
+// Dijkstra
+pair<vector<pair<int,string>>, int> SequenceGraph::dijkstra(int orig, int dest)
+{
+
+    // vetor de distâncias
+    int V = this->V;
+
+    int dist[V];
+    int prev[V];
+    /*
+        vetor de visitados serve para caso o vértice já tenha sido
+        expandido (visitado), não expandir mais
+    */
+    int visitados[V];
+
+    // fila de prioridades de pair (distancia, vértice)
+    priority_queue <pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+    // inicia o vetor de distâncias e visitados
+    for(int i = 0; i < V; i++)
+    {
+        dist[i] = INF;
+        prev[i] = -1;
+        visitados[i] = false;
+
+    }
+
+    // a distância de orig para orig é 0
+    dist[orig] = 0;
+
+    // insere na fila
+    pq.push(make_pair(dist[orig], orig));
+    // loop do algoritmo
+    while(!pq.empty())
+    {
+
+        pair<int, int> p = pq.top(); // extrai o pair do topo
+        int u = p.second; // obtém o vértice do pair
+        pq.pop(); // remove da fila
+
+
+        // verifica se o vértice não foi expandido
+        if(visitados[u] == false)
+        {
+			// marca como visitado
+            visitados[u] = true;
+
+            // percorre os vértices "v" adjacentes de "u" se existire size() > 0
+			if (this->adj[u].size() > 0)
+			{
+				for(auto it = this->getAdjBegin(u); it !=  this->getAdjEnd(u); it++)
+				{
+					// obtém o vértice adjacente e o custo da aresta
+					int v = it->first;
+					int custo_aresta = it->second;
+
+					// relaxamento (u, v)
+					if(dist[v] > (dist[u] + custo_aresta))
+					{
+						// atualiza a distância de "v" e insere na fila
+						dist[v] = dist[u] + custo_aresta;
+						prev[v] = u;
+						pq.push(make_pair(dist[v], v));
+					}
+				}
+			}
+        }
+    }
+
+    list<string> induced_sequence;
+    vector<pair<int,string>> saida;
+    induced_sequence.push_back(this->getBase(dest));
+    saida.push_back(make_pair(dest,this->getBase(dest)));
+
+    for (int j = dest; j >= 0; j = prev[j])
+    {
+		if (prev[j] != -1)
+		{
+			induced_sequence.push_back(this->getBase(prev[j]));
+			saida.push_back(make_pair(prev[j],this->getBase(prev[j])));
+		}
+    }
+
+    // defvolve a distância mínima até o destino
+    return make_pair(saida, dist[dest]);
 }
 
 // Driver code

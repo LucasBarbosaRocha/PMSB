@@ -44,17 +44,23 @@ public:
     /* funcao recebe um k-mer kmer e verrifica se estah presente no grafo */
     bool contains(string kmer);
 
-    /* funcao recebe um k-mer kmer e apaga do grafo  */
-    void findAndRemoveKmer(string kmer);
-
     /*  funcao transforma o grafo de De Bruijn em um grafo de sequências simples (um caractere por rótulo) */
     pair<unordered_map<int, string>,SequenceGraph> dbgToSequenceGraph_1();
 
     /* funcao transforma o grafo de De Bruijn em um grafo de sequências simples reduzido */
     pair<unordered_map<int, string>,SequenceGraph> dbgToSequenceGraph_2();
 
+    /* funcao transforma o grafo de De Bruijn (lista de kmers) em um grafo de sequências (com arestas) */
+    SequenceGraph dbgToSequenceGraph_3();
+
+    /* funcao transforma o grafo de De Bruijn (lista de kmers) em um grafo de sequências reverso (com arestas) */
+    SequenceGraph dbgToSequenceGraph_3R();
+
     /* funcao imprime um grafo de De Bruijn */
 	void displayHash();
+
+    /* excluir grafo */
+	void deleteHash();
 
     /* funcao devolve o comprimento k  */
     int getK();
@@ -65,6 +71,10 @@ public:
     void populateGraph(string nomeArquivo, bool detalhes);
 
     int getQtdKmers();
+
+    int hammingDistance(string kmer1, string kmer2);
+
+    list<string> compareKmersWithGraph(string kmer, int errors);
 
 };
 
@@ -300,6 +310,94 @@ pair<unordered_map<int, string>,SequenceGraph> Hash::dbgToSequenceGraph_2()
     return make_pair(kmerAndNode,sequenceGraph);
 }
 
+SequenceGraph Hash::dbgToSequenceGraph_3()
+{
+    int qtdNodes = 0;
+    list<pair<int, string>> list_aux;
+    unordered_map<string, list<string>>:: iterator itr;
+    string bases[] = {"A", "C", "G", "T"};
+    unordered_map<int, string> kmerAndNode;
+
+    for (itr = graph.begin(); itr != graph.end(); itr++)
+    {
+        list_aux.push_back(make_pair(qtdNodes, itr->first));
+        qtdNodes++;
+    }
+    SequenceGraph sequenceGraph(qtdNodes, this->k);
+
+    for (auto aux : list_aux)
+    {
+        sequenceGraph.insertNode(aux.first, aux.second);
+        kmerAndNode[aux.first] = aux.second; // mapeando kmer e node
+    }
+
+    for (auto aux : list_aux)
+    {
+        for (auto base : bases)
+        {
+            if(containsOut(aux.second, base))
+            {
+                int node = -1; string kmer_aux = aux.second.substr(1, this->k-1) + base;
+                for (auto aux2 : list_aux)
+                {
+                    if (kmer_aux == aux2.second)
+                    {
+                        node = aux2.first;
+                        break;
+                    }
+                }
+                sequenceGraph.insertEdge(aux.first, node, 1);
+            }
+        }     
+    }
+
+    return sequenceGraph;    
+}
+
+SequenceGraph Hash::dbgToSequenceGraph_3R()
+{
+    int qtdNodes = 0;
+    list<pair<int, string>> list_aux;
+    unordered_map<string, list<string>>:: iterator itr;
+    string bases[] = {"A", "C", "G", "T"};
+    unordered_map<int, string> kmerAndNode;
+
+    for (itr = graph.begin(); itr != graph.end(); itr++)
+    {
+        list_aux.push_back(make_pair(qtdNodes, itr->first));
+        qtdNodes++;
+    }
+    SequenceGraph sequenceGraph(qtdNodes, this->k);
+
+    for (auto aux : list_aux)
+    {
+        sequenceGraph.insertNode(aux.first, aux.second);
+        kmerAndNode[aux.first] = aux.second; // mapeando kmer e node
+    }
+
+    for (auto aux : list_aux)
+    {
+        for (auto base : bases)
+        {
+            if(containsOut(aux.second, base))
+            {
+                int node = -1; string kmer_aux = aux.second.substr(1, this->k-1) + base;
+                for (auto aux2 : list_aux)
+                {
+                    if (kmer_aux == aux2.second)
+                    {
+                        node = aux2.first;
+                        break;
+                    }
+                }
+                sequenceGraph.insertEdge(node, aux.first, 1);
+            }
+        }     
+    }
+
+    return sequenceGraph;    
+}
+
 void Hash::displayHash()
 {
     unordered_map<string, list<string>>:: iterator itr;
@@ -312,6 +410,11 @@ void Hash::displayHash()
             cout << *it << " ";
         cout << endl;
     }
+}
+
+void Hash::deleteHash()
+{
+    this->graph.clear();
 }
 
 void Hash::populateGraph(string nomeArquivo, bool detalhes = false)
@@ -342,11 +445,38 @@ unordered_map<string, string> Hash::getKmerSpecialAndKmer()
     return this->kmerSpecialAndKmer;
 }
 
-
 int Hash::getQtdKmers()
 {
     return this->graph.size();
 }
+
+int Hash::hammingDistance(string kmer1, string kmer2)
+{
+    int i, errors = 0;
+    for (i = 0; i < kmer1.length(); i++)
+    {
+        if (kmer1[i] != kmer2[i])
+        {
+            errors++;
+        }
+    }
+    return errors;
+}
+
+list<string> Hash::compareKmersWithGraph(string kmer, int errors)
+{
+    unordered_map<string, list<string>>:: iterator itr;
+    list<string> kmers;
+    for (itr = graph.begin(); itr != graph.end(); itr++)
+    {
+        if (hammingDistance(kmer, itr->first) <= errors)
+        {
+            kmers.push_front(itr->first);
+        }
+    }
+    return kmers;
+}
+
 
 /*int main()
 {

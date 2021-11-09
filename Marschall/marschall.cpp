@@ -189,8 +189,6 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
 
     // fila de prioridades de pair (distancia, vértice)
     priority_queue <pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    cout << "bla " << endl;
-
 
     // inicia o vetor de distâncias e visitados
     for(int i = 0; i < V; i++)
@@ -219,21 +217,24 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
         {
             // marca como visitado
             visitados[u] = true;
-
-            // percorre os vértices "v" adjacentes de "u"
-            for(auto it = grafo.getAdjBegin(u); it !=  grafo.getAdjEnd(u); it++)
-            {
-                // obtém o vértice adjacente e o custo da aresta
-                int v = it->first;
-                int custo_aresta = it->second;
-
-                // relaxamento (u, v)
-                if(dist[v] > (dist[u] + custo_aresta))
+            // percorre os vértices "v" adjacentes de "u" se existire size() > 0
+			if (grafo.getOutDegree(u) > 0)
+			{
+                // percorre os vértices "v" adjacentes de "u"
+                for(auto it = grafo.getAdjBegin(u); it !=  grafo.getAdjEnd(u); it++)
                 {
-                    // atualiza a distância de "v" e insere na fila
-                    dist[v] = dist[u] + custo_aresta;
-                    prev[v] = u;
-                    pq.push(make_pair(dist[v], v));
+                    // obtém o vértice adjacente e o custo da aresta
+                    int v = it->first;
+                    int custo_aresta = it->second;
+
+                    // relaxamento (u, v)
+                    if(dist[v] > (dist[u] + custo_aresta))
+                    {
+                        // atualiza a distância de "v" e insere na fila
+                        dist[v] = dist[u] + custo_aresta;
+                        prev[v] = u;
+                        pq.push(make_pair(dist[v], v));
+                    }
                 }
             }
         }
@@ -245,8 +246,11 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
     saida.push_back(make_pair(dest,grafo.getBase(dest)));
     for (int j = dest; j > 0; j = prev[j])
     {
-        induced_sequence.push_back(grafo.getBase(prev[j]));
-        saida.push_back(make_pair(prev[j],grafo.getBase(prev[j])));
+        if (prev[j] != -1)
+        {
+            induced_sequence.push_back(grafo.getBase(prev[j]));
+            saida.push_back(make_pair(prev[j],grafo.getBase(prev[j])));
+        }
     }
 
     /*for (auto it = saida.begin(); it != saida.end(); it++)
@@ -447,6 +451,8 @@ pair<list<string>, string> Marschall::mostraMapeamento(vector<pair<int,string>> 
     string aux, tmp, baseAnterior, kmer_aux = "";
     list<string> kmers;
 
+    //cout << "mapeando " << endl;
+
     if (details == 1)
     {
         for (auto it = retorno.begin(); it != retorno.end(); it++)
@@ -512,6 +518,13 @@ pair<list<string>, string> Marschall::mostraMapeamento(vector<pair<int,string>> 
                 baseAnterior = "-";    
         } 
     }
+
+    /*for (auto a = kmers.begin(); a != kmers.end(); a++)
+    {
+        cout << (*a) << " ";
+    }
+    cout << endl;*/
+
     return  make_pair(kmers,aux.substr(0, aux.length() - 1));
 }
 
