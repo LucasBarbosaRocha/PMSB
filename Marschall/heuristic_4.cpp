@@ -3,13 +3,16 @@
 #include <queue>
 #include <bits/stdc++.h>
 
-string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSequencias, string sequence, int k)
+string mapeamento(Hash h, string sequence, int k)
 {
     cout << sequence << endl;
-    int posicao = 0;
+    int posicao = 0, length, aux;
+    float x = 0.5;
     string resposta = "";
     vector<int> posicoesValidas;
+    list<string> kmer_lista_aux;
     Marschall m;
+    Hash dbg_gap(k);
 
     for (int i = 0; i < sequence.length() - (k - 1); i++)
     {
@@ -24,10 +27,28 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
         if (posicoesValidas[0] != 0)
         {
             //cout << "(-," << posicoesValidas[0] << ") ";
+            length = k * x, aux = 0;
+
+            string kmer_cauda = sequence.substr(posicoesValidas[0], k);
+
+            dbg_gap.insertKmer(kmer_cauda);   
+            // buscando os kmers do gap
+
+            for(int j = 0; j < posicoesValidas[0]; j++)
+            {
+
+                string kmer_aux = sequence.substr(j, k);
+                kmer_lista_aux = h.compareKmersWithGraph(kmer_aux, x * k); 
+                for (auto aux : kmer_lista_aux)
+                    dbg_gap.insertKmer(aux);
+            }  
+
+            auto sequence_graph_aux = dbg_gap.dbgToSequenceGraph_1();    
+        
             string sequence_aux = sequence.substr(0, k + posicoesValidas[0]);
-            auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence_aux);
+            auto grafo_multicamada = m.buildMultilayerGraph(sequence_graph_aux.second, sequence_aux);
             auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
-            auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
+            auto mapeamento = m.mostraMapeamento(retorno.first, sequence_graph_aux.first, sequence_graph_aux.second);    
             resposta = mapeamento.second.substr(0,posicoesValidas[0]) + sequence.substr(posicoesValidas[0], k); 
             posicao++;
         }
@@ -38,10 +59,26 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
             int dif = posicoesValidas[i + 1] -  posicoesValidas[i]; 
             if (dif > 1)
             {
+                length = dif * x, aux = 0;
+                string kmer_cabeca = sequence.substr(posicoesValidas[i], k);
+                string kmer_cauda = sequence.substr(posicoesValidas[i+1], k);
+                dbg_gap.deleteHash();
+                dbg_gap.insertKmer(kmer_cabeca);
+                dbg_gap.insertKmer(kmer_cauda);
+                // buscando os kmers do gap
+                //cout << "entre " << kmer_cabeca << " " << kmer_cauda << endl;
+                for(int j = posicoesValidas[i] + 1; j < posicoesValidas[i+1]; j++)
+                {
+                    string kmer_aux = sequence.substr(j, k);
+                    kmer_lista_aux = h.compareKmersWithGraph(kmer_aux, x * k); 
+                    for (auto aux : kmer_lista_aux)
+                        dbg_gap.insertKmer(aux);
+                } 
+                auto sequence_graph_aux = dbg_gap.dbgToSequenceGraph_1();        
                 string sequence_aux = sequence.substr(posicoesValidas[i], k + dif);
-                auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence_aux);
+                auto grafo_multicamada = m.buildMultilayerGraph(sequence_graph_aux.second, sequence_aux);
                 auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
-                auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
+                auto mapeamento = m.mostraMapeamento(retorno.first, sequence_graph_aux.first, sequence_graph_aux.second);    
                 if (mapeamento.second.length() >= k)      
                 {
                     resposta = resposta + mapeamento.second.substr(k, mapeamento.second.length() - (2 * k));   
@@ -61,13 +98,28 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
         if (posicoesValidas[posicoesValidas.size() - 1] != sequence.length() - k)
         {
             //cout << "(" << posicoesValidas[posicoesValidas.size() - 1] << ",-)" << endl;
-            int dif = sequence.length() - posicoesValidas[posicoesValidas.size() - 1];
+            length = k * x, aux = 0;
+            string kmer_cabeca = sequence.substr(posicoesValidas[posicoesValidas.size() - 1], k);
+            dbg_gap.insertKmer(kmer_cabeca);   
+            //kmers_mapeamento.push_back(kmer_cabeca);
+
+            // buscando os kmers do gap
+            for(int j = posicoesValidas[posicoesValidas.size() - 1]; j < sequence.length() - k; j++)
+            {
+                string kmer_aux = sequence.substr(j, k);
+                kmer_lista_aux = h.compareKmersWithGraph(kmer_aux, x * k); 
+                for (auto aux : kmer_lista_aux)
+                    dbg_gap.insertKmer(aux);
+            }  
+            auto sequence_graph_aux = dbg_gap.dbgToSequenceGraph_1();
+   
+               int dif = sequence.length() - posicoesValidas[posicoesValidas.size() - 1];
             if (dif > 1)
             {    
                 string sequence_aux = sequence.substr(posicoesValidas[posicoesValidas.size() - 1], k + dif);
-                auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence_aux);
+                auto grafo_multicamada = m.buildMultilayerGraph(sequence_graph_aux.second, sequence_aux);
                 auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
-                auto mapeamento = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
+                auto mapeamento = m.mostraMapeamento(retorno.first, sequence_graph_aux.first, sequence_graph_aux.second);    
                 if (mapeamento.second.length() >= k)      
                     resposta = resposta + mapeamento.second.substr(k, mapeamento.second.length() - k);  
             }
@@ -75,9 +127,10 @@ string mapeamento(Hash h, pair<unordered_map<int, string>,SequenceGraph> grafoSe
     } else
     {
         cout << "Nenhum kmer encontrado no grafo. A sequência vai ser toda mapeada." << endl;
-        auto grafo_multicamada = m.buildMultilayerGraph(grafoSequencias.second, sequence);
+        auto sequence_graph = h.dbgToSequenceGraph_1();
+        auto grafo_multicamada = m.buildMultilayerGraph(sequence_graph.second, sequence);
         auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
-        auto resposta = m.mostraMapeamento(retorno.first, grafoSequencias.first, grafoSequencias.second);    
+        auto resposta = m.mostraMapeamento(retorno.first, sequence_graph.first, sequence_graph.second);    
         return resposta.second;
     }
     return resposta;
@@ -91,9 +144,9 @@ int main (void)
     int k = 10;
     Hash h(k);   
     h.populateGraph(nomeArquivo, false);
-    auto grafoSequencias = h.dbgToSequenceGraph_1();    
+    // auto grafoSequencias = h.dbgToSequenceGraph_1();    
     // mapeamento
-    auto retorno = mapeamento(h, grafoSequencias, sequence, k); 
+    auto retorno = mapeamento(h, sequence, k); 
     cout << "Mapeamento " << retorno << endl;
     return 0;
 }
