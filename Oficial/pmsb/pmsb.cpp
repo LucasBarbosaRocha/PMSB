@@ -20,20 +20,18 @@ int main(int argc, char *argv[])
 
     if(utils.typeGraph == 0)
     {
-        SequenceGraph traditionalGraph = h.dbgToTraditionalSequenceGraph();
-        //traditionalGraph.printGraph();
-        SequenceGraph m_traditionalGraph = m.buildMultilayerGraph(traditionalGraph, utils.sequence);
-        auto retorno = m.dijkstra(m_traditionalGraph, m.getInitialNode(), m.getEndNode());
-        auto saida = m.showTraditionalMapping(retorno.first, h, traditionalGraph);
+        h.dbgToTraditionalSequenceGraph(0);
+        m.buildMultilayerGraph(h.sequenceGraph, utils.sequence);
+        auto retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
+        auto saida = m.showTraditionalMapping(retorno.first, h, h.sequenceGraph);
         cout << "Traditional." << endl;
         cout << "Cost: " << retorno.second << endl; 
         cout << "Mapping:" << saida.second << endl;    
     } else {
-        SequenceGraph simplifedGraph = h.dbgToSimplifiedSequenceGraph();
-        //simplifedGraph.printGraph();
-        SequenceGraph m_simplifedGraph = m.buildMultilayerGraph(simplifedGraph, utils.sequence);
-        auto retorno = m.dijkstra(m_simplifedGraph, m.getInitialNode(), m.getEndNode());
-        auto saida = m.showSimplifiedMapping(retorno.first, h, simplifedGraph);
+        h.dbgToSimplifiedSequenceGraph(0);
+        m.buildMultilayerGraph(h.sequenceGraph, utils.sequence);
+        auto retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
+        auto saida = m.showSimplifiedMapping(retorno.first, h, h.sequenceGraph);
         cout << "Simplified." << endl;
         cout << "Cost: " << retorno.second << endl; 
         cout << "Mapping:" << saida.second << endl;    

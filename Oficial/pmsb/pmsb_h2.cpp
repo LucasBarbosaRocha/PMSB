@@ -4,177 +4,245 @@
 #include <queue>
 #include <bits/stdc++.h>
 
+#define x 0.5
+MyUtils utils;
+Marschall m;
+
+pair<int, string> headMapping(int firstPosition, Hash h, string sequence, int k)
+{
+    Hash dbg_gap(k);
+    int length, aux, caminho_encontrado = 1;
+    list<string> kmer_lista_aux;
+    string resposta;
+    Marschall m;
+    pair<list<string>, string>  mapeamento;
+
+    if (firstPosition != 0)
+    {
+        cout << "HEAD " << endl;
+        length = k * x, aux = 0;
+        string kmer_cauda = sequence.substr(firstPosition, k);
+        dbg_gap.insertKmer(kmer_cauda);        
+        for(int j = 0; j < firstPosition; j++)
+        {
+            string kmer_aux = sequence.substr(j, k);
+            h.compareKmersWithGraph(dbg_gap, kmer_aux, length); 
+        }  
+
+        // TODO CONFERIR os nós do do grafo simplificado
+        if (utils.typeGraph == 0)
+            dbg_gap.dbgToTraditionalSequenceGraph(0);  
+        else
+            dbg_gap.dbgToSimplifiedSequenceGraph(0);  
+
+        string sequence_aux = sequence.substr(0, k + firstPosition);
+        m.buildMultilayerGraph(dbg_gap.sequenceGraph, sequence_aux);        
+        auto inicial_final = dbg_gap.vertice_inicial_final(kmer_cauda, kmer_cauda);
+        int final = (inicial_final.second + 2) + ((sequence_aux.size() - 1) * dbg_gap.sequenceGraph.getV()) + (sequence_aux.size() - 1);
+        
+        auto retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
+
+        if (retorno.second == INT_MAX)  
+        {
+            caminho_encontrado = 0;
+            return make_pair(caminho_encontrado, resposta);
+        }
+
+         if (utils.typeGraph == 0)
+            mapeamento = m.showTraditionalMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
+        else
+            mapeamento = m.showSimplifiedMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
+
+        resposta = mapeamento.second.substr(0,firstPosition) + sequence.substr(firstPosition, k);    
+
+        // liberando memória
+        retorno.first.clear();
+        mapeamento.second.clear();
+    }
+    return make_pair(caminho_encontrado, resposta);
+}
+
+pair<int, string> internalMapping(vector<int> positions, Hash h, string sequence, int k)
+{
+    int caminho_encontrado = 0, length, aux, posicao = positions[0];
+    string resposta;
+    Hash dbg_gap(k);
+    Marschall m;
+    pair<list<string>, string> mapeamento;
+    cout << "INTERNAL " << endl;
+    for(int i = 0; i < positions.size() - 1; i++)
+    {     
+        caminho_encontrado = 1;
+
+        int dif = positions[i + 1] - positions[i]; 
+        if (dif > 1)
+        {
+            length = k * x, aux = 0;
+            string kmer_cabeca = sequence.substr(positions[i], k);
+            string kmer_cauda = sequence.substr(positions[i+1], k);
+            dbg_gap.deleteHash();
+            dbg_gap.insertKmer(kmer_cabeca);
+            dbg_gap.insertKmer(kmer_cauda);
+            //buscando os kmers do gap
+            for(int j = positions[i] + 1; j < positions[i+1]; j++)
+            {
+                string kmer_aux = sequence.substr(j, k);
+                h.compareKmersWithGraph(dbg_gap, kmer_aux, length); 
+            } 
+
+            if (utils.typeGraph == 0)
+                dbg_gap.dbgToTraditionalSequenceGraph(0);        
+            else
+                dbg_gap.dbgToSimplifiedSequenceGraph(0);
+
+            string sequence_aux = sequence.substr(positions[i], k + dif);
+            m.buildMultilayerGraph(dbg_gap.sequenceGraph, sequence_aux);
+            auto inicial_final = dbg_gap.vertice_inicial_final(kmer_cabeca, kmer_cauda);
+            int inicial = inicial_final.first + 2;
+            int final = (inicial_final.second + 1) + ((sequence_aux.size() - 1) * dbg_gap.sequenceGraph.getV()) + (sequence_aux.size() - 1);
+            auto retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
+
+            if (utils.typeGraph == 0)
+                mapeamento = m.showTraditionalMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
+            else
+                mapeamento = m.showSimplifiedMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
+
+            if (retorno.second == INT_MAX)
+            {
+                i = positions.size() + 1;
+                caminho_encontrado = 0;
+                if (positions[i] == 0)
+                    resposta = resposta + kmer_cabeca;
+                else
+                    resposta = resposta + kmer_cabeca[k-1];
+                break;
+            } else
+            if (mapeamento.second.size() > k)      
+            {
+                resposta = resposta + mapeamento.second.substr(k, mapeamento.second.length() - (2 * k));   
+                resposta = resposta + sequence.substr(positions[i+1], k);                 
+                posicao = 1;
+            }
+
+
+            // limpando memória
+            dbg_gap.sequenceGraph.deleteGraph();
+            mapeamento.second.clear();
+            retorno.first.clear();
+        }else{
+            if (posicao == 0)
+                resposta = resposta + sequence.substr(positions[i], k);
+            else
+                resposta = resposta + sequence.substr(positions[i] + (k-1), 1);
+            posicao++;
+        }
+    }
+    return make_pair(caminho_encontrado, resposta);
+}
+
+pair<int, string> tailMapping(int lastPosition, Hash h, string sequence, int k)
+{
+    int length = k * x, aux = 0, caminho_encontrado = 0;
+    Hash dbg_gap(k);
+    Marschall m;
+    string resposta = "";
+    pair<list<string>, string> mapeamento;
+
+    if (sequence.length() - lastPosition >= k)
+    {
+        cout << "TAIL " << endl;
+
+        string kmer_cabeca = sequence.substr(lastPosition, k);
+        dbg_gap.insertKmer(kmer_cabeca);   
+
+        for(int j = lastPosition; j < sequence.length() - k; j++)
+        {
+            string kmer_aux = sequence.substr(j, k);
+            h.compareKmersWithGraph(dbg_gap, kmer_aux, x * k); 
+        }  
+
+        if (utils.typeGraph == 0)
+            dbg_gap.dbgToTraditionalSequenceGraph(0);
+        else
+            dbg_gap.dbgToSimplifiedSequenceGraph(0);
+
+        int dif = sequence.length() - lastPosition;    
+        string sequence_aux = sequence.substr(lastPosition, k + dif);
+        m.buildMultilayerGraph(dbg_gap.sequenceGraph, sequence_aux);
+        auto inicial_final = dbg_gap.vertice_inicial_final(kmer_cabeca, kmer_cabeca);
+        int inicial = inicial_final.first + 2;
+        auto retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
+
+        if (utils.typeGraph == 0)
+            mapeamento = m.showTraditionalMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
+        else
+            mapeamento = m.showSimplifiedMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
+    
+        if (mapeamento.second.length() >= k)      
+        {
+            resposta = resposta + mapeamento.second.substr(k, mapeamento.second.length() - k); 
+            caminho_encontrado = 1; 
+        }       
+    }
+    return make_pair(caminho_encontrado, resposta);
+}
+
 string mapeamento(Hash h, string sequence, int k)
 {
     int posicao = 0, length, aux, caminho_encontrado = 1;
-    float x = 0.5;
     string resposta = "";
     vector<int> posicoesValidas;
     list<string> kmer_lista_aux;
     Marschall m;
     Hash dbg_gap(k);
+    pair<int, string> status;
+
 
     for (int i = 0; i < sequence.length() - (k - 1); i++)
     {
-                cout << "teste " << sequence.substr(i,2) << endl;
-
         if (h.contains(sequence.substr(i,k)))
         {
             posicoesValidas.push_back(i);
-
         }
     }
+
     if (posicoesValidas.size() > 0)
     {
-        if (posicoesValidas[0] != 0)
-        {
 
-            length = k * x, aux = 0;
+        status = headMapping(posicoesValidas[0], h, sequence, k);
+        if (status.first == 0)
+            return status.second;
 
-            string kmer_cauda = sequence.substr(posicoesValidas[0], k);
+        cout << "Head path " << status.first << endl;
 
-            dbg_gap.insertKmer(kmer_cauda);   
-            // buscando os kmers do gap
+        resposta = status.second;
 
-            for(int j = 0; j < posicoesValidas[0]; j++)
-            {
+        status = internalMapping(posicoesValidas, h, sequence, k);
+        if (status.first == 0)
+            return resposta + status.second;
 
-                string kmer_aux = sequence.substr(j, k);
-                kmer_lista_aux = h.compareKmersWithGraph(kmer_aux, x * k); 
-                for (auto aux : kmer_lista_aux)
-                    dbg_gap.insertKmer(aux);
-            }  
+        cout << "Internal path " << status.first << endl;
 
-            auto sequence_graph_aux = dbg_gap.dbgToTraditionalSequenceGraph(0);  
-            string sequence_aux = sequence.substr(0, k + posicoesValidas[0]);
+        resposta += status.second;
 
-            auto grafo_multicamada = m.buildMultilayerGraph(sequence_graph_aux, sequence_aux);
-            auto inicial_final = h.vertice_inicial_final(kmer_cauda, kmer_cauda);
-            int final = inicial_final.second + ((sequence_aux.size() - 1) * sequence_graph_aux.getV());
-            auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), final);
-            auto mapeamento = m.showTraditionalMapping(retorno.first, h, sequence_graph_aux);
-            if (retorno.second == INT_MAX)
-            {
-                caminho_encontrado = 0;
-            }else
-                resposta = resposta + mapeamento.second.substr(0,posicoesValidas[0]) + sequence.substr(posicoesValidas[0], k); 
-            posicao++;
-        }
+        status = tailMapping(posicoesValidas[posicoesValidas.size() - 1], h, sequence, k);
+        if (status.first == 0)
+            return resposta + status.second;
 
-        if(caminho_encontrado == 1)
-        {     
-            for(int i = 0; i < posicoesValidas.size() - 1; i++)
-            {     
-                caminho_encontrado = 1;
-
-                int dif = posicoesValidas[i + 1] -  posicoesValidas[i]; 
-                if (dif > 1)
-                {
-                    length = dif * x, aux = 0;
-                    string kmer_cabeca = sequence.substr(posicoesValidas[i], k);
-                    string kmer_cauda = sequence.substr(posicoesValidas[i+1], k);
-                    dbg_gap.deleteHash();
-                    dbg_gap.insertKmer(kmer_cabeca);
-                    dbg_gap.insertKmer(kmer_cauda);
-                    //buscando os kmers do gap
-                    for(int j = posicoesValidas[i] + 1; j < posicoesValidas[i+1]; j++)
-                    {
-                        string kmer_aux = sequence.substr(j, k);
-                        kmer_lista_aux = h.compareKmersWithGraph(kmer_aux, x * k); 
-                        for (auto aux : kmer_lista_aux)
-                            dbg_gap.insertKmer(aux);
-                    } 
-                    auto sequence_graph_aux = dbg_gap.dbgToTraditionalSequenceGraph(0);        
-                    string sequence_aux = sequence.substr(posicoesValidas[i], k + dif);
-                    auto grafo_multicamada = m.buildMultilayerGraph(sequence_graph_aux, sequence_aux);
-
-                    auto inicial_final = h.vertice_inicial_final(kmer_cauda, kmer_cauda);
-                    int inicial = inicial_final.first + 2;
-                    int final = inicial_final.second + ((sequence_aux.size() - 1) * sequence_graph_aux.getV());
-                    auto retorno = m.dijkstra(grafo_multicamada, inicial, final);
-                    auto mapeamento = m.showTraditionalMapping(retorno.first, h, sequence_graph_aux);
-
-                    if (retorno.second == INT_MAX)
-                    {
-                        i = posicoesValidas.size() + 1;
-                        caminho_encontrado = 0;
-                        if (posicoesValidas[i] == 0)
-                            resposta = resposta + kmer_cabeca;
-                        else
-                            resposta = resposta + kmer_cabeca[k-1];
-                        break;
-                    } else
-                    if (mapeamento.second.size() > k)      
-                    {
-                        resposta = resposta + mapeamento.second.substr(k, mapeamento.second.length() - (2 * k));   
-                        //resposta = resposta + mapeamento.substr(mapeamento.length()- (k), k);   
-                        resposta = resposta + sequence.substr(posicoesValidas[i+1], k);                 
-                        posicao = 1;
-                    }
-                }else{
-                    if (posicao == 0)
-                        resposta = resposta + sequence.substr(posicoesValidas[i], k);
-                    else
-                        resposta = resposta + sequence.substr(posicoesValidas[i] + (k-1), 1);
-                    posicao++;
-                }
-            }
-
-            if (caminho_encontrado == 1 && posicoesValidas[posicoesValidas.size() - 1] != sequence.length() - k)
-            {
-
-                length = k * x, aux = 0;
-                string kmer_cabeca = sequence.substr(posicoesValidas[posicoesValidas.size() - 1], k);
-                dbg_gap.insertKmer(kmer_cabeca);   
-                //kmers_mapeamento.push_back(kmer_cabeca);
-
-                // buscando os kmers do gap
-                for(int j = posicoesValidas[posicoesValidas.size() - 1]; j < sequence.length() - k; j++)
-                {
-                    string kmer_aux = sequence.substr(j, k);
-                    kmer_lista_aux = h.compareKmersWithGraph(kmer_aux, x * k); 
-                    for (auto aux : kmer_lista_aux)
-                        dbg_gap.insertKmer(aux);
-                }  
-                auto sequence_graph_aux = dbg_gap.dbgToTraditionalSequenceGraph(0);
-    
-                int dif = sequence.length() - posicoesValidas[posicoesValidas.size() - 1];
-                if (dif > 1)
-                {    
-                    string sequence_aux = sequence.substr(posicoesValidas[posicoesValidas.size() - 1], k + dif);
-                    auto grafo_multicamada = m.buildMultilayerGraph(sequence_graph_aux, sequence_aux);
-                    auto inicial_final = h.vertice_inicial_final(kmer_cabeca, kmer_cabeca);
-                    int inicial = inicial_final.first + 2;
-                    auto retorno = m.dijkstra(grafo_multicamada, inicial, m.getEndNode());
-                    auto mapeamento = m.showTraditionalMapping(retorno.first, h, sequence_graph_aux);
-                    if (mapeamento.second.length() >= k)      
-                        resposta = resposta + mapeamento.second.substr(k, mapeamento.second.length() - k);  
-                }
-            }
-        }
-    } else
-    {
-
-        auto sequence_graph = h.dbgToTraditionalSequenceGraph(0);
-        auto grafo_multicamada = m.buildMultilayerGraph(sequence_graph, sequence);
-        auto retorno = m.dijkstra(grafo_multicamada, m.getInitialNode(), m.getEndNode());
-        auto mapeamento = m.showTraditionalMapping(retorno.first, h, sequence_graph);
-        return mapeamento.second;
-    }
+        
+        cout << "Tail path " << status.first << endl;
+    } 
 
     if (resposta.size() > 0)
         return resposta;
     else
-        return "caminho nao encontrado";
+        return "Sequência nao pode ser mapeada";
 }
 
 int main(int argc, char *argv[])
 {
-    MyUtils utils;
-
     if(utils.verifyData(argc, argv) == 1)
-        exit (0);
-    
+        exit (0); 
         
     Hash h(utils.k);   
     utils.readSequence(utils.nameSequenceArchive);  
