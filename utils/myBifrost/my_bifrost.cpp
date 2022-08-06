@@ -1,6 +1,7 @@
 //#include "bifrost/src/CompactedDBG.hpp"
 #include "myData.cpp"
-#include "../mySequenceGraph.cpp"
+//#include "../mySequenceGraph.cpp"
+#include "../myDBGgraph.cpp"
 
 #define sub 1
 #define ins 1
