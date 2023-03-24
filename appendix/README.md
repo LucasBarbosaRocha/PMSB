@@ -2,10 +2,10 @@
 
 ## Pseudocodes
 
-![findAnchors](https://github.com/lucasbarbosarocha/PMSB/edit/main/appendix/findAnchors.png?raw=true "teste")
+### Find Anchors
 
+![findAnchors](findAnchors.png?raw=true "Find Anchors")
+
+### Convert Graph
   
-<img src="[https://github.com/lucasbarbosarocha/PMSB/edit/main/appendix/findAnchors.png]" style=" width:60px ; height:60px " >
-
-
-![convertGraph](https://github.com/lucasbarbosarocha/PMSB/edit/main/appendix/convertGraph.png?raw=true)
+![convertGraph](convertGraph.png?raw=true "Convert Graph")
