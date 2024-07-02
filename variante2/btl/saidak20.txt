@@ -1,0 +1,800 @@
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6979
+Size L.Read 6998
+qtd kmers in s 6978
+cost: 232
+kmers after maping: 6979
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2718
+Size L.Read 2737
+qtd kmers in s 2717
+cost: 96
+kmers after maping: 2718
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6829
+Size L.Read 6848
+qtd kmers in s 6828
+cost: 236
+kmers after maping: 6829
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 11043
+Size L.Read 11062
+qtd kmers in s 11042
+cost: 371
+kmers after maping: 11043
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5746
+Size L.Read 5765
+qtd kmers in s 5745
+cost: 202
+kmers after maping: 5746
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2971
+Size L.Read 2990
+qtd kmers in s 2970
+cost: 102
+kmers after maping: 2971
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5579
+Size L.Read 5598
+qtd kmers in s 5578
+cost: 204
+kmers after maping: 5579
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 7025
+Size L.Read 7044
+qtd kmers in s 7024
+cost: 246
+kmers after maping: 7025
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3827
+Size L.Read 3846
+qtd kmers in s 3826
+cost: 133
+kmers after maping: 3827
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5876
+Size L.Read 5895
+qtd kmers in s 5875
+cost: 195
+kmers after maping: 5876
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4763
+Size L.Read 4782
+qtd kmers in s 4762
+cost: 159
+kmers after maping: 4763
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5540
+Size L.Read 5559
+qtd kmers in s 5539
+cost: 190
+kmers after maping: 5540
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3582
+Size L.Read 3601
+qtd kmers in s 3581
+cost: 138
+kmers after maping: 3582
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3077
+Size L.Read 3096
+qtd kmers in s 3076
+cost: 119
+kmers after maping: 3077
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6065
+Size L.Read 6084
+qtd kmers in s 6064
+cost: 195
+kmers after maping: 6065
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5047
+Size L.Read 5066
+qtd kmers in s 5046
+cost: 181
+kmers after maping: 5047
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 8449
+Size L.Read 8468
+qtd kmers in s 8448
+cost: 281
+kmers after maping: 8449
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6340
+Size L.Read 6359
+qtd kmers in s 6339
+cost: 222
+kmers after maping: 6340
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5466
+Size L.Read 5485
+qtd kmers in s 5465
+cost: 186
+kmers after maping: 5466
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5831
+Size L.Read 5850
+qtd kmers in s 5830
+cost: 191
+kmers after maping: 5831
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6644
+Size L.Read 6663
+qtd kmers in s 6643
+cost: 242
+kmers after maping: 6644
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5726
+Size L.Read 5745
+qtd kmers in s 5725
+cost: 200
+kmers after maping: 5726
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3890
+Size L.Read 3909
+qtd kmers in s 3889
+cost: 132
+kmers after maping: 3890
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6048
+Size L.Read 6067
+qtd kmers in s 6047
+cost: 204
+kmers after maping: 6048
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 7016
+Size L.Read 7035
+qtd kmers in s 7015
+cost: 236
+kmers after maping: 7016
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2443
+Size L.Read 2462
+qtd kmers in s 2442
+cost: 80
+kmers after maping: 2443
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5074
+Size L.Read 5093
+qtd kmers in s 5073
+cost: 165
+kmers after maping: 5074
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2504
+Size L.Read 2523
+qtd kmers in s 2503
+cost: 95
+kmers after maping: 2504
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5553
+Size L.Read 5572
+qtd kmers in s 5552
+cost: 190
+kmers after maping: 5553
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6070
+Size L.Read 6089
+qtd kmers in s 6069
+cost: 224
+kmers after maping: 6070
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5555
+Size L.Read 5579
+qtd kmers in s 5554
+cost: 198
+kmers after maping: 5560
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 7405
+Size L.Read 7424
+qtd kmers in s 7404
+cost: 245
+kmers after maping: 7405
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2705
+Size L.Read 2724
+qtd kmers in s 2704
+cost: 92
+kmers after maping: 2705
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2545
+Size L.Read 2564
+qtd kmers in s 2544
+cost: 83
+kmers after maping: 2545
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2362
+Size L.Read 2381
+qtd kmers in s 2361
+cost: 80
+kmers after maping: 2362
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5632
+Size L.Read 5651
+qtd kmers in s 5631
+cost: 208
+kmers after maping: 5632
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3429
+Size L.Read 3448
+qtd kmers in s 3428
+cost: 128
+kmers after maping: 3429
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2404
+Size L.Read 2423
+qtd kmers in s 2403
+cost: 84
+kmers after maping: 2404
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4245
+Size L.Read 4264
+qtd kmers in s 4244
+cost: 131
+kmers after maping: 4245
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2436
+Size L.Read 2455
+qtd kmers in s 2435
+cost: 94
+kmers after maping: 2436
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6822
+Size L.Read 6841
+qtd kmers in s 6821
+cost: 229
+kmers after maping: 6822
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 8701
+Size L.Read 8720
+qtd kmers in s 8700
+cost: 304
+kmers after maping: 8701
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 8258
+Size L.Read 8277
+qtd kmers in s 8257
+cost: 295
+kmers after maping: 8258
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5369
+Size L.Read 5388
+qtd kmers in s 5368
+cost: 194
+kmers after maping: 5369
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 7070
+Size L.Read 7089
+qtd kmers in s 7069
+cost: 251
+kmers after maping: 7070
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4422
+Size L.Read 4441
+qtd kmers in s 4421
+cost: 154
+kmers after maping: 4422
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2790
+Size L.Read 2809
+qtd kmers in s 2789
+cost: 103
+kmers after maping: 2790
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4879
+Size L.Read 4898
+qtd kmers in s 4878
+cost: 167
+kmers after maping: 4879
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2885
+Size L.Read 2904
+qtd kmers in s 2884
+cost: 94
+kmers after maping: 2885
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2279
+Size L.Read 2298
+qtd kmers in s 2278
+cost: 71
+kmers after maping: 2279
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6206
+Size L.Read 6225
+qtd kmers in s 6205
+cost: 208
+kmers after maping: 6206
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6321
+Size L.Read 6340
+qtd kmers in s 6320
+cost: 203
+kmers after maping: 6321
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4445
+Size L.Read 4464
+qtd kmers in s 4444
+cost: 155
+kmers after maping: 4445
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5907
+Size L.Read 5926
+qtd kmers in s 5906
+cost: 209
+kmers after maping: 5907
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6941
+Size L.Read 6991
+qtd kmers in s 6937
+cost: 240
+kmers after maping: 6972
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5284
+Size L.Read 5303
+qtd kmers in s 5283
+cost: 163
+kmers after maping: 5284
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4740
+Size L.Read 4759
+qtd kmers in s 4739
+cost: 156
+kmers after maping: 4740
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4202
+Size L.Read 4221
+qtd kmers in s 4201
+cost: 147
+kmers after maping: 4202
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5643
+Size L.Read 5662
+qtd kmers in s 5642
+cost: 194
+kmers after maping: 5643
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5884
+Size L.Read 5903
+qtd kmers in s 5883
+cost: 196
+kmers after maping: 5884
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5730
+Size L.Read 5749
+qtd kmers in s 5729
+cost: 205
+kmers after maping: 5730
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 7015
+Size L.Read 7034
+qtd kmers in s 7014
+cost: 242
+kmers after maping: 7015
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3499
+Size L.Read 3518
+qtd kmers in s 3498
+cost: 128
+kmers after maping: 3499
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6527
+Size L.Read 6546
+qtd kmers in s 6526
+cost: 220
+kmers after maping: 6527
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2926
+Size L.Read 2945
+qtd kmers in s 2925
+cost: 96
+kmers after maping: 2926
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6645
+Size L.Read 6667
+qtd kmers in s 6644
+cost: 229
+kmers after maping: 6648
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3187
+Size L.Read 3206
+qtd kmers in s 3186
+cost: 113
+kmers after maping: 3187
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6117
+Size L.Read 6136
+qtd kmers in s 6116
+cost: 201
+kmers after maping: 6117
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3566
+Size L.Read 3585
+qtd kmers in s 3565
+cost: 133
+kmers after maping: 3566
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5887
+Size L.Read 5906
+qtd kmers in s 5886
+cost: 201
+kmers after maping: 5887
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5674
+Size L.Read 5693
+qtd kmers in s 5673
+cost: 191
+kmers after maping: 5674
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5808
+Size L.Read 5827
+qtd kmers in s 5807
+cost: 205
+kmers after maping: 5808
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4563
+Size L.Read 4582
+qtd kmers in s 4562
+cost: 161
+kmers after maping: 4563
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6749
+Size L.Read 6768
+qtd kmers in s 6748
+cost: 222
+kmers after maping: 6749
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2635
+Size L.Read 2654
+qtd kmers in s 2634
+cost: 92
+kmers after maping: 2635
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4900
+Size L.Read 4919
+qtd kmers in s 4899
+cost: 166
+kmers after maping: 4900
+b'Kmers in Gk: 6979\nSize L.Read 6998\nqtd kmers in s 6978\ncost: 232\nkmers after maping: 6979\n'
+cost: 232
+b'Kmers in Gk: 2718\nSize L.Read 2737\nqtd kmers in s 2717\ncost: 96\nkmers after maping: 2718\n'
+cost: 96
+b'Kmers in Gk: 6829\nSize L.Read 6848\nqtd kmers in s 6828\ncost: 236\nkmers after maping: 6829\n'
+cost: 236
+b'Kmers in Gk: 11043\nSize L.Read 11062\nqtd kmers in s 11042\ncost: 371\nkmers after maping: 11043\n'
+cost: 371
+b'Kmers in Gk: 5746\nSize L.Read 5765\nqtd kmers in s 5745\ncost: 202\nkmers after maping: 5746\n'
+cost: 202
+b'Kmers in Gk: 2971\nSize L.Read 2990\nqtd kmers in s 2970\ncost: 102\nkmers after maping: 2971\n'
+cost: 102
+b'Kmers in Gk: 5579\nSize L.Read 5598\nqtd kmers in s 5578\ncost: 204\nkmers after maping: 5579\n'
+cost: 204
+b'Kmers in Gk: 7025\nSize L.Read 7044\nqtd kmers in s 7024\ncost: 246\nkmers after maping: 7025\n'
+cost: 246
+b'Kmers in Gk: 3827\nSize L.Read 3846\nqtd kmers in s 3826\ncost: 133\nkmers after maping: 3827\n'
+cost: 133
+b'Kmers in Gk: 5876\nSize L.Read 5895\nqtd kmers in s 5875\ncost: 195\nkmers after maping: 5876\n'
+cost: 195
+b'Kmers in Gk: 4763\nSize L.Read 4782\nqtd kmers in s 4762\ncost: 159\nkmers after maping: 4763\n'
+cost: 159
+b'Kmers in Gk: 5540\nSize L.Read 5559\nqtd kmers in s 5539\ncost: 190\nkmers after maping: 5540\n'
+cost: 190
+b'Kmers in Gk: 3582\nSize L.Read 3601\nqtd kmers in s 3581\ncost: 138\nkmers after maping: 3582\n'
+cost: 138
+b'Kmers in Gk: 3077\nSize L.Read 3096\nqtd kmers in s 3076\ncost: 119\nkmers after maping: 3077\n'
+cost: 119
+b'Kmers in Gk: 6065\nSize L.Read 6084\nqtd kmers in s 6064\ncost: 195\nkmers after maping: 6065\n'
+cost: 195
+b'Kmers in Gk: 5047\nSize L.Read 5066\nqtd kmers in s 5046\ncost: 181\nkmers after maping: 5047\n'
+cost: 181
+b'Kmers in Gk: 8449\nSize L.Read 8468\nqtd kmers in s 8448\ncost: 281\nkmers after maping: 8449\n'
+cost: 281
+b'Kmers in Gk: 6340\nSize L.Read 6359\nqtd kmers in s 6339\ncost: 222\nkmers after maping: 6340\n'
+cost: 222
+b'Kmers in Gk: 5466\nSize L.Read 5485\nqtd kmers in s 5465\ncost: 186\nkmers after maping: 5466\n'
+cost: 186
+b'Kmers in Gk: 5831\nSize L.Read 5850\nqtd kmers in s 5830\ncost: 191\nkmers after maping: 5831\n'
+cost: 191
+b'Kmers in Gk: 6644\nSize L.Read 6663\nqtd kmers in s 6643\ncost: 242\nkmers after maping: 6644\n'
+cost: 242
+b'Kmers in Gk: 5726\nSize L.Read 5745\nqtd kmers in s 5725\ncost: 200\nkmers after maping: 5726\n'
+cost: 200
+b'Kmers in Gk: 3890\nSize L.Read 3909\nqtd kmers in s 3889\ncost: 132\nkmers after maping: 3890\n'
+cost: 132
+b'Kmers in Gk: 6048\nSize L.Read 6067\nqtd kmers in s 6047\ncost: 204\nkmers after maping: 6048\n'
+cost: 204
+b'Kmers in Gk: 7016\nSize L.Read 7035\nqtd kmers in s 7015\ncost: 236\nkmers after maping: 7016\n'
+cost: 236
+b'Kmers in Gk: 2443\nSize L.Read 2462\nqtd kmers in s 2442\ncost: 80\nkmers after maping: 2443\n'
+cost: 80
+b'Kmers in Gk: 5074\nSize L.Read 5093\nqtd kmers in s 5073\ncost: 165\nkmers after maping: 5074\n'
+cost: 165
+b'Kmers in Gk: 2504\nSize L.Read 2523\nqtd kmers in s 2503\ncost: 95\nkmers after maping: 2504\n'
+cost: 95
+b'Kmers in Gk: 5553\nSize L.Read 5572\nqtd kmers in s 5552\ncost: 190\nkmers after maping: 5553\n'
+cost: 190
+b'Kmers in Gk: 6070\nSize L.Read 6089\nqtd kmers in s 6069\ncost: 224\nkmers after maping: 6070\n'
+cost: 224
+b'Kmers in Gk: 5555\nSize L.Read 5579\nqtd kmers in s 5554\ncost: 198\nkmers after maping: 5560\n'
+cost: 198
+b'Kmers in Gk: 7405\nSize L.Read 7424\nqtd kmers in s 7404\ncost: 245\nkmers after maping: 7405\n'
+cost: 245
+b'Kmers in Gk: 2705\nSize L.Read 2724\nqtd kmers in s 2704\ncost: 92\nkmers after maping: 2705\n'
+cost: 92
+b'Kmers in Gk: 2545\nSize L.Read 2564\nqtd kmers in s 2544\ncost: 83\nkmers after maping: 2545\n'
+cost: 83
+b'Kmers in Gk: 2362\nSize L.Read 2381\nqtd kmers in s 2361\ncost: 80\nkmers after maping: 2362\n'
+cost: 80
+b'Kmers in Gk: 5632\nSize L.Read 5651\nqtd kmers in s 5631\ncost: 208\nkmers after maping: 5632\n'
+cost: 208
+b'Kmers in Gk: 3429\nSize L.Read 3448\nqtd kmers in s 3428\ncost: 128\nkmers after maping: 3429\n'
+cost: 128
+b'Kmers in Gk: 2404\nSize L.Read 2423\nqtd kmers in s 2403\ncost: 84\nkmers after maping: 2404\n'
+cost: 84
+b'Kmers in Gk: 4245\nSize L.Read 4264\nqtd kmers in s 4244\ncost: 131\nkmers after maping: 4245\n'
+cost: 131
+b'Kmers in Gk: 2436\nSize L.Read 2455\nqtd kmers in s 2435\ncost: 94\nkmers after maping: 2436\n'
+cost: 94
+b'Kmers in Gk: 6822\nSize L.Read 6841\nqtd kmers in s 6821\ncost: 229\nkmers after maping: 6822\n'
+cost: 229
+b'Kmers in Gk: 8701\nSize L.Read 8720\nqtd kmers in s 8700\ncost: 304\nkmers after maping: 8701\n'
+cost: 304
+b'Kmers in Gk: 8258\nSize L.Read 8277\nqtd kmers in s 8257\ncost: 295\nkmers after maping: 8258\n'
+cost: 295
+b'Kmers in Gk: 5369\nSize L.Read 5388\nqtd kmers in s 5368\ncost: 194\nkmers after maping: 5369\n'
+cost: 194
+b'Kmers in Gk: 7070\nSize L.Read 7089\nqtd kmers in s 7069\ncost: 251\nkmers after maping: 7070\n'
+cost: 251
+b'Kmers in Gk: 4422\nSize L.Read 4441\nqtd kmers in s 4421\ncost: 154\nkmers after maping: 4422\n'
+cost: 154
+b'Kmers in Gk: 2790\nSize L.Read 2809\nqtd kmers in s 2789\ncost: 103\nkmers after maping: 2790\n'
+cost: 103
+b'Kmers in Gk: 4879\nSize L.Read 4898\nqtd kmers in s 4878\ncost: 167\nkmers after maping: 4879\n'
+cost: 167
+b'Kmers in Gk: 2885\nSize L.Read 2904\nqtd kmers in s 2884\ncost: 94\nkmers after maping: 2885\n'
+cost: 94
+b'Kmers in Gk: 2279\nSize L.Read 2298\nqtd kmers in s 2278\ncost: 71\nkmers after maping: 2279\n'
+cost: 71
+b'Kmers in Gk: 6206\nSize L.Read 6225\nqtd kmers in s 6205\ncost: 208\nkmers after maping: 6206\n'
+cost: 208
+b'Kmers in Gk: 6321\nSize L.Read 6340\nqtd kmers in s 6320\ncost: 203\nkmers after maping: 6321\n'
+cost: 203
+b'Kmers in Gk: 4445\nSize L.Read 4464\nqtd kmers in s 4444\ncost: 155\nkmers after maping: 4445\n'
+cost: 155
+b'Kmers in Gk: 5907\nSize L.Read 5926\nqtd kmers in s 5906\ncost: 209\nkmers after maping: 5907\n'
+cost: 209
+b'Kmers in Gk: 6941\nSize L.Read 6991\nqtd kmers in s 6937\ncost: 240\nkmers after maping: 6972\n'
+cost: 240
+b'Kmers in Gk: 5284\nSize L.Read 5303\nqtd kmers in s 5283\ncost: 163\nkmers after maping: 5284\n'
+cost: 163
+b'Kmers in Gk: 4740\nSize L.Read 4759\nqtd kmers in s 4739\ncost: 156\nkmers after maping: 4740\n'
+cost: 156
+b'Kmers in Gk: 4202\nSize L.Read 4221\nqtd kmers in s 4201\ncost: 147\nkmers after maping: 4202\n'
+cost: 147
+b'Kmers in Gk: 5643\nSize L.Read 5662\nqtd kmers in s 5642\ncost: 194\nkmers after maping: 5643\n'
+cost: 194
+b'Kmers in Gk: 5884\nSize L.Read 5903\nqtd kmers in s 5883\ncost: 196\nkmers after maping: 5884\n'
+cost: 196
+b'Kmers in Gk: 5730\nSize L.Read 5749\nqtd kmers in s 5729\ncost: 205\nkmers after maping: 5730\n'
+cost: 205
+b'Kmers in Gk: 7015\nSize L.Read 7034\nqtd kmers in s 7014\ncost: 242\nkmers after maping: 7015\n'
+cost: 242
+b'Kmers in Gk: 3499\nSize L.Read 3518\nqtd kmers in s 3498\ncost: 128\nkmers after maping: 3499\n'
+cost: 128
+b'Kmers in Gk: 6527\nSize L.Read 6546\nqtd kmers in s 6526\ncost: 220\nkmers after maping: 6527\n'
+cost: 220
+b'Kmers in Gk: 2926\nSize L.Read 2945\nqtd kmers in s 2925\ncost: 96\nkmers after maping: 2926\n'
+cost: 96
+b'Kmers in Gk: 6645\nSize L.Read 6667\nqtd kmers in s 6644\ncost: 229\nkmers after maping: 6648\n'
+cost: 229
+b'Kmers in Gk: 3187\nSize L.Read 3206\nqtd kmers in s 3186\ncost: 113\nkmers after maping: 3187\n'
+cost: 113
+b'Kmers in Gk: 6117\nSize L.Read 6136\nqtd kmers in s 6116\ncost: 201\nkmers after maping: 6117\n'
+cost: 201
+b'Kmers in Gk: 3566\nSize L.Read 3585\nqtd kmers in s 3565\ncost: 133\nkmers after maping: 3566\n'
+cost: 133
+b'Kmers in Gk: 5887\nSize L.Read 5906\nqtd kmers in s 5886\ncost: 201\nkmers after maping: 5887\n'
+cost: 201
+b'Kmers in Gk: 5674\nSize L.Read 5693\nqtd kmers in s 5673\ncost: 191\nkmers after maping: 5674\n'
+cost: 191
+b'Kmers in Gk: 5808\nSize L.Read 5827\nqtd kmers in s 5807\ncost: 205\nkmers after maping: 5808\n'
+cost: 205
+b'Kmers in Gk: 4563\nSize L.Read 4582\nqtd kmers in s 4562\ncost: 161\nkmers after maping: 4563\n'
+cost: 161
+b'Kmers in Gk: 6749\nSize L.Read 6768\nqtd kmers in s 6748\ncost: 222\nkmers after maping: 6749\n'
+cost: 222
+b'Kmers in Gk: 2635\nSize L.Read 2654\nqtd kmers in s 2634\ncost: 92\nkmers after maping: 2635\n'
+cost: 92
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2570
+Size L.Read 2589
+qtd kmers in s 2569
+cost: 87
+kmers after maping: 2570
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6010
+Size L.Read 6029
+qtd kmers in s 6009
+cost: 210
+kmers after maping: 6010
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2942
+Size L.Read 2961
+qtd kmers in s 2941
+cost: 96
+kmers after maping: 2942
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5635
+Size L.Read 5654
+qtd kmers in s 5634
+cost: 201
+kmers after maping: 5635
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 9019
+Size L.Read 9140
+qtd kmers in s 9010
+cost: 323
+kmers after maping: 9121
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2577
+Size L.Read 2596
+qtd kmers in s 2576
+cost: 81
+kmers after maping: 2577
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5185
+Size L.Read 5204
+qtd kmers in s 5184
+cost: 190
+kmers after maping: 5185
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3358
+Size L.Read 3377
+qtd kmers in s 3357
+cost: 120
+kmers after maping: 3358
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 1474
+Size L.Read 1493
+qtd kmers in s 1473
+cost: 49
+kmers after maping: 1474
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 6061
+Size L.Read 6168
+qtd kmers in s 6052
+cost: 225
+kmers after maping: 6149
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 7067
+Size L.Read 7086
+qtd kmers in s 7066
+cost: 234
+kmers after maping: 7067
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5227
+Size L.Read 5246
+qtd kmers in s 5226
+cost: 180
+kmers after maping: 5227
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5810
+Size L.Read 5829
+qtd kmers in s 5809
+cost: 188
+kmers after maping: 5810
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 3073
+Size L.Read 3092
+qtd kmers in s 3072
+cost: 101
+kmers after maping: 3073
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5026
+Size L.Read 5045
+qtd kmers in s 5025
+cost: 179
+kmers after maping: 5026
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4224
+Size L.Read 4243
+qtd kmers in s 4223
+cost: 146
+kmers after maping: 4224
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 8642
+Size L.Read 8661
+qtd kmers in s 8641
+cost: 286
+kmers after maping: 8642
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 8268
+Size L.Read 8287
+qtd kmers in s 8267
+cost: 278
+kmers after maping: 8268
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5711
+Size L.Read 5730
+qtd kmers in s 5710
+cost: 193
+kmers after maping: 5711
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 5535
+Size L.Read 5554
+qtd kmers in s 5534
+cost: 196
+kmers after maping: 5535
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 7687
+Size L.Read 7708
+qtd kmers in s 7685
+cost: 264
+kmers after maping: 7689
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 8151
+Size L.Read 8170
+qtd kmers in s 8150
+cost: 295
+kmers after maping: 8151
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 4415
+Size L.Read 4434
+qtd kmers in s 4414
+cost: 154
+kmers after maping: 4415
+g++ -O3 -std=c++11 -o btl main.o hung.o
+Kmers in Gk: 2275
+Size L.Read 2294
+qtd kmers in s 2274
+cost: 71
+kmers after maping: 2275
+b'Kmers in Gk: 4900\nSize L.Read 4919\nqtd kmers in s 4899\ncost: 166\nkmers after maping: 4900\n'
+cost: 166
+b'Kmers in Gk: 2570\nSize L.Read 2589\nqtd kmers in s 2569\ncost: 87\nkmers after maping: 2570\n'
+cost: 87
+b'Kmers in Gk: 6010\nSize L.Read 6029\nqtd kmers in s 6009\ncost: 210\nkmers after maping: 6010\n'
+cost: 210
+b'Kmers in Gk: 2942\nSize L.Read 2961\nqtd kmers in s 2941\ncost: 96\nkmers after maping: 2942\n'
+cost: 96
+b'Kmers in Gk: 5635\nSize L.Read 5654\nqtd kmers in s 5634\ncost: 201\nkmers after maping: 5635\n'
+cost: 201
+b'Kmers in Gk: 9019\nSize L.Read 9140\nqtd kmers in s 9010\ncost: 323\nkmers after maping: 9121\n'
+cost: 323
+b'Kmers in Gk: 2577\nSize L.Read 2596\nqtd kmers in s 2576\ncost: 81\nkmers after maping: 2577\n'
+cost: 81
+b'Kmers in Gk: 5185\nSize L.Read 5204\nqtd kmers in s 5184\ncost: 190\nkmers after maping: 5185\n'
+cost: 190
+b'Kmers in Gk: 3358\nSize L.Read 3377\nqtd kmers in s 3357\ncost: 120\nkmers after maping: 3358\n'
+cost: 120
+b'Kmers in Gk: 1474\nSize L.Read 1493\nqtd kmers in s 1473\ncost: 49\nkmers after maping: 1474\n'
+cost: 49
+b'Kmers in Gk: 6061\nSize L.Read 6168\nqtd kmers in s 6052\ncost: 225\nkmers after maping: 6149\n'
+cost: 225
+b'Kmers in Gk: 7067\nSize L.Read 7086\nqtd kmers in s 7066\ncost: 234\nkmers after maping: 7067\n'
+cost: 234
+b'Kmers in Gk: 5227\nSize L.Read 5246\nqtd kmers in s 5226\ncost: 180\nkmers after maping: 5227\n'
+cost: 180
+b'Kmers in Gk: 5810\nSize L.Read 5829\nqtd kmers in s 5809\ncost: 188\nkmers after maping: 5810\n'
+cost: 188
+b'Kmers in Gk: 3073\nSize L.Read 3092\nqtd kmers in s 3072\ncost: 101\nkmers after maping: 3073\n'
+cost: 101
+b'Kmers in Gk: 5026\nSize L.Read 5045\nqtd kmers in s 5025\ncost: 179\nkmers after maping: 5026\n'
+cost: 179
+b'Kmers in Gk: 4224\nSize L.Read 4243\nqtd kmers in s 4223\ncost: 146\nkmers after maping: 4224\n'
+cost: 146
+b'Kmers in Gk: 8642\nSize L.Read 8661\nqtd kmers in s 8641\ncost: 286\nkmers after maping: 8642\n'
+cost: 286
+b'Kmers in Gk: 8268\nSize L.Read 8287\nqtd kmers in s 8267\ncost: 278\nkmers after maping: 8268\n'
+cost: 278
+b'Kmers in Gk: 5711\nSize L.Read 5730\nqtd kmers in s 5710\ncost: 193\nkmers after maping: 5711\n'
+cost: 193
+b'Kmers in Gk: 5535\nSize L.Read 5554\nqtd kmers in s 5534\ncost: 196\nkmers after maping: 5535\n'
+cost: 196
+b'Kmers in Gk: 7687\nSize L.Read 7708\nqtd kmers in s 7685\ncost: 264\nkmers after maping: 7689\n'
+cost: 264
+b'Kmers in Gk: 8151\nSize L.Read 8170\nqtd kmers in s 8150\ncost: 295\nkmers after maping: 8151\n'
+cost: 295
+b'Kmers in Gk: 4415\nSize L.Read 4434\nqtd kmers in s 4414\ncost: 154\nkmers after maping: 4415\n'
+cost: 154
+b'Kmers in Gk: 2275\nSize L.Read 2294\nqtd kmers in s 2274\ncost: 71\nkmers after maping: 2275\n'
+cost: 71

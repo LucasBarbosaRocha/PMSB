@@ -1,0 +1,400 @@
+Sequência 1
+Mudanças feitas em 349 kmers
+b'Kmers in Gk: 6979\nSize L.Read 6998\ncost: 292\nkmers after maping: 6979\n'
+-------------------------------------------------
+Sequência 2
+Mudanças feitas em 136 kmers
+b'Kmers in Gk: 2718\nSize L.Read 2737\ncost: 116\nkmers after maping: 2718\n'
+-------------------------------------------------
+Sequência 3
+Mudanças feitas em 342 kmers
+b'Kmers in Gk: 6829\nSize L.Read 6848\ncost: 376\nkmers after maping: 6829\n'
+-------------------------------------------------
+Sequência 4
+Mudanças feitas em 553 kmers
+b'Kmers in Gk: 11043\nSize L.Read 11062\ncost: 491\nkmers after maping: 11043\n'
+-------------------------------------------------
+Sequência 5
+Mudanças feitas em 288 kmers
+b'Kmers in Gk: 5746\nSize L.Read 5765\ncost: 202\nkmers after maping: 5746\n'
+-------------------------------------------------
+Sequência 6
+Mudanças feitas em 149 kmers
+b'Kmers in Gk: 2971\nSize L.Read 2990\ncost: 102\nkmers after maping: 2971\n'
+-------------------------------------------------
+Sequência 7
+Mudanças feitas em 279 kmers
+b'Kmers in Gk: 5579\nSize L.Read 5598\ncost: 238\nkmers after maping: 5579\n'
+-------------------------------------------------
+Sequência 8
+Mudanças feitas em 352 kmers
+b'Kmers in Gk: 7025\nSize L.Read 7044\ncost: 266\nkmers after maping: 7025\n'
+-------------------------------------------------
+Sequência 9
+Mudanças feitas em 192 kmers
+b'Kmers in Gk: 3827\nSize L.Read 3846\ncost: 153\nkmers after maping: 3827\n'
+-------------------------------------------------
+Sequência 10
+Mudanças feitas em 294 kmers
+b'Kmers in Gk: 5876\nSize L.Read 5895\ncost: 295\nkmers after maping: 5876\n'
+-------------------------------------------------
+Sequência 11
+Mudanças feitas em 239 kmers
+b'Kmers in Gk: 4763\nSize L.Read 4782\ncost: 199\nkmers after maping: 4763\n'
+-------------------------------------------------
+Sequência 12
+Mudanças feitas em 277 kmers
+b'Kmers in Gk: 5540\nSize L.Read 5559\ncost: 310\nkmers after maping: 5540\n'
+-------------------------------------------------
+Sequência 13
+Mudanças feitas em 180 kmers
+b'Kmers in Gk: 3582\nSize L.Read 3601\ncost: 158\nkmers after maping: 3582\n'
+-------------------------------------------------
+Sequência 14
+Mudanças feitas em 154 kmers
+b'Kmers in Gk: 3077\nSize L.Read 3096\ncost: 139\nkmers after maping: 3077\n'
+-------------------------------------------------
+Sequência 15
+Mudanças feitas em 304 kmers
+b'Kmers in Gk: 6065\nSize L.Read 6084\ncost: 195\nkmers after maping: 6065\n'
+-------------------------------------------------
+Sequência 16
+Mudanças feitas em 253 kmers
+b'Kmers in Gk: 5047\nSize L.Read 5066\ncost: 220\nkmers after maping: 5047\n'
+-------------------------------------------------
+Sequência 17
+Mudanças feitas em 423 kmers
+b'Kmers in Gk: 8449\nSize L.Read 8468\ncost: 321\nkmers after maping: 8449\n'
+-------------------------------------------------
+Sequência 18
+Mudanças feitas em 317 kmers
+b'Kmers in Gk: 6340\nSize L.Read 6359\ncost: 342\nkmers after maping: 6340\n'
+-------------------------------------------------
+Sequência 19
+Mudanças feitas em 274 kmers
+b'Kmers in Gk: 5466\nSize L.Read 5485\ncost: 246\nkmers after maping: 5466\n'
+-------------------------------------------------
+Sequência 20
+Mudanças feitas em 292 kmers
+b'Kmers in Gk: 5831\nSize L.Read 5850\ncost: 191\nkmers after maping: 5831\n'
+-------------------------------------------------
+Sequência 21
+Mudanças feitas em 333 kmers
+b'Kmers in Gk: 6644\nSize L.Read 6663\ncost: 321\nkmers after maping: 6644\n'
+-------------------------------------------------
+Sequência 22
+Mudanças feitas em 287 kmers
+b'Kmers in Gk: 5726\nSize L.Read 5745\ncost: 260\nkmers after maping: 5726\n'
+-------------------------------------------------
+Sequência 23
+Mudanças feitas em 195 kmers
+b'Kmers in Gk: 3890\nSize L.Read 3909\ncost: 192\nkmers after maping: 3890\n'
+-------------------------------------------------
+Sequência 24
+Mudanças feitas em 303 kmers
+b'Kmers in Gk: 6048\nSize L.Read 6067\ncost: 204\nkmers after maping: 6048\n'
+-------------------------------------------------
+Sequência 25
+Mudanças feitas em 351 kmers
+b'Kmers in Gk: 7016\nSize L.Read 7035\ncost: 376\nkmers after maping: 7016\n'
+-------------------------------------------------
+Sequência 26
+Mudanças feitas em 123 kmers
+b'Kmers in Gk: 2443\nSize L.Read 2462\ncost: 120\nkmers after maping: 2443\n'
+-------------------------------------------------
+Sequência 27
+Mudanças feitas em 254 kmers
+b'Kmers in Gk: 5074\nSize L.Read 5093\ncost: 165\nkmers after maping: 5074\n'
+-------------------------------------------------
+Sequência 28
+Mudanças feitas em 126 kmers
+b'Kmers in Gk: 2504\nSize L.Read 2523\ncost: 115\nkmers after maping: 2504\n'
+-------------------------------------------------
+Sequência 29
+Mudanças feitas em 278 kmers
+b'Kmers in Gk: 5553\nSize L.Read 5572\ncost: 270\nkmers after maping: 5553\n'
+-------------------------------------------------
+Sequência 30
+Mudanças feitas em 304 kmers
+b'Kmers in Gk: 6070\nSize L.Read 6089\ncost: 224\nkmers after maping: 6070\n'
+-------------------------------------------------
+Sequência 31
+Mudanças feitas em 278 kmers
+b'Kmers in Gk: 5555\nSize L.Read 5579\nQty. kmers (5555) in Gk need to be >= kmers in sequence to pair\n'
+-------------------------------------------------
+Sequência 32
+Mudanças feitas em 371 kmers
+b'Kmers in Gk: 7405\nSize L.Read 7424\ncost: 305\nkmers after maping: 7405\n'
+-------------------------------------------------
+Sequência 33
+Mudanças feitas em 136 kmers
+b'Kmers in Gk: 2705\nSize L.Read 2724\ncost: 92\nkmers after maping: 2705\n'
+-------------------------------------------------
+Sequência 34
+Mudanças feitas em 128 kmers
+b'Kmers in Gk: 2545\nSize L.Read 2564\ncost: 83\nkmers after maping: 2545\n'
+-------------------------------------------------
+Sequência 35
+Mudanças feitas em 119 kmers
+b'Kmers in Gk: 2362\nSize L.Read 2381\ncost: 80\nkmers after maping: 2362\n'
+-------------------------------------------------
+Sequência 36
+Mudanças feitas em 282 kmers
+b'Kmers in Gk: 5632\nSize L.Read 5651\ncost: 208\nkmers after maping: 5632\n'
+-------------------------------------------------
+Sequência 37
+Mudanças feitas em 172 kmers
+b'Kmers in Gk: 3429\nSize L.Read 3448\ncost: 148\nkmers after maping: 3429\n'
+-------------------------------------------------
+Sequência 38
+Mudanças feitas em 121 kmers
+b'Kmers in Gk: 2404\nSize L.Read 2423\ncost: 84\nkmers after maping: 2404\n'
+-------------------------------------------------
+Sequência 39
+Mudanças feitas em 213 kmers
+b'Kmers in Gk: 4245\nSize L.Read 4264\ncost: 171\nkmers after maping: 4245\n'
+-------------------------------------------------
+Sequência 40
+Mudanças feitas em 122 kmers
+b'Kmers in Gk: 2436\nSize L.Read 2455\ncost: 94\nkmers after maping: 2436\n'
+-------------------------------------------------
+Sequência 41
+Mudanças feitas em 342 kmers
+b'Kmers in Gk: 6822\nSize L.Read 6841\ncost: 269\nkmers after maping: 6822\n'
+-------------------------------------------------
+Sequência 42
+Mudanças feitas em 436 kmers
+b'Kmers in Gk: 8701\nSize L.Read 8720\ncost: 404\nkmers after maping: 8701\n'
+-------------------------------------------------
+Sequência 43
+Mudanças feitas em 413 kmers
+b'Kmers in Gk: 8258\nSize L.Read 8277\ncost: 335\nkmers after maping: 8258\n'
+-------------------------------------------------
+Sequência 44
+Mudanças feitas em 269 kmers
+b'Kmers in Gk: 5369\nSize L.Read 5388\ncost: 274\nkmers after maping: 5369\n'
+-------------------------------------------------
+Sequência 45
+Mudanças feitas em 354 kmers
+b'Kmers in Gk: 7070\nSize L.Read 7089\ncost: 329\nkmers after maping: 7070\n'
+-------------------------------------------------
+Sequência 46
+Mudanças feitas em 222 kmers
+b'Kmers in Gk: 4422\nSize L.Read 4441\ncost: 194\nkmers after maping: 4422\n'
+-------------------------------------------------
+Sequência 47
+Mudanças feitas em 140 kmers
+b'Kmers in Gk: 2790\nSize L.Read 2809\ncost: 103\nkmers after maping: 2790\n'
+-------------------------------------------------
+Sequência 48
+Mudanças feitas em 244 kmers
+b'Kmers in Gk: 4879\nSize L.Read 4898\ncost: 1623\nkmers after maping: 4879\n'
+-------------------------------------------------
+Sequência 49
+Mudanças feitas em 145 kmers
+b'Kmers in Gk: 2885\nSize L.Read 2904\ncost: 134\nkmers after maping: 2885\n'
+-------------------------------------------------
+Sequência 50
+Mudanças feitas em 114 kmers
+b'Kmers in Gk: 2279\nSize L.Read 2298\ncost: 91\nkmers after maping: 2279\n'
+-------------------------------------------------
+Sequência 51
+Mudanças feitas em 311 kmers
+b'Kmers in Gk: 6206\nSize L.Read 6225\ncost: 268\nkmers after maping: 6206\n'
+-------------------------------------------------
+Sequência 52
+Mudanças feitas em 317 kmers
+b'Kmers in Gk: 6321\nSize L.Read 6340\ncost: 223\nkmers after maping: 6321\n'
+-------------------------------------------------
+Sequência 53
+Mudanças feitas em 223 kmers
+b'Kmers in Gk: 4445\nSize L.Read 4464\ncost: 555\nkmers after maping: 4445\n'
+-------------------------------------------------
+Sequência 54
+Mudanças feitas em 296 kmers
+b'Kmers in Gk: 5907\nSize L.Read 5926\ncost: 249\nkmers after maping: 5907\n'
+-------------------------------------------------
+Sequência 55
+Mudanças feitas em 349 kmers
+b'Kmers in Gk: 6941\nSize L.Read 6991\nQty. kmers (6941) in Gk need to be >= kmers in sequence to pair\n'
+-------------------------------------------------
+Sequência 56
+Mudanças feitas em 265 kmers
+b'Kmers in Gk: 5284\nSize L.Read 5303\ncost: 223\nkmers after maping: 5284\n'
+-------------------------------------------------
+Sequência 57
+Mudanças feitas em 237 kmers
+b'Kmers in Gk: 4740\nSize L.Read 4759\ncost: 176\nkmers after maping: 4740\n'
+-------------------------------------------------
+Sequência 58
+Mudanças feitas em 211 kmers
+b'Kmers in Gk: 4202\nSize L.Read 4221\ncost: 147\nkmers after maping: 4202\n'
+-------------------------------------------------
+Sequência 59
+Mudanças feitas em 283 kmers
+b'Kmers in Gk: 5643\nSize L.Read 5662\ncost: 274\nkmers after maping: 5643\n'
+-------------------------------------------------
+Sequência 60
+Mudanças feitas em 295 kmers
+b'Kmers in Gk: 5884\nSize L.Read 5903\ncost: 296\nkmers after maping: 5884\n'
+-------------------------------------------------
+Sequência 61
+Mudanças feitas em 287 kmers
+b'Kmers in Gk: 5730\nSize L.Read 5749\ncost: 205\nkmers after maping: 5730\n'
+-------------------------------------------------
+Sequência 62
+Mudanças feitas em 351 kmers
+b'Kmers in Gk: 7015\nSize L.Read 7034\ncost: 262\nkmers after maping: 7015\n'
+-------------------------------------------------
+Sequência 63
+Mudanças feitas em 175 kmers
+b'Kmers in Gk: 3499\nSize L.Read 3518\ncost: 288\nkmers after maping: 3499\n'
+-------------------------------------------------
+Sequência 64
+Mudanças feitas em 327 kmers
+b'Kmers in Gk: 6527\nSize L.Read 6546\ncost: 280\nkmers after maping: 6527\n'
+-------------------------------------------------
+Sequência 65
+Mudanças feitas em 147 kmers
+b'Kmers in Gk: 2926\nSize L.Read 2945\ncost: 136\nkmers after maping: 2926\n'
+-------------------------------------------------
+Sequência 66
+Mudanças feitas em 333 kmers
+b'Kmers in Gk: 6645\nSize L.Read 6667\nQty. kmers (6645) in Gk need to be >= kmers in sequence to pair\n'
+-------------------------------------------------
+Sequência 67
+Mudanças feitas em 160 kmers
+b'Kmers in Gk: 3187\nSize L.Read 3206\ncost: 133\nkmers after maping: 3187\n'
+-------------------------------------------------
+Sequência 68
+Mudanças feitas em 306 kmers
+b'Kmers in Gk: 6117\nSize L.Read 6136\ncost: 201\nkmers after maping: 6117\n'
+-------------------------------------------------
+Sequência 69
+Mudanças feitas em 179 kmers
+b'Kmers in Gk: 3566\nSize L.Read 3585\ncost: 193\nkmers after maping: 3566\n'
+-------------------------------------------------
+Sequência 70
+Mudanças feitas em 295 kmers
+b'Kmers in Gk: 5887\nSize L.Read 5906\ncost: 201\nkmers after maping: 5887\n'
+-------------------------------------------------
+Sequência 71
+Mudanças feitas em 284 kmers
+b'Kmers in Gk: 5674\nSize L.Read 5693\ncost: 191\nkmers after maping: 5674\n'
+-------------------------------------------------
+Sequência 72
+Mudanças feitas em 291 kmers
+b'Kmers in Gk: 5808\nSize L.Read 5827\ncost: 225\nkmers after maping: 5808\n'
+-------------------------------------------------
+Sequência 73
+Mudanças feitas em 229 kmers
+b'Kmers in Gk: 4563\nSize L.Read 4582\ncost: 161\nkmers after maping: 4563\n'
+-------------------------------------------------
+Sequência 74
+Mudanças feitas em 338 kmers
+b'Kmers in Gk: 6749\nSize L.Read 6768\ncost: 302\nkmers after maping: 6749\n'
+-------------------------------------------------
+Sequência 75
+Mudanças feitas em 132 kmers
+b'Kmers in Gk: 2635\nSize L.Read 2654\ncost: 92\nkmers after maping: 2635\n'
+-------------------------------------------------
+Sequência 76
+Mudanças feitas em 245 kmers
+b'Kmers in Gk: 4900\nSize L.Read 4919\ncost: 166\nkmers after maping: 4900\n'
+-------------------------------------------------
+Sequência 77
+Mudanças feitas em 129 kmers
+b'Kmers in Gk: 2570\nSize L.Read 2589\ncost: 127\nkmers after maping: 2570\n'
+-------------------------------------------------
+Sequência 78
+Mudanças feitas em 301 kmers
+b'Kmers in Gk: 6010\nSize L.Read 6029\ncost: 230\nkmers after maping: 6010\n'
+-------------------------------------------------
+Sequência 79
+Mudanças feitas em 148 kmers
+b'Kmers in Gk: 2942\nSize L.Read 2961\ncost: 156\nkmers after maping: 2942\n'
+-------------------------------------------------
+Sequência 80
+Mudanças feitas em 282 kmers
+b'Kmers in Gk: 5635\nSize L.Read 5654\ncost: 221\nkmers after maping: 5635\n'
+-------------------------------------------------
+Sequência 81
+Mudanças feitas em 457 kmers
+b'Kmers in Gk: 9019\nSize L.Read 9140\nQty. kmers (9019) in Gk need to be >= kmers in sequence to pair\n'
+-------------------------------------------------
+Sequência 82
+Mudanças feitas em 129 kmers
+b'Kmers in Gk: 2577\nSize L.Read 2596\ncost: 121\nkmers after maping: 2577\n'
+-------------------------------------------------
+Sequência 83
+Mudanças feitas em 260 kmers
+b'Kmers in Gk: 5185\nSize L.Read 5204\ncost: 230\nkmers after maping: 5185\n'
+-------------------------------------------------
+Sequência 84
+Mudanças feitas em 168 kmers
+b'Kmers in Gk: 3358\nSize L.Read 3377\ncost: 160\nkmers after maping: 3358\n'
+-------------------------------------------------
+Sequência 85
+Mudanças feitas em 74 kmers
+b'Kmers in Gk: 1474\nSize L.Read 1493\ncost: 69\nkmers after maping: 1474\n'
+-------------------------------------------------
+Sequência 86
+Mudanças feitas em 308 kmers
+b'Kmers in Gk: 6061\nSize L.Read 6168\nQty. kmers (6061) in Gk need to be >= kmers in sequence to pair\n'
+-------------------------------------------------
+Sequência 87
+Mudanças feitas em 354 kmers
+b'Kmers in Gk: 7067\nSize L.Read 7086\ncost: 294\nkmers after maping: 7067\n'
+-------------------------------------------------
+Sequência 88
+Mudanças feitas em 262 kmers
+b'Kmers in Gk: 5227\nSize L.Read 5246\ncost: 200\nkmers after maping: 5227\n'
+-------------------------------------------------
+Sequência 89
+Mudanças feitas em 291 kmers
+b'Kmers in Gk: 5810\nSize L.Read 5829\ncost: 288\nkmers after maping: 5810\n'
+-------------------------------------------------
+Sequência 90
+Mudanças feitas em 154 kmers
+b'Kmers in Gk: 3073\nSize L.Read 3092\ncost: 141\nkmers after maping: 3073\n'
+-------------------------------------------------
+Sequência 91
+Mudanças feitas em 252 kmers
+b'Kmers in Gk: 5026\nSize L.Read 5045\ncost: 219\nkmers after maping: 5026\n'
+-------------------------------------------------
+Sequência 92
+Mudanças feitas em 212 kmers
+b'Kmers in Gk: 4224\nSize L.Read 4243\ncost: 166\nkmers after maping: 4224\n'
+-------------------------------------------------
+Sequência 93
+Mudanças feitas em 433 kmers
+b'Kmers in Gk: 8642\nSize L.Read 8661\ncost: 406\nkmers after maping: 8642\n'
+-------------------------------------------------
+Sequência 94
+Mudanças feitas em 414 kmers
+b'Kmers in Gk: 8268\nSize L.Read 8287\ncost: 338\nkmers after maping: 8268\n'
+-------------------------------------------------
+Sequência 95
+Mudanças feitas em 286 kmers
+b'Kmers in Gk: 5711\nSize L.Read 5730\ncost: 213\nkmers after maping: 5711\n'
+-------------------------------------------------
+Sequência 96
+Mudanças feitas em 277 kmers
+b'Kmers in Gk: 5535\nSize L.Read 5554\ncost: 216\nkmers after maping: 5535\n'
+-------------------------------------------------
+Sequência 97
+Mudanças feitas em 385 kmers
+b'Kmers in Gk: 7687\nSize L.Read 7708\nQty. kmers (7687) in Gk need to be >= kmers in sequence to pair\n'
+-------------------------------------------------
+Sequência 98
+Mudanças feitas em 408 kmers
+b'Kmers in Gk: 8151\nSize L.Read 8170\ncost: 315\nkmers after maping: 8151\n'
+-------------------------------------------------
+Sequência 99
+Mudanças feitas em 221 kmers
+b'Kmers in Gk: 4415\nSize L.Read 4434\ncost: 194\nkmers after maping: 4415\n'
+-------------------------------------------------
+Sequência 100
+Mudanças feitas em 114 kmers
+b'Kmers in Gk: 2275\nSize L.Read 2294\ncost: 71\nkmers after maping: 2275\n'
+-------------------------------------------------
