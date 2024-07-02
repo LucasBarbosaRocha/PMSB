@@ -26,6 +26,7 @@ public:
     int node_kmer_for_kmer_special;
     int is_visited;
     string originalKmer;
+    int ordem;
 
     My_object();
 };
@@ -37,6 +38,7 @@ My_object::My_object()
     this->is_kmer_special = 0;
     this->node_kmer_for_kmer_special = 0;
     this->is_visited = 0;
+    this->ordem = 0;
 }
 
 class Hash
@@ -65,7 +67,7 @@ public:
     void insertKmerInDbgAux(string kmer, My_object object);
 
     /* funcao recebe um k-mer e insere no grafo */
-	void insertKmer(string kmer);
+	void insertKmer(string kmer, int ordem);
 
     /* funcao recebe uma sequencia e insere todos os k-mers no grafo  */
 	void insertSequence(string sequence);    
@@ -168,7 +170,7 @@ vector<vector<double>> Hash::getCostMatrix(vector<int> ancoragem, string sequenc
 
             for (auto col = this->new_graph.begin(); col != this->new_graph.end(); col++)
             {
-                cout << "buscando " << kmer << " " << line << " " << col->second.node_in_sequence_graph << " " << col->second.is_visited << " kmer " << col->first << endl;
+                //cout << "buscando " << kmer << " " << line << " " << col->second.node_in_sequence_graph << " " << col->second.is_visited << " kmer " << col->first << endl;
                 if (line != col->second.node_in_sequence_graph && col->second.is_visited != 1)
                 {
                     int cost = this->hammingDistance(kmer, col->first);
@@ -189,36 +191,40 @@ vector<vector<double>> Hash::getCostMatrix(vector<int> ancoragem, string sequenc
 
 void Hash::insertSpecialsKmers()
 {
-    unordered_map<string, My_object>:: iterator itr;
-    string bases[] = {"A", "C", "G", "T"}, kmer, kmer_aux; int val;
+    string bases[] = {"A", "C", "G", "T"};
 
-    for (itr = this->new_graph.begin(); itr != this->new_graph.end(); itr++)
+    for (auto& pair : new_graph)
     {
-        kmer = (itr)->first; val = 1;
-        for (auto base : bases)
+        const string& kmer = pair.first;
+        bool isSpecial = true;
+        
+        for (const auto& base : bases)
         {
-            //cout << "teste " << kmer.substr(k-1,1) << " " << base << " r " << kmer.substr(k-1,1).compare(base)<< endl;
             if (containsIn(kmer, base))
             {
-                val = 0;
+                isSpecial = false;
                 break;
             }
         }
-        if (val == 1 || (val == 1 && kmer.substr(0,this->k-1).compare(kmer.substr(1,this->k-1)) == 0))
+        
+        if (isSpecial || (isSpecial && kmer.substr(0, this->k - 1) == kmer.substr(1, this->k - 1)))
         {
-            this->new_graph[kmer].is_kmer_special = 1;
-            for (int i = 1; i < kmer.length(); i++)
+            auto& node = new_graph[kmer];
+            node.is_kmer_special = 1;
+            int ordem = node.ordem;
+            
+            for (int i = 1; i < kmer.length(); ++i)
             {
-                kmer_aux = "";
-                for (int j = 0; j < i; j++)
-                    kmer_aux = kmer_aux + "$";                
-                kmer_aux = kmer_aux + kmer.substr(0,this->k-i);
-                insertKmer(kmer_aux);
-                this->new_graph[kmer_aux].is_kmer_special = 1;
-                this->new_graph[kmer_aux].originalKmer = kmer;
+                string kmer_aux(i, '$');
+                kmer_aux += kmer.substr(0, this->k - i);
+                int new_ordem = ordem - i;
+                insertKmer(kmer_aux, new_ordem);
+                auto& new_node = new_graph[kmer_aux];
+                new_node.is_kmer_special = 1;
+                new_node.originalKmer = kmer;
             }
         }
-    }    
+    }
 }
 
 void Hash::insertKmerInDbgAux(string kmer, My_object object)
@@ -226,57 +232,59 @@ void Hash::insertKmerInDbgAux(string kmer, My_object object)
     this->new_graph[kmer] = object;
 }
 
-void Hash::insertKmer(string kmer)
-{
-    list<string> adj; list<string>::iterator it; 
-    My_object obj;
-    string bases[] = {"A", "C", "G", "T"}, base_aux, kmer_aux;
-    transform(kmer.begin(), kmer.end(),kmer.begin(), ::toupper);
-    if(!contains(kmer))
-    {
-        obj.adjacent = adj; // new
-        this->new_graph[kmer] = obj; // new
-        for (auto base : bases)
-        {
-            if (containsOut(kmer, base))
-            {             
-                for (it = this->new_graph[kmer].adjacent.begin(); it != this->new_graph[kmer].adjacent.end(); it++)
-                    if (*it == base)
-                        break;
-                
-                if (it == this->new_graph[kmer].adjacent.end())
-                    this->new_graph[kmer].adjacent.push_back(base);
-                auto a = this->new_graph[kmer];
+void Hash::insertKmer(string kmer, int ordem) {
+    string bases[] = {"A", "C", "G", "T"};
+    string base_aux, kmer_aux;
+    string upper_kmer = kmer;
+    transform(upper_kmer.begin(), upper_kmer.end(), upper_kmer.begin(), ::toupper);
+
+    if (!contains(upper_kmer)) {
+        My_object obj;
+        obj.ordem = ordem;
+        new_graph[upper_kmer] = obj;
+
+        auto& adjacent = new_graph[upper_kmer].adjacent;
+        unordered_set<string> adj_set(adjacent.begin(), adjacent.end());  // Use a set to avoid duplicates
+
+        for (const auto& base : bases) {
+            if (containsOut(upper_kmer, base)) {
+                if (adj_set.find(base) == adj_set.end()) {
+                    adjacent.push_back(base);
+                    adj_set.insert(base);
+                }
             }
 
-            if (containsIn(kmer, base))
-            {
-                base_aux = kmer.substr(this->k-1,1); kmer_aux = base+kmer.substr(0,this->k-1);
-                for (it = this->new_graph[kmer].adjacent.begin(); it != this->new_graph[kmer].adjacent.end(); it++)
-                    if (*it == base_aux)
-                        break;
-                
-                if (it == this->new_graph[kmer].adjacent.end())
-                    this->new_graph[kmer_aux].adjacent.push_back(base_aux);
+            if (containsIn(upper_kmer, base)) {
+                base_aux = upper_kmer.substr(this->k - 1, 1);
+                kmer_aux = base + upper_kmer.substr(0, this->k - 1);
+                auto& kmer_aux_adjacent = new_graph[kmer_aux].adjacent;
+                unordered_set<string> kmer_aux_adj_set(kmer_aux_adjacent.begin(), kmer_aux_adjacent.end());
+
+                if (kmer_aux_adj_set.find(base_aux) == kmer_aux_adj_set.end()) {
+                    kmer_aux_adjacent.push_back(base_aux);
+                    kmer_aux_adj_set.insert(base_aux);
+                }
             }
         }
-    } 
+    }
 }
 
 void Hash::insertSequence(string sequence)
 {
     int n = sequence.length();
     string kmer;
-    for (int i = 0; i <= n - k; i++)
+
+    if (sequence.find("N") != string::npos) {
+        return;
+    }
+
+    for (int i = 0; i <= n - k; ++i)
     {
         kmer = sequence.substr(i, k);
-        //cout << "kmer " << kmer << endl;
-        if (kmer.find("N") == string::npos)
-        {
-            insertKmer(kmer);
-        }
+        insertKmer(kmer, i);
     }
 }
+
 
 bool Hash::containsAndMarkIfExists(string kmer)
 {
@@ -319,121 +327,157 @@ bool Hash::containsIn(string kmer, string base)
 void Hash::dbgToTraditionalSequenceGraph(int reverse, int heuristic)
 {
     int qtdNodes = 0;
-    unordered_map<string, My_object>:: iterator itr;
     string bases[] = {"A", "C", "G", "T"};
     unordered_map<int, string> kmerAndNode;
+    auto& graph = (reverse == 0) ? sequenceGraph : sequenceGraphReverse;
 
-    for (auto itr = this->new_graph.begin(); itr != this->new_graph.end(); itr++)
-    {
-        this->new_graph[itr->first].node_in_sequence_graph = qtdNodes;
-        if (reverse == 0 && heuristic == 1)
-            this->map_node_kmer[qtdNodes] = itr->first;
+    // Map nodes and optionally map k-mers
+    for (auto& pair : new_graph) {
+        auto& key = pair.first;
+        pair.second.node_in_sequence_graph = qtdNodes;
+        if (reverse == 0 && heuristic == 1) {
+            map_node_kmer[qtdNodes] = key;
+        }
         qtdNodes += this->k;
     }
 
-    if (reverse == 0)
-        sequenceGraph.initilizeSequenceGraph(qtdNodes, this->k);
-    else
-        sequenceGraphReverse.initilizeSequenceGraph(qtdNodes, this->k);
-    //SequenceGraph sequenceGraph(qtdNodes, this->k);
+    graph.initilizeSequenceGraph(qtdNodes, this->k);
 
-    for (itr = this->new_graph.begin(); itr != this->new_graph.end(); itr++)
-    {
-        int node = this->new_graph[itr->first].node_in_sequence_graph;
-        for (int i = 0; i < itr->first.length(); i++)
-        {
-            if (i == 0)
-            {
-                if (reverse == 0)
-                    sequenceGraph.alterarValorVerticeInicial(node + i, 1); // nao lembro para que fiz isso
-                else
-                    sequenceGraphReverse.alterarValorVerticeInicial(node + i, 1); // nao lembro para que fiz isso
+    // Insert nodes and initial edges
+    for (auto& pair : new_graph) {
+        auto& key = pair.first;
+        int node = pair.second.node_in_sequence_graph;
+        for (int i = 0; i < this->k; ++i) {
+            if (i == 0) {
+                graph.alterarValorVerticeInicial(node + i, 1);
             }
-            if(reverse == 0)
-                sequenceGraph.insertNode(node + i, itr->first.substr(i, 1)); 
-            else
-                sequenceGraphReverse.insertNode(node + i, itr->first.substr(i, 1)); 
-          
-            
-            // kmerAndNode[aux.first + i] = aux.second; // mapeando kmer e node
-        }
-        for (int i = 0; i < itr->first.length() - 1; i++)
-        {   if (reverse == 0)
-                sequenceGraph.insertEdge(node + i, node + i + 1, 0);
-            else
-                sequenceGraphReverse.insertEdge(node + i + 1, node + i, 0);
+            graph.insertNode(node + i, key.substr(i, 1));
+            if (i < this->k - 1) {
+                if (reverse == 0) {
+                    graph.insertEdge(node + i, node + i + 1, 0);
+                } else {
+                    graph.insertEdge(node + i + 1, node + i, 0);
+                }
+            }
         }
     }
 
-    for (itr = this->new_graph.begin(); itr != this->new_graph.end(); itr++)
-    {
-        for (auto base : bases)
-        {
-            if(containsOut(itr->first, base))
-            {
-                string kmer_aux = itr->first.substr(1, this->k-1) + base;
-                int source_node = this->new_graph[itr->first].node_in_sequence_graph + this -> k - 1;
-                int target_node = this->new_graph[kmer_aux].node_in_sequence_graph + this -> k - 1;
-                if (reverse == 0)
-                    sequenceGraph.insertEdge(source_node, target_node, 0);
-                else 
-                    sequenceGraphReverse.insertEdge(target_node, source_node, 0);
+    // Insert remaining edges based on k-mer connections
+    for (auto& pair : new_graph) {
+        auto& key = pair.first;
+        int source_node = pair.second.node_in_sequence_graph + this->k - 1;
+        for (const auto& base : bases) {
+            if (containsOut(key, base)) {
+                string kmer_aux = key.substr(1, this->k - 1) + base;
+                int target_node = new_graph[kmer_aux].node_in_sequence_graph + this->k - 1;
+                if (reverse == 0) {
+                    graph.insertEdge(source_node, target_node, 0);
+                } else {
+                    graph.insertEdge(target_node, source_node, 0);
+                }
             }
-        }   
+        }
     }
 }
 
-
-void Hash::dbgToSimplifiedSequenceGraph(int reverse)
-{
-    int qtdNodes = 0;
-    unordered_map<string, My_object>:: iterator itr;
+void Hash::dbgToSimplifiedSequenceGraph(int reverse) {
+    int qtdNodes = 0, novosNodes = 0;
+    unordered_map<string, My_object>::iterator itr;
     string bases[] = {"A", "C", "G", "T"};
 
     this->insertSpecialsKmers();
 
-    for (itr = this->new_graph.begin(); itr != this->new_graph.end(); itr++)
-    {
-        this->new_graph[itr->first].node_in_sequence_graph = qtdNodes;
+    vector<pair<string, int>> keys;
+    for (const auto& pair : new_graph) {
+        keys.emplace_back(pair.first, pair.second.ordem);
+    }
+
+    sort(keys.begin(), keys.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
+        return a.second < b.second;
+    });
+
+    for (const auto& key_pair : keys) {
+        const string& key = key_pair.first;
+        auto& node = new_graph[key];
+        //cout << key << "" << qtdNodes << endl;
+        node.node_in_sequence_graph = qtdNodes;
+
+        if (all_of(key.begin(), key.end(), [&](char c) { return c == key[0]; })) {
+            qtdNodes++;
+        }
         qtdNodes++;
     }
-    //SequenceGraph sequenceGraph(qtdNodes, this->k);
-    if (reverse == 0)
-        sequenceGraph.initilizeSequenceGraph(qtdNodes, this->k);
-    else
-        sequenceGraphReverse.initilizeSequenceGraph(qtdNodes, this->k);
+    //qtdNodes += novosNodes;
 
-    for (itr = this->new_graph.begin(); itr != this->new_graph.end(); itr++)
-    {
-        int node = this->new_graph[itr->first].node_in_sequence_graph;
-        if (reverse == 0)
-            sequenceGraph.insertNode(node, itr->first.substr(this->k-1,1));
-        else
-            sequenceGraphReverse.insertNode(node, itr->first.substr(this->k-1,1));
+    auto& graph = (reverse == 0) ? sequenceGraph : sequenceGraphReverse;
+    graph.initilizeSequenceGraph(qtdNodes, this->k);
+
+    int nosInseridos = 0;
+    for (const auto& pair : new_graph) {
+        const string& key = pair.first;
+        int node = pair.second.node_in_sequence_graph;
+        graph.insertNode(node, key.substr(this->k-1, 1));
+        nosInseridos++;
     }
 
-    for (itr = this->new_graph.begin(); itr != this->new_graph.end(); itr++)
-    {
-        for (auto base : bases)
-        {
-            if(containsOut(itr->first, base))
-            {
-                string kmer_aux = itr->first.substr(1, this->k-1) + base;
-                int source_node = this->new_graph[itr->first].node_in_sequence_graph;
-                int target_node = this->new_graph[kmer_aux].node_in_sequence_graph;
-                if (reverse == 0)
-                    sequenceGraph.insertEdge(source_node, target_node, 0);
-                else 
-                    sequenceGraphReverse.insertEdge(target_node, source_node, 0);
+    for (const auto& pair : new_graph) {
+        const string& key = pair.first;
+        int source_node = pair.second.node_in_sequence_graph;
+        for (const auto& base : bases) {
+            if (containsOut(key, base)) {
+                string kmer_aux = key.substr(1, this->k-1) + base;
+                int target_node = new_graph[kmer_aux].node_in_sequence_graph;
+
+                if (reverse == 0) {
+                    cout << source_node << " -> " << target_node << endl;
+                    if (source_node != target_node) {
+                        graph.insertEdge(source_node, target_node, 0);
+                        graph.insertIncoming(source_node, target_node);
+                        graph.insertOutComing(source_node, target_node);
+                    } else {
+                        graph.insertNode(source_node+1, key.substr(this->k-1, 1));
+                        graph.insertEdge(source_node, source_node+1, 0);
+                        graph.insertEdge(source_node+1, source_node, 0);
+                        graph.insertIncoming(source_node + 1, source_node);                  
+                        graph.insertOutComing(source_node + 1, source_node);
+                        nosInseridos++;
+                    }
+                } else {
+                    graph.insertEdge(target_node, source_node, 0);
+                }
             }
-        }   
+        }
     }
 
-    if (reverse == 0)
-        sequenceGraph.markInitials(1);
-    else
-        sequenceGraphReverse.markInitials(1);
+    for (const auto& pair : new_graph) {
+        const string& key = pair.first;
+        int source_node = pair.second.node_in_sequence_graph;
+        for (const auto& base : bases) {
+            if (containsOut(key, base)) {
+                string kmer_aux = key.substr(1, this->k-1) + base;
+                int target_node = new_graph[kmer_aux].node_in_sequence_graph;
+
+                if (reverse == 0) {
+                    cout << source_node << " -> " << target_node << endl;
+                    if (source_node == target_node) {
+                        for (int src : graph.getIncoming(source_node)) {
+                            cout << "repetidos " << src << " -> " << source_node << endl;
+                            graph.insertEdge(src, source_node + 1, 0);
+                            graph.insertIncoming(src, source_node + 1);                  
+                            graph.insertOutComing(src, source_node + 1);
+                        }
+                    }
+                } else {
+                    graph.insertEdge(target_node, source_node, 0);
+                }
+            }
+        }
+    }
+
+
+    graph.markInitials(1);
 }
+
 
 string Hash::findKmerBySpecialKmer(string specialkmer)
 {
@@ -452,28 +496,30 @@ void Hash::deleteKmer(string kmer)
 
 void Hash::populateGraph(string nomeArquivo, bool detalhes = false)
 {
-    string linha;
-	fstream meuArquivo;
-	meuArquivo.open(nomeArquivo);
-    int qtd = 0;
+    ifstream meuArquivo(nomeArquivo);
+    if (!meuArquivo) {
+        throw runtime_error("Arquivo " + nomeArquivo + " de kmers não encontrado");
+    }
 
-	if (!meuArquivo) {
-		cout << "Arquivo " << nomeArquivo << " de kmers não encontrado" << endl;
-	}
-	else {
-        if (detalhes) cout << "Criando o grafo de De Bruijn" << endl;
+    if (detalhes) {
+        cout << "Criando o grafo de De Bruijn" << endl;
+    }
+
+    string linha;
+    size_t qtd = 0;
+
+    while (getline(meuArquivo, linha)) {
         getline(meuArquivo, linha);
-        while (getline(meuArquivo, linha))
-        {
-            if (detalhes) cout << "Adicionando " << linha << endl;
-            insertSequence(linha);
-            qtd = qtd + linha.size() - k;
-            getline(meuArquivo, linha);
+        if (detalhes) {
+            cout << "Adicionando " << linha << " " << k << endl;
         }
-		meuArquivo.close();
-        if (detalhes) cout << "De Bruijn criado." << endl;
-        cout << "Qtd G.Kmers " << this->getQtdKmers() << endl;
-    }    
+        insertSequence(linha);
+        qtd += linha.size() - k;
+    }
+
+    if (detalhes) {
+        cout << "De Bruijn criado." << endl;
+    }
 }
 
 string Hash::readSequence(string nomeArquivo, bool detalhes = false)
@@ -527,7 +573,7 @@ void Hash::compareKmersWithGraph(Hash &dbg_gab, string kmer, int errors)
             if (hammingDistance(kmer, itr->first) < errors)
             {
                 //cout << kmer << " " << itr->first << ":" << hammingDistance(kmer, itr->first) << " < " << errors << endl;
-                dbg_gab.insertKmer(itr->first);
+                dbg_gab.insertKmer(itr->first, 0);
             }
         }
     }
@@ -573,7 +619,7 @@ int Hash::compareKmersWithGraphAndRemove(Hash *dbg_aux, string kmer, int cost)
     }
     if (h != -1)
         this->deleteKmer(kmer_key);
-    dbg_aux->insertKmer(kmer);
+    dbg_aux->insertKmer(kmer, 0);
     return h;
 }
 
@@ -599,7 +645,7 @@ void Hash::compareGraphWithSequence(Hash &dbg_gab, string sequence, int errors)
             }
             if (val == 0)
             {
-                dbg_gab.insertKmer(itr->first);
+                dbg_gab.insertKmer(itr->first, 0);
             }
         }
     }
@@ -689,7 +735,7 @@ void Hash::insertKmersByNodes(list<int> nodes, Hash &dbg)
                 {
                     if (this->new_graph[kmer].node_in_sequence_graph <= node && node <= this->new_graph[kmer].node_in_sequence_graph + this->k)
                     {
-                        dbg.insertKmer(kmer);
+                        dbg.insertKmer(kmer, 0);
                     }
                     break;
                 } 

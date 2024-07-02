@@ -43,13 +43,17 @@ public:
        devolve sub caso A != B, e 0 caso contrário */
     int w_sub(string caractere_grafo, string caractere_sequence);
 
+    void buildReverseMultilayerGraph(SequenceGraph grafo, string sequence);
+
     /* a função recebe um grafo de sequências simples G e uma sequência s,
        devolve um grafo de multicamadas com pesos nas arestas */
     void buildMultilayerGraph(SequenceGraph grafo, string sequence);
 
     /* a função de dijkstra recebe um grafo e dois vertices de origem e destino
        devolve a sequencia induzida pelo caminho mínimo e seu custo */
-    pair<vector<pair<int,string>>, int>  dijkstra(SequenceGraph grafo, int orig, int dest);
+    pair<vector<pair<int,string>>, int> dijkstra(SequenceGraph grafo, int orig, int dest, map<int, bool> used, int tamOriginalSequenceGraph);
+    pair<vector<pair<int,string>>, int> dijkstra(SequenceGraph grafo, int orig, int dest, int limite);
+    pair<vector<pair<int,string>>, vector<int>> dijkstraWithAllCosts(SequenceGraph grafo, int orig, int dest, int limite);
 
     pair<vector<pair<int,string>>, int> aStar(SequenceGraph grafo, int orig, int dest, string uM, string qM);
 
@@ -62,6 +66,8 @@ public:
     /* a função recebe dois vertices e salva o vertice inicial s 
        e vertice final t para a execução do dijkstra */
     void insertInitialAndEndNode(int v_initial, int v_end);
+
+    void invertInitialAndEndNode();
 
     /* devolve o vertice inicial para rodar no dijkstra */
     int getInitialNode();
@@ -85,6 +91,114 @@ int Marschall::w_sub(string caractere_grafo, string caractere_sequence)
         return 0;
     return sub;
 }
+
+void Marschall::buildReverseMultilayerGraph(SequenceGraph grafo, string sequence) 
+{
+    int V = grafo.getV(), m = sequence.length(), vertice_atual = 0, vertice_inicial = 0, vertice_final, vertice_atual_aux, controle;
+    int m_v = m * (V + 1) + 2; // quantidade de vertice do grafo multicamadas
+    //SequenceGraph m_grafo(m_v, grafo.getK());
+    m_sequenceGraph.initilizeSequenceGraph(m_v, grafo.getK());
+    int *mapeamento;
+
+    mapeamento = new (nothrow) int[V];
+    this->sequenceGraphAndMulticamada = new (nothrow) vector<int>[m_v];  
+    if (mapeamento == nullptr || this->sequenceGraphAndMulticamada == nullptr)
+    {
+        cerr << "error allocation multlayer graph" << endl;
+    }
+
+    for (int i = 0; i <= m; i++)
+    {      
+        if (i == 0) // camada inicial
+        {
+            m_sequenceGraph.insertNode(vertice_atual, "s");
+            vertice_atual++;
+        } else {
+            vertice_atual_aux = vertice_atual; 
+            // dummy
+            sequenceGraphAndMulticamada[vertice_atual_aux].push_back(-1);
+            m_sequenceGraph.insertNode(vertice_atual_aux, "d");
+            vertice_atual_aux++;
+            // vertices
+            for (int j = 0; j < V; j++)
+            {
+                string base = grafo.getBase(j);
+                m_sequenceGraph.insertNode(vertice_atual_aux, base);
+                mapeamento[j] = vertice_atual_aux;
+                sequenceGraphAndMulticamada[vertice_atual_aux].push_back(j);
+                vertice_atual_aux++;               
+            }
+            
+            // arestas adjacentes
+            for (int j = 0; j < V; j++)
+            {
+                for (auto it = grafo.getAdjBegin(j); it != grafo.getAdjEnd(j); it++)
+                {
+                    // insercao
+                    m_sequenceGraph.insertEdge(mapeamento[(*it).first], mapeamento[j], ins);
+                }
+            }
+
+            if (i - 1 == 0)
+            {
+                // dummy
+                m_sequenceGraph.insertEdge(vertice_atual, vertice_inicial, del);
+                for (int j = 0; j < V; j++)
+                {
+                    // substituicao
+                    if (grafo.isInicial(j))
+                    {
+                        m_sequenceGraph.insertEdge(mapeamento[j], vertice_inicial, w_sub(grafo.getBase(j), sequence.substr(i-1,1)));    
+                    }              
+                }   
+            } else {
+                int vertice_atual_camada_anterior = vertice_atual - (V + 1);
+                int dif;
+
+                // dummy esta em vertice_atual
+                // delecao
+                m_sequenceGraph.insertEdge(vertice_atual, vertice_atual - (V + 1), del);                
+                for (int j = 0; j < V; j++)
+                {
+                    // substituicao
+                    if (grafo.isInicial(j)) // j eh no grafo original
+                        m_sequenceGraph.insertEdge(mapeamento[j], vertice_atual - (V + 1), w_sub(grafo.getBase(j), sequence.substr(i-1,1)));                  
+                }                
+           
+                // outros
+                for (int j = 0; j < V; j++)
+                {
+                    // delecao
+                    m_sequenceGraph.insertEdge(mapeamento[j], mapeamento[j] - (V + 1), del);
+                    // substituicao
+                    for (auto it = grafo.getAdjBegin(j); it != grafo.getAdjEnd(j); it++)
+                    {
+                        m_sequenceGraph.insertEdge(mapeamento[(*it).first], mapeamento[j] - (V + 1), w_sub(grafo.getBase((*it).first), sequence.substr(i-1,1)));
+                    }
+                }                
+            }
+            vertice_atual = vertice_atual_aux; // atualizando o vertice atual
+        }
+    }
+
+    // criar ultimo vertice
+    vertice_final = vertice_atual;
+    m_sequenceGraph.insertNode(vertice_final, "t");
+    // dummy
+    m_sequenceGraph.insertEdge(vertice_final, vertice_final - (V + 1), 0);
+    // outros
+
+    for (int j = 0; j < V; j++)
+    {
+        m_sequenceGraph.insertEdge(vertice_final, vertice_final - (V + 1) + (j+1), 0);
+    }
+    // criar grafo multicamadas
+    this->insertInitialAndEndNode(vertice_final, vertice_inicial);
+
+    // deletando vetores sem utilizacao
+    delete [] mapeamento;
+}
+
 
 void Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequence)
 {
@@ -142,6 +256,7 @@ void Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequence)
                     // substituicao
                     if (grafo.isInicial(j))
                     {
+                        //cout << "COISA compara " << vertice_inicial << " -> " << mapeamento[j] << " " << j << " " << grafo.getBase(j) << " =? " << sequence.substr(i-1,1) << " custo " << w_sub(grafo.getBase(j), sequence.substr(i-1,1)) << endl;
                         m_sequenceGraph.insertEdge(vertice_inicial, mapeamento[j], w_sub(grafo.getBase(j), sequence.substr(i-1,1)));    
                     }              
                 }   
@@ -155,8 +270,11 @@ void Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequence)
                 for (int j = 0; j < V; j++)
                 {
                     // substituicao
-                    if (grafo.isInicial(j)) // j eh no grafo original
+                    if (grafo.isInicial(j)) // j eh no grafo original 
+                    {
+                        //cout << "COISA compara " << vertice_atual - (V + 1) << " -> " << mapeamento[j] << " " << j << " " << grafo.getBase(j) << " =? " << sequence.substr(i-1,1) << " custo " << w_sub(grafo.getBase(j), sequence.substr(i-1,1)) << endl;
                         m_sequenceGraph.insertEdge(vertice_atual - (V + 1), mapeamento[j], w_sub(grafo.getBase(j), sequence.substr(i-1,1)));                  
+                    }
                 }                
            
                 // outros
@@ -194,7 +312,7 @@ void Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequence)
 }
 
 // Dijkstra
-pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int orig, int dest)
+pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int orig, int dest, map<int, bool> used, int tamOriginalSequenceGraph)
 {
     // vetor de distâncias
     int V = grafo.getV();
@@ -202,6 +320,7 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
     vector<pair<int,string>> saida;
     int *dist;
     int *prev;
+    int lim;
     /*
         vetor de visitados serve para caso o vértice já tenha sido
         expandido (visitado), não expandir mais
@@ -242,14 +361,21 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
         pair<int, int> p = pq.top(); // extrai o pair do topo
         int u = p.second; // obtém o vértice do pair
         pq.pop(); // remove da fila
+
+        //verifica se o vertice nao foi usado, isso eh para caminhos
+        cout << " #### " << endl;
+        for (auto ax : used){
+            cout << ax.first << " " << ax.second << " base " << grafo.getBase(u) << endl;
+        }
+
         // verifica se o vértice não foi expandido
         if(visitados[u] == false)
         {
             // marca como visitado
             visitados[u] = true;
             // percorre os vértices "v" adjacentes de "u" se existire size() > 0
-			if (grafo.getOutDegree(u) > 0)
-			{
+            if (grafo.getOutDegree(u) > 0)
+            {
                 // percorre os vértices "v" adjacentes de "u"
                 for(auto it = grafo.getAdjBegin(u); it !=  grafo.getAdjEnd(u); it++)
                 {
@@ -261,13 +387,37 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
                     if(dist[v] > (dist[u] + custo_aresta))
                     {
                         // atualiza a distância de "v" e insere na fila
-                        dist[v] = dist[u] + custo_aresta;
-                        prev[v] = u;
-                        pq.push(make_pair(dist[v], v));
+                        //cout << "relaxamento. origem " << u << " dest " << v << endl; 
+                        if (used.find(u) == used.end())
+                        {
+                            if (u > 0)
+                            {
+                                cout << "entra para o vertice " << u << " tam grafo " << tamOriginalSequenceGraph << endl;
+                                for (int posUsed = u; posUsed < grafo.getV(); posUsed += tamOriginalSequenceGraph + 1)
+                                {
+                                    cout << posUsed << " used " << endl;
+                                    used[posUsed] = true;
+                                }
+                            }
+
+                            dist[v] = dist[u] + custo_aresta;
+                            prev[v] = u;
+                            pq.push(make_pair(dist[v], v));
+                        } else {
+                            int vertDeletionV = u + tamOriginalSequenceGraph + 1;
+                            if (vertDeletionV < V)
+                            {
+                                dist[vertDeletionV] = dist[u] + 1;
+                                prev[vertDeletionV] = u;
+                                pq.push(make_pair(dist[vertDeletionV], vertDeletionV));
+                            }
+                        }
                     }
                 }
             }
-        }
+            
+        } else
+            cout << u  << "usado anteriormente, base " << grafo.getBase(u) << endl;
     }
 
     induced_sequence.push_back(grafo.getBase(dest));
@@ -289,6 +439,110 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
 
     return make_pair(saida, custo);
 }
+
+// Dijkstra
+pair<vector<pair<int, string>>, int> Marschall::dijkstra(SequenceGraph grafo, int orig, int dest, int limite = -1) {
+    int V = grafo.getV();
+    vector<pair<int, string>> saida;
+    vector<int> dist(V, INF), prev(V, -1), visitados(V, false);
+
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    dist[orig] = 0;
+    pq.emplace(dist[orig], orig);
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+
+        if (!visitados[u]) {
+            visitados[u] = true;
+            if (grafo.getOutDegree(u) > 0) {
+                for (auto it = grafo.getAdjBegin(u); it != grafo.getAdjEnd(u); ++it) {
+                    int v = it->first;
+                    int custo_aresta = it->second;
+                    if (dist[v] > dist[u] + custo_aresta) {
+                        dist[v] = dist[u] + custo_aresta;
+                        prev[v] = u;
+                        pq.emplace(dist[v], v);
+                    }
+                }
+            }
+        }
+    }
+
+    if (limite > -1) {
+        cout << "Custo\n" << dist[orig] << "\n";
+        for (int i = 1; i < V - limite; i += limite) {
+            for (int j = 0; j < limite; ++j) {
+                cout << dist[i + j] << " ";
+            }
+            cout << "\n";
+        }
+        cout << dist[dest] << "\n\n";
+    }
+
+    list<string> induced_sequence;
+    induced_sequence.push_back(grafo.getBase(dest));
+    saida.push_back(make_pair(dest,grafo.getBase(dest)));
+    for (int j = dest; j > 0; j = prev[j]) {
+        int prevIndex = prev[j];
+        if (prevIndex != -1) {
+            auto base = grafo.getBase(prevIndex);
+            induced_sequence.push_back(base);
+            saida.emplace_back(prevIndex, base);
+        }
+    }
+    
+    return make_pair(saida, dist[dest]);
+}
+
+pair<vector<pair<int,string>>, vector<int>> Marschall::dijkstraWithAllCosts(SequenceGraph grafo, int orig, int dest, int limite = -1) {
+    int V = grafo.getV();
+    vector<pair<int, string>> saida;
+    vector<int> dist(V, INF), prev(V, -1), visitados(V, false);
+
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    dist[orig] = 0;
+    pq.emplace(dist[orig], orig);
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+
+        if (!visitados[u]) {
+            visitados[u] = true;
+            if (grafo.getOutDegree(u) > 0) {
+                for (auto it = grafo.getAdjBegin(u); it != grafo.getAdjEnd(u); ++it) {
+                    int v = it->first;
+                    int custo_aresta = it->second;
+                    if (dist[v] > dist[u] + custo_aresta) {
+                        dist[v] = dist[u] + custo_aresta;
+                        prev[v] = u;
+                        pq.emplace(dist[v], v);
+                    }
+                }
+            }
+        }
+    }
+
+    list<string> induced_sequence;
+    induced_sequence.push_back(grafo.getBase(dest));
+    saida.push_back(make_pair(dest,grafo.getBase(dest)));
+    cout << "path " << endl;
+    for (int j = dest; j > 0; j = prev[j]) {
+        int prevIndex = prev[j];
+        if (prevIndex != -1) {
+            auto base = grafo.getBase(prevIndex);
+            induced_sequence.push_back(base);
+            saida.emplace_back(prevIndex, base);
+            cout << prevIndex << "(" << base << ") ";
+        }
+    }
+    cout << endl;
+    
+    return make_pair(saida, dist);
+}
+
 
 int Marschall::heuristic(SequenceGraph grafo, string u, string q, int i, int node_start)
 {
@@ -430,6 +684,13 @@ void Marschall::insertInitialAndEndNode(int v_initial, int v_end)
 {
     this->initialNode = v_initial;
     this->endNode = v_end;
+}
+
+void Marschall::invertInitialAndEndNode()
+{
+    auto aux = this->initialNode;
+    this->initialNode = this->endNode;
+    this->endNode = aux;
 }
 
 int Marschall::getInitialNode()
@@ -627,61 +888,32 @@ string Marschall::verificaAresta(int u, int v, int tamGraph)
     return "ins";
 }
 
-pair<list<string>, string> Marschall::showTraditionalMapping(vector<pair<int,string>> retorno, Hash deBruijnGraph, SequenceGraph traditionalGraph)
-{
-    int primeiro = 0, indice, anterior = 0, details = 0, k = traditionalGraph.getK(), kmer_count = 0;
+pair<list<string>, string> Marschall::showTraditionalMapping(vector<pair<int, string>> retorno, Hash deBruijnGraph, SequenceGraph traditionalGraph) {
+    int anterior = 0, k = traditionalGraph.getK(), kmer_count = 0;
     string aux, tmp, baseAnterior, kmer_aux = "";
     list<string> kmers;
 
-    //cout << "mapeando " << endl;
-
-    if (details == 1)
-    {
-        for (auto it = retorno.begin(); it != retorno.end(); it++)
-        {
-            cout << (*it).second << " <- ";
-            aux = (*it).second + aux;
-        }
-        cout << endl;
-        cout << aux << endl; 
-    }
-
-
-    for (auto it = retorno.begin(); it != retorno.end(); it++)
-    {
+    for (auto it = retorno.begin(); it != retorno.end(); ++it) {
         tmp = "";
-        if (it == retorno.end() - 1)
-        {
-            if (anterior == 1)
-                tmp = "del";
-            else
-                tmp = "sub";
+        
+        if (it == retorno.begin()) {
+            anterior = it->first;
+            baseAnterior = it->second;
+            continue;
+        } 
+
+        if (it == retorno.end() - 1) {
+            tmp = anterior == 1 ? "del" : "sub";
             aux = baseAnterior + aux;
-            if (details == 1)
-                cout << "(" << tmp << ") ";
-        }else if (it == retorno.begin())
-        {
-            anterior = (*it).first;
-            baseAnterior = (*it).second;
-        }
-        else
-        {
+        } else {
+            tmp = this->verificaAresta(it->first, anterior, traditionalGraph.getV());
+            anterior = it->first;    
+            int indice = this->sequenceGraphAndMulticamada[it->first].front(); 
 
-            tmp = this->verificaAresta((*it).first, anterior, traditionalGraph.getV());
-            if (details == 1)
-                cout << "(" << tmp << ") ";
-            anterior = (*it).first;    
-            indice = this->sequenceGraphAndMulticamada[(*it).first].front(); 
-
-            if (indice != -1)
-            {   
-                // auto kmer = kmerAndNode.at(indice);      
+            if (indice != -1) {   
                 auto kmer = deBruijnGraph.findKmerByIndex(indice);
-                if (details == 1)
-                    cout << (*it).second << "(" << kmer << ") <-";
-
-                if (kmer.compare(kmer_aux) != 0 || kmer_count == 0)
-                {
+                
+                if (kmer.compare(kmer_aux) != 0 || kmer_count == 0) {
                     kmers.push_front(kmer);
                     kmer_count = 0;
                     kmer_aux = kmer;
@@ -689,27 +921,12 @@ pair<list<string>, string> Marschall::showTraditionalMapping(vector<pair<int,str
                 kmer_count++;
             }
 
-            if (tmp == "del")
-            {
-                aux = "-" + aux;
-            }else
-            {
-                aux = baseAnterior + aux;
-                baseAnterior = (*it).second; 
-            } 
-
-            if (indice == -1)
-                baseAnterior = "-";    
+            aux = (tmp == "del") ? "-" + aux : baseAnterior + aux;
+            baseAnterior = (indice == -1) ? "-" : it->second;
         } 
     }
 
-    /*for (auto a = kmers.begin(); a != kmers.end(); a++)
-    {
-        cout << (*a) << " ";
-    }
-    cout << endl;*/
-
-    return  make_pair(kmers,aux.substr(0, aux.length() - 1));
+    return make_pair(kmers, aux.substr(0, aux.length() - 1));
 }
 
 pair<list<string>, string> Marschall::showSimplifiedMapping(vector<pair<int,string>> retorno, Hash deBruijnGraph, SequenceGraph simplifiedGraph)

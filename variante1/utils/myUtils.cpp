@@ -12,6 +12,7 @@ public:
     string nameArchive;
     int k;
     int typeGraph;
+    bool path;
 
     MyUtils(){};
     int verifyData(int argc, char *argv[]);
@@ -31,11 +32,11 @@ int MyUtils::verifyData(int argc, char *argv[])
     {
         aux = argv[1];
         if (aux.compare("-help") == 0)
-            cout << "-s nameSequenceArchive -g nameGraphArchive -k kmerSize -t typeSequenceGraph (0 - traditional, 1 - simplified) " << endl;
+            cout << "-s nameSequenceArchive -g nameGraphArchive -k kmerSize -t typeSequenceGraph (0 - traditional, 1 - simplified) -p (0 - walk, 1 - path)" << endl;
         return 1;
     }
 
-    if (argc == 9)
+    if (argc == 11)
     {
         aux = argv[1];
         if (aux.compare("-s") == 0)
@@ -69,6 +70,15 @@ int MyUtils::verifyData(int argc, char *argv[])
             cout << "Error: digite -help" << endl;
             return 1;
         }
+        aux = argv[9];
+        if (aux.compare("-p") == 0)
+            path = atoi(argv[10]);
+        else
+        {
+            cout << "Error: digite -help" << endl;
+            return 1;
+        }
+
         return 0;
     }
 

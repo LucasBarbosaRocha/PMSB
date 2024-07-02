@@ -17,6 +17,8 @@ private:
 	int V; /* número de vértices */
 	int k; /* k-mer do SequenceGraph De Bruijn */
 	vector<pair<int, int> > *adj; /* Representacao do grafo */
+	unordered_map<int, vector<int>> incomingEdges;
+    unordered_map<int, vector<int>> outcomingEdges;
 	map<int, bool> visited;
 	vector<int> iniciais;
 	bool val;
@@ -36,6 +38,13 @@ public:
 
 	/* funcao insere uma aresta com peso no grafo de sequências simples */
     void insertEdge(int u, int v, int wt);
+
+	vector<int> getIncoming(int u);
+	vector<int> getOutcoming(int u);
+	void insertOutComing(int u, int v);
+	void insertIncoming(int u, int v);
+
+	void invertEdge();
 
 	void alterarPesoAresta(int u, int v, int wt);
 
@@ -62,6 +71,7 @@ public:
 	/* funcao recebe um vertice v e verifica se v eh inicial */
 	int isInicial(int v);
 
+	bool existsKey(int key);
 	int isNodeExistis(int v);
 
 	/* funcao recebe um vertice v e devolve o grau de saida */
@@ -128,18 +138,16 @@ SequenceGraph::SequenceGraph(int V, int k)
 
 void SequenceGraph::initilizeSequenceGraph(int V, int k)
 {
-	this->k = k;
-	this->V = V; // atribui o número de vértices
+    this->k = k;
+    this->V = V;
+    
 	bases = new vector<string>[V];
 	kmers = new vector<string>[V];
-    this->adj = new vector<pair<int,int>>[V];	
-	for(int i = 0; i < V; i++)
-	{
-		iniciais.push_back(0);
-		level.push_back(0);
-	}
-}
+	this->adj = new vector<pair<int,int>>[V];
 
+    iniciais.assign(V, 0);
+    level.assign(V, 0);
+}
 
 void SequenceGraph::insertNode(int v1, string base)
 {
@@ -149,15 +157,66 @@ void SequenceGraph::insertNode(int v1, string base)
 // To add an edge
 void SequenceGraph::insertEdge(int u, int v, int wt)
 {
+	if (u == v)
+		return;
+
+	for (const auto& edge : adj[u]) {
+        if (edge.first == v) {
+            return;
+        }
+    }
+	
 	this->adj[u].push_back(make_pair(v, wt));
 }
 
+// To add an edge
+void SequenceGraph::insertIncoming(int u, int v)
+{
+	if (u == v)
+		return;
+	this->incomingEdges[v].push_back(u);
+}
+
+// To add an edge
+void SequenceGraph::insertOutComing(int u, int v)
+{
+	if (u == v)
+		return;
+	this->outcomingEdges[u].push_back(v);
+}
+
+// To add an edge
+vector<int> SequenceGraph::getIncoming(int u)
+{
+	return this->incomingEdges[u];
+}
+
+// To add an edge
+vector<int> SequenceGraph::getOutcoming(int u)
+{
+	return this->outcomingEdges[u];
+}
+
+// To add an edge
+void SequenceGraph::invertEdge()
+{
+	vector<pair<int, int>> *new_adj = new vector<pair<int, int> >[this->V];
+
+    for (int i = 0; i < this->V; ++i) {
+        for (auto& edge : adj[i]) {
+            new_adj[edge.first].emplace_back(i, edge.second);
+        }
+    }
+
+	delete[] adj;
+	adj = new_adj;
+}
 // To add an edge
 void SequenceGraph::alterarPesoAresta(int u, int v, int wt)
 {
 	for (auto it = this->adj[u].begin(); it != this->adj[u].end(); it++)
 	{
-		if ((*it).first == u)
+		if ((*it).first == v)
 			(*it).second = wt;
 	}
 }
@@ -170,17 +229,17 @@ bool SequenceGraph::isThereNeighbor(int v1, int v2)
 	return false;
 }
 
-// Print adjacency list representation ot graph
 void SequenceGraph::printGraph()
 {
-	cout << "Sequence graph:" << endl;
-	cout << "Qty. nodes: " << this->V << endl;
-    for (int i = 0; i < this->V; i++)
-    {
-        cout << "(" <<  iniciais[i] << ")" << i << "-" << bases[i].front() << ": ";
-		//cout << i << "-" << bases[i].front() << ": ";
-        for (auto it = adj[i].begin(); it != adj[i].end(); it++)
-            cout << (*it).first << "(" << (*it).second << ") ";
+    cout << "Sequence graph:" << endl;
+    cout << "Qty. nodes: " << this->V << endl;
+
+    for (int i = 0; i < this->V; ++i) {
+        cout << "(" << iniciais[i] << ")" << i << "-" << bases[i].front() << ": ";
+        
+        for (const auto& neighbor : adj[i]) {
+            cout << neighbor.first << "(" << neighbor.second << ") ";
+        }
         cout << endl;
     }
 }
@@ -290,6 +349,14 @@ int SequenceGraph::isNodeExistis(int v)
 		return 1;
 	}
 	return 0;
+}
+
+bool SequenceGraph::existsKey(int key) {
+    if (!bases[key].empty()) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 int SequenceGraph::isInicial(int v)
