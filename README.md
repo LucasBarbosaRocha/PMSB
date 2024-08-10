@@ -7,7 +7,7 @@ Dadas uma sequência s e um grafo de De Bruijn G, encontrar o menor percurso p e
 
 # Publicações
 * Heuristics for the de Bruijn Graph Sequence Mapping Problem - https://link.springer.com/chapter/10.1007/978-3-031-36805-9_11
-* 
+  
 ## Autores/Colaboradores
 
 * Lucas Barbosa Rocha
