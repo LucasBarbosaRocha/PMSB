@@ -5,8 +5,8 @@
 #include <queue>
 #include <bits/stdc++.h>
 
-#define x 0.5
-#define heuristc 1
+constexpr double kGapLengthFactor = 0.5;
+constexpr int kUseHeuristic = 1;
 
 MyUtils utils;
 Marschall m;
@@ -18,13 +18,13 @@ pair<vector<pair<int,string>>, int> retorno;
 int returnLengthGap(int k, int gap)
 {
     if (gap > k)
-        return gap * x;
+        return gap * kGapLengthFactor;
     return k;
 }
 
-pair<int, string> headMapping(Hash dbg_gap, int firstPosition, Hash h, string sequence, int k)
+tuple<int, string, int> headMapping(Hash dbg_gap, int firstPosition, Hash &h, const string &sequence, int k)
 {
-    int length, final, final_aux, aux, caminho_encontrado = 0;
+    int length, final, final_aux, aux, caminho_encontrado = 0, custo = 0;
     list<string> kmer_lista_aux;
     pair<int, int> inicial_final;
     string resposta = "";
@@ -40,22 +40,22 @@ pair<int, string> headMapping(Hash dbg_gap, int firstPosition, Hash h, string se
 
         // buscando os kmers do gap
         final_aux = h.verifyLabelExistisAndReturnVerticeIndex(kmer_cauda);
-        
+
         if (final_aux == -1)
         {
             caminho_encontrado = -1; resposta = "";
-            return make_pair(caminho_encontrado, resposta);
+            return make_tuple(caminho_encontrado, resposta, custo);
         }
 
         final_aux += (k-1);
 
         nodes = h.sequenceGraphReverse.bfs(final_aux, length);
-        dbg_gap.insertKmer(kmer_cauda);        
+        dbg_gap.insertKmer(kmer_cauda, 0);        
         h.insertKmersByNodes(nodes, dbg_gap);
 
         // TODO CONFERIR os nós do do grafo simplificado
         if (utils.typeGraph == 0)
-            dbg_gap.dbgToTraditionalSequenceGraph(0, !heuristc); 
+            dbg_gap.dbgToTraditionalSequenceGraph(0, !kUseHeuristic); 
         else
             dbg_gap.dbgToSimplifiedSequenceGraph(0); 
 
@@ -66,10 +66,10 @@ pair<int, string> headMapping(Hash dbg_gap, int firstPosition, Hash h, string se
         
         retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
 
-        if (retorno.second == INT_MAX)  
+        if (retorno.second == INT_MAX)
         {
             caminho_encontrado = -1;
-            return make_pair(caminho_encontrado, resposta);
+            return make_tuple(caminho_encontrado, resposta, custo);
         } else {
 
             if (utils.typeGraph == 0)
@@ -77,7 +77,8 @@ pair<int, string> headMapping(Hash dbg_gap, int firstPosition, Hash h, string se
             else
                 mapping = m.showSimplifiedMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
 
-            resposta = mapping.second.substr(0,firstPosition) + sequence.substr(firstPosition, k);    
+            resposta = mapping.second.substr(0,firstPosition) + sequence.substr(firstPosition, k);
+            custo = retorno.second;
         }
 
         // liberando memória
@@ -85,12 +86,12 @@ pair<int, string> headMapping(Hash dbg_gap, int firstPosition, Hash h, string se
         mapping.first.clear();
         mapping.second.clear();
     }
-    return make_pair(caminho_encontrado, resposta);
+    return make_tuple(caminho_encontrado, resposta, custo);
 }
 
-pair<int, string> internalMapping(Hash dbg_gap, int pos, vector<int> positions, Hash h, string sequence, int k)
+tuple<int, string, int> internalMapping(Hash dbg_gap, int pos, const vector<int> &positions, Hash &h, const string &sequence, int k)
 {
-    int caminho_encontrado = positions.size(), length, aux, posicao = positions[0], inicial_aux, final_aux, dif;
+    int caminho_encontrado = positions.size(), length, aux, posicao = positions[0], inicial_aux, final_aux, dif, custo = 0;
     string resposta = "", kmer_cabeca = "", kmer_cauda = "", sequence_aux = "";
     pair<int, int> inicial_final;
     // cout << "INTERNAL " << endl;
@@ -109,15 +110,15 @@ pair<int, string> internalMapping(Hash dbg_gap, int pos, vector<int> positions, 
             inicial_aux = h.verifyLabelExistisAndReturnVerticeIndex(kmer_cabeca);
             final_aux = h.verifyLabelExistisAndReturnVerticeIndex(kmer_cauda);
 
-            if (final_aux == -1 || inicial_aux == -1)            
-                return make_pair(caminho_encontrado, resposta);
+            if (final_aux == -1 || inicial_aux == -1)
+                return make_tuple(caminho_encontrado, resposta, custo);
             
             final_aux += (k-1);
 
             dbg_gap.deleteHash();
 
-            dbg_gap.insertKmer(kmer_cabeca);
-            dbg_gap.insertKmer(kmer_cauda);
+            dbg_gap.insertKmer(kmer_cabeca, 0);
+            dbg_gap.insertKmer(kmer_cauda, 0);
 
             nodes = h.sequenceGraph.bfs(inicial_aux, length);
             h.insertKmersByNodes(nodes, dbg_gap);
@@ -126,7 +127,7 @@ pair<int, string> internalMapping(Hash dbg_gap, int pos, vector<int> positions, 
             h.insertKmersByNodes(nodes, dbg_gap);
 
             if (utils.typeGraph == 0)
-                dbg_gap.dbgToTraditionalSequenceGraph(0, !heuristc);        
+                dbg_gap.dbgToTraditionalSequenceGraph(0, !kUseHeuristic);        
             else
                 dbg_gap.dbgToSimplifiedSequenceGraph(0);
 
@@ -139,12 +140,13 @@ pair<int, string> internalMapping(Hash dbg_gap, int pos, vector<int> positions, 
 
             if (retorno.second == INT_MAX)
             {
+                int posicao_atual = i;
                 i = positions.size() + 1;
-                if (positions[i] == 0)
+                if (positions[posicao_atual] == 0)
                     resposta = resposta + kmer_cabeca;
                 else
-                    resposta = resposta + kmer_cabeca[k-1]; 
-                return make_pair(caminho_encontrado, resposta);
+                    resposta = resposta + kmer_cabeca[k-1];
+                return make_tuple(caminho_encontrado, resposta, custo);
             } else
             {
                 if (utils.typeGraph == 0)
@@ -152,11 +154,12 @@ pair<int, string> internalMapping(Hash dbg_gap, int pos, vector<int> positions, 
                 else
                     mapping = m.showSimplifiedMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
 
-                if (mapping.second.size() > k)      
+                if (mapping.second.size() > k)
                 {
                     // resposta = resposta + sequence.substr(positions[i], k);
-                    resposta = resposta + mapping.second.substr(k, mapping.second.length() - k);   
+                    resposta = resposta + mapping.second.substr(k, mapping.second.length() - k);
                     posicao = 1;
+                    custo += retorno.second;
                 }
             }
 
@@ -178,12 +181,12 @@ pair<int, string> internalMapping(Hash dbg_gap, int pos, vector<int> positions, 
             posicao++;
         }
     }
-    return make_pair(caminho_encontrado, resposta);
+    return make_tuple(caminho_encontrado, resposta, custo);
 }
 
-pair<int, string> tailMapping(Hash dbg_gap, int lastPosition, Hash h, string sequence, int k)
+tuple<int, string, int> tailMapping(Hash dbg_gap, int lastPosition, Hash &h, const string &sequence, int k)
 {
-    int length, aux = 0, caminho_encontrado = -1, inicial_aux, dif, inicial;
+    int length, aux = 0, caminho_encontrado = -1, inicial_aux, dif, inicial, custo = 0;
     string resposta = "", kmer_cabeca = "", sequence_aux = "";
     pair<int, int> inicial_final;
 
@@ -192,7 +195,7 @@ pair<int, string> tailMapping(Hash dbg_gap, int lastPosition, Hash h, string seq
         // cout << "TAIL " << endl;
         length = returnLengthGap(k, sequence.length() - lastPosition);
         kmer_cabeca = sequence.substr(lastPosition, k);
-        dbg_gap.insertKmer(kmer_cabeca);   
+        dbg_gap.insertKmer(kmer_cabeca, 0);   
 
         // buscando os kmers do gap
         inicial_aux = h.verifyLabelExistisAndReturnVerticeIndex(kmer_cabeca);
@@ -201,16 +204,16 @@ pair<int, string> tailMapping(Hash dbg_gap, int lastPosition, Hash h, string seq
         {
             caminho_encontrado = -1; resposta = "";
             for (int trash_it = lastPosition + k; trash_it < sequence.length(); trash_it++)
-                resposta = resposta + '-';    
-            return make_pair(caminho_encontrado, resposta);
+                resposta = resposta + '-';
+            return make_tuple(caminho_encontrado, resposta, custo);
         }
         dbg_gap.deleteHash();
-        dbg_gap.insertKmer(kmer_cabeca);
+        dbg_gap.insertKmer(kmer_cabeca, 0);
         nodes = h.sequenceGraph.bfs(inicial_aux, length);
         h.insertKmersByNodes(nodes, dbg_gap);
 
         if (utils.typeGraph == 0)
-            dbg_gap.dbgToTraditionalSequenceGraph(0, !heuristc);
+            dbg_gap.dbgToTraditionalSequenceGraph(0, !kUseHeuristic);
         else
             dbg_gap.dbgToSimplifiedSequenceGraph(0);
 
@@ -226,29 +229,30 @@ pair<int, string> tailMapping(Hash dbg_gap, int lastPosition, Hash h, string seq
         else
             mapping = m.showSimplifiedMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);
     
-        if (mapping.second.length() > k)      
+        if (mapping.second.length() > k)
         {
-            resposta = resposta + mapping.second.substr(k, mapping.second.length() - k); 
+            resposta = resposta + mapping.second.substr(k, mapping.second.length() - k);
             // cout << "tail: " << mapping.second.substr(k, mapping.second.length() - k);
-            caminho_encontrado = 1; 
+            caminho_encontrado = 1;
+            custo = retorno.second;
         } else {
             //for (int trash_it = lastPosition + k; trash_it < sequence.length(); trash_it++)
-            //    resposta = resposta + '-';    
-        } 
+            //    resposta = resposta + '-';
+        }
         retorno.first.clear();
         mapping.first.clear();
         mapping.second.clear();
     }
-    return make_pair(caminho_encontrado, resposta);
+    return make_tuple(caminho_encontrado, resposta, custo);
 }
 
-string mapeamento(Hash h, string sequence, int k)
+pair<string, int> mapeamento(Hash &h, const string &sequence, int k)
 {
-    int posicao = 0, length, aux, caminho_encontrado = 1;
+    int posicao = 0, length, aux, caminho_encontrado = 1, custo_total = 0;
     string resposta = "";
     vector<int> posicoesValidas;
     Hash dbg_gap(k);
-    pair<int, string> status;
+    tuple<int, string, int> status;
 
 
     for (int i = 0; i < sequence.length() - (k - 1); i++)
@@ -265,8 +269,8 @@ string mapeamento(Hash h, string sequence, int k)
     {
         if (utils.typeGraph == 0)
         {
-            h.dbgToTraditionalSequenceGraph(0, heuristc);
-            h.dbgToTraditionalSequenceGraph(1, heuristc);
+            h.dbgToTraditionalSequenceGraph(0, kUseHeuristic);
+            h.dbgToTraditionalSequenceGraph(1, kUseHeuristic);
         } else {
             h.dbgToSimplifiedSequenceGraph(0);
             h.dbgToSimplifiedSequenceGraph(1);
@@ -276,65 +280,74 @@ string mapeamento(Hash h, string sequence, int k)
         //h.sequenceGraphReverse.printGraph();
 
         string resp_temp = "";
+        int custo_temp = 0;
         status = headMapping(dbg_gap, posicoesValidas[0], h, sequence, k);
 
-        if (status.first != -1){
-            resposta = status.second;
-            resp_temp = status.second;
+        if (get<0>(status) != -1){
+            resposta = get<1>(status);
+            resp_temp = get<1>(status);
+            custo_temp = get<2>(status);
         }
 
         int limite = posicoesValidas.size();
 
         int pos_head = 0, pos_internal = 0, pos_internal_escolhida = 0;
         string aux = resposta;
-        while (status.first < limite)
+        int aux_custo = custo_temp;
+        while (get<0>(status) < limite)
         {
             status = internalMapping(dbg_gap, pos_internal, posicoesValidas, h, sequence, k);
-            if (status.first < limite) 
+            if (get<0>(status) < limite)
             {
-                aux = aux + status.second;
+                aux = aux + get<1>(status);
+                aux_custo = aux_custo + get<2>(status);
                 if (resp_temp.size() < aux.size())
                 {
                     resp_temp = aux;
+                    custo_temp = aux_custo;
                     pos_internal_escolhida = pos_internal;
                 }
-            }  
-            pos_internal = status.first;
+            }
+            pos_internal = get<0>(status);
             aux = "";
+            aux_custo = 0;
         }
 
         resposta = resp_temp;
+        custo_total = custo_temp;
         status = tailMapping(dbg_gap, posicoesValidas[posicoesValidas.size() - 1], h, sequence, k);
-        if (status.first != -1) {    
-            resposta = resposta + status.second;
-        } 
-    } 
+        if (get<0>(status) != -1) {
+            resposta = resposta + get<1>(status);
+            custo_total += get<2>(status);
+        }
+    }
 
     if (resposta.size() > 0)
-        return resposta;
+        return make_pair(resposta, custo_total);
     else
-        return "Sequência nao pode ser mapeada";
+        return make_pair("Sequência nao pode ser mapeada", custo_total);
 }
 
 int main(int argc, char *argv[])
 {
     string line;
     if(utils.verifyData(argc, argv) == 1)
-        exit (0); 
-        
-    Hash h(utils.k);   
+        exit (0);
+
+    Hash h(utils.k);
     ifstream file(utils.nameSequenceArchive);
-    h.populateGraph(utils.nameArchive, false);       
+    h.populateGraph(utils.nameArchive, false);
 
     while(getline(file, line))
     {
-        //utils.readSequence(utils.nameSequenceArchive);  
+        //utils.readSequence(utils.nameSequenceArchive);
         getline(file, line);
         cout << "Size L.Read " << line.size() << endl;
         utils.sequence = line;
         // mapeamento
-        auto retorno = mapeamento(h, utils.sequence, utils.k); 
-        cout << retorno << endl << endl;
-    }     
+        auto retorno = mapeamento(h, utils.sequence, utils.k);
+        cout << retorno.first << endl;
+        cout << "Cost: " << retorno.second << endl << endl;
+    }
     return 0;
 }

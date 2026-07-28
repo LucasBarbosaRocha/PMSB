@@ -5,8 +5,7 @@
 #include <queue>
 #include <bits/stdc++.h>
 
-#define x 0.5
-#define heuristc 1
+constexpr double kGapLengthFactor = 0.5;
 
 MyUtils utils;
 
@@ -17,11 +16,11 @@ pair<vector<pair<int,string>>, int> retorno;
 int returnLengthGap(int k, int gap)
 {
     if (gap > k)
-        return gap * x;
+        return gap * kGapLengthFactor;
     return k;
 }
 
-pair<int, string> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost h, string sequence, int k)
+pair<int, string> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost &h, const string &sequence, int k)
 {
     int length, final, final_aux, aux, caminho_encontrado = 0;
     list<string> kmer_lista_aux;
@@ -62,7 +61,7 @@ pair<int, string> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost 
     return make_pair(caminho_encontrado, resposta);
 }
 
-pair<int, string> internalMapping(my_Bifrost dbg_gap, int pos, vector<int> positions, my_Bifrost h, string sequence, int k)
+pair<int, string> internalMapping(my_Bifrost dbg_gap, int pos, const vector<int> &positions, my_Bifrost &h, const string &sequence, int k)
 {
     int caminho_encontrado = positions.size(), length, aux, posicao = positions[0], inicial_aux, final_aux, dif;
     string resposta = "", kmer_cabeca = "", kmer_cauda = "", sequence_aux = "";
@@ -105,11 +104,12 @@ pair<int, string> internalMapping(my_Bifrost dbg_gap, int pos, vector<int> posit
             // cout << "mapping " << mapping.second << endl;
             if (retorno.second == INT_MAX)
             {
+                int posicao_atual = i;
                 i = positions.size() + 1;
-                if (positions[i] == 0)
+                if (positions[posicao_atual] == 0)
                     resposta = resposta + kmer_cabeca;
                 else
-                    resposta = resposta + kmer_cabeca[k-1]; 
+                    resposta = resposta + kmer_cabeca[k-1];
                 return make_pair(caminho_encontrado, resposta);
             } else
             {
@@ -143,7 +143,7 @@ pair<int, string> internalMapping(my_Bifrost dbg_gap, int pos, vector<int> posit
     return make_pair(caminho_encontrado, resposta);
 }
 
-pair<int, string> tailMapping(my_Bifrost dbg_gap, int lastPosition, my_Bifrost h, string sequence, int k)
+pair<int, string> tailMapping(my_Bifrost dbg_gap, int lastPosition, my_Bifrost &h, const string &sequence, int k)
 {
     int length, aux = 0, caminho_encontrado = -1, inicial_aux, dif, inicial;
     string resposta = "", kmer_cabeca = "", sequence_aux = "";
@@ -185,7 +185,7 @@ pair<int, string> tailMapping(my_Bifrost dbg_gap, int lastPosition, my_Bifrost h
     return make_pair(caminho_encontrado, resposta);
 }
 
-string mapeamento(my_Bifrost h, string sequence, int k)
+string mapeamento(my_Bifrost &h, const string &sequence, int k)
 {
     int posicao = 0, length, aux, caminho_encontrado = 1;
     string resposta = "";
@@ -201,19 +201,6 @@ string mapeamento(my_Bifrost h, string sequence, int k)
     cout << endl; */
     if (posicoesValidas.size() > 0)
     {
-        if (utils.typeGraph == 0)
-        {
-
-            // h.dbgToTraditionalSequenceGraph(0, heuristc);
-            // h.dbgToTraditionalSequenceGraph(1, heuristc);
-        } else {
-            //h.dbgToSimplifiedSequenceGraph(0);
-            //h.dbgToSimplifiedSequenceGraph(1);
-        }
-
-        //h.sequenceGraph.printGraph();
-        //h.sequenceGraphReverse.printGraph();
-
         string resp_temp = "";
         status = headMapping(dbg_gap, posicoesValidas[0], h, sequence, k);
         if (status.first != -1){

@@ -1,58 +1,51 @@
 #include <iostream>
 #include <fstream>
-//#include "../utils/myDBGgraph.cpp"
 #include "../utils/marschall.cpp"
 #include "../utils/myUtils.cpp"
 #include <queue>
 #include <bits/stdc++.h>
 
+constexpr int kUseHeuristic = 1;
+
 int main(int argc, char *argv[])
 {
-    //string nomeArquivo = "../archives/kmers.txt";
     string line;
-    Marschall m;  
+    Marschall m;
     MyUtils utils;
     if (utils.verifyData(argc, argv) == 1)
         exit(0);
 
-    Hash h(utils.k); 
+    Hash h(utils.k);
     ifstream file(utils.nameSequenceArchive);
-    // utils.readSequence(utils.nameSequenceArchive);
-    h.populateGraph(utils.nameArchive, false); 
-    
-   if(utils.typeGraph == 0)
-        h.dbgToSimplifiedSequenceGraph(0);
-    else
-        h.dbgToSimplifiedSequenceGraph(1);
+    h.populateGraph(utils.nameArchive, false);
 
-    while(getline(file, line))
+    if (utils.typeGraph == 0)
+        h.dbgToTraditionalSequenceGraph(0, kUseHeuristic);
+    else
+        h.dbgToSimplifiedSequenceGraph(0);
+
+    while (getline(file, line))
     {
-        //utils.readSequence(utils.nameSequenceArchive);  
         getline(file, line);
         cout << "Size L.Read " << line.size() << endl;
         utils.sequence = line;
-        // mapeamento
-        if(utils.typeGraph == 0)
+
+        m.buildMultilayerGraph(h.sequenceGraph, utils.sequence);
+        auto retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
+
+        if (utils.typeGraph == 0)
         {
-            m.buildMultilayerGraph(h.sequenceGraph, utils.sequence);
-            auto retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
             auto saida = m.showTraditionalMapping(retorno.first, h, h.sequenceGraph);
-            //cout << "Traditional." << endl;
-            cout << saida.second << endl;    
-            cout << "Cost: " << retorno.second << endl; 
-            
-        } else {
-            m.buildMultilayerGraph(h.sequenceGraph, utils.sequence);
-            auto retorno = m.dijkstra(m.m_sequenceGraph, m.getInitialNode(), m.getEndNode());
+            cout << saida.second << endl;
+        }
+        else
+        {
             auto saida = m.showSimplifiedMapping(retorno.first, h, h.sequenceGraph);
-            //cout << "Simplified." << endl;
-            cout << saida.second << endl;    
-            cout << "Cost: " << retorno.second << endl; 
+            cout << saida.second << endl;
             m.m_sequenceGraph.deleteGraph();
         }
+        cout << "Cost: " << retorno.second << endl;
     }
 
-return 0;
+    return 0;
 }
-
-
