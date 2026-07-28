@@ -17,6 +17,8 @@
 
 using namespace std;
 
+constexpr bool kVerboseDbg = false;
+
 class My_object
 {
 public:
@@ -429,7 +431,7 @@ void Hash::dbgToSimplifiedSequenceGraph(int reverse) {
                 int target_node = new_graph[kmer_aux].node_in_sequence_graph;
 
                 if (reverse == 0) {
-                    cout << source_node << " -> " << target_node << endl;
+                    if (kVerboseDbg) cout << source_node << " -> " << target_node << endl;
                     if (source_node != target_node) {
                         graph.insertEdge(source_node, target_node, 0);
                         graph.insertIncoming(source_node, target_node);
@@ -458,10 +460,10 @@ void Hash::dbgToSimplifiedSequenceGraph(int reverse) {
                 int target_node = new_graph[kmer_aux].node_in_sequence_graph;
 
                 if (reverse == 0) {
-                    cout << source_node << " -> " << target_node << endl;
+                    if (kVerboseDbg) cout << source_node << " -> " << target_node << endl;
                     if (source_node == target_node) {
                         for (int src : graph.getIncoming(source_node)) {
-                            cout << "repetidos " << src << " -> " << source_node << endl;
+                            if (kVerboseDbg) cout << "repetidos " << src << " -> " << source_node << endl;
                             graph.insertEdge(src, source_node + 1, 0);
                             graph.insertIncoming(src, source_node + 1);                  
                             graph.insertOutComing(src, source_node + 1);
@@ -688,7 +690,7 @@ string Hash::findKmerBySpecialNode(int index)
     {
         if (itr->second.node_in_sequence_graph == index)
         {
-            cout << "achei " << itr->second.node_in_sequence_graph  << " " << index << endl;
+            if (kVerboseDbg) cout << "achei " << itr->second.node_in_sequence_graph  << " " << index << endl;
             return itr->first;
         }
     }
@@ -762,30 +764,3 @@ int Hash::countVisitedKmers()
     }
     return count;
 }
-
-
-/*int main()
-{
-    // array that contains kmers to be mapped
-    string kmers[] = {"AAA", "AAT", "GGG", "GGT", "TTT", "ATT", "TTA", "TTT"};
-    string kmers2[] = {"TACT","TTAA","ACGT","CGTG","GTTA","GTCT","TCAA", "TTT"};
-    int n = sizeof(kmers2)/sizeof(kmers[0]);
-    int k = 3;
-
-    // insert the kmers into the hash table
-    Hash h(k); // 7 is count of buckets in
-                // hash table
-    
-    string nomeArquivo = "../archives/kmers.txt";
-
-    h.populateGraph(nomeArquivo, false); 
-    //h.insertSpecialsKmers();        
-    h.displayHash();
-    auto SequenceGraph = h.dbgToTraditionalSequenceGraph();
-    SequenceGraph.printGraph();
-
-    auto SequenceGraph2 = h.dbgToSimplifiedSequenceGraph();
-    h.displayHash();
-    SequenceGraph2.printGraph(); 
-return 0;
-} */

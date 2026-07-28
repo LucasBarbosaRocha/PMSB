@@ -37,22 +37,23 @@ private:
 
 public:
     /* construtor da classe */
-    Marschall(){};
+    Marschall() : sequenceGraphAndMulticamada(nullptr) {};
+    ~Marschall() { delete[] sequenceGraphAndMulticamada; };
     
     /* a função recebe dois caracteres A e B e os comparam, 
        devolve sub caso A != B, e 0 caso contrário */
     int w_sub(string caractere_grafo, string caractere_sequence);
 
-    void buildReverseMultilayerGraph(SequenceGraph grafo, string sequence);
+    void buildReverseMultilayerGraph(SequenceGraph &grafo, const string &sequence);
 
     /* a função recebe um grafo de sequências simples G e uma sequência s,
        devolve um grafo de multicamadas com pesos nas arestas */
-    void buildMultilayerGraph(SequenceGraph grafo, string sequence);
+    void buildMultilayerGraph(SequenceGraph &grafo, const string &sequence);
 
     /* a função de dijkstra recebe um grafo e dois vertices de origem e destino
        devolve a sequencia induzida pelo caminho mínimo e seu custo */
     pair<vector<pair<int,string>>, int> dijkstra(SequenceGraph grafo, int orig, int dest, map<int, bool> used, int tamOriginalSequenceGraph);
-    pair<vector<pair<int,string>>, int> dijkstra(SequenceGraph grafo, int orig, int dest, int limite);
+    pair<vector<pair<int,string>>, int> dijkstra(SequenceGraph &grafo, int orig, int dest, int limite);
     pair<vector<pair<int,string>>, vector<int>> dijkstraWithAllCosts(SequenceGraph grafo, int orig, int dest, int limite);
 
     pair<vector<pair<int,string>>, int> aStar(SequenceGraph grafo, int orig, int dest, string uM, string qM);
@@ -79,8 +80,8 @@ public:
 
     string verificaAresta(int u, int v, int tamGraph);
 
-    pair<list<string>, string> showTraditionalMapping(vector<pair<int,string>> retorno, Hash deBruijnGraph, SequenceGraph traditionalGraph);
-    pair<list<string>, string> showSimplifiedMapping(vector<pair<int,string>> retorno,  Hash deBruijnGraph, SequenceGraph simplifiedGraph);
+    pair<list<string>, string> showTraditionalMapping(const vector<pair<int,string>> &retorno, Hash &deBruijnGraph, SequenceGraph &traditionalGraph);
+    pair<list<string>, string> showSimplifiedMapping(const vector<pair<int,string>> &retorno, Hash &deBruijnGraph, SequenceGraph &simplifiedGraph);
 
 
 };
@@ -92,7 +93,7 @@ int Marschall::w_sub(string caractere_grafo, string caractere_sequence)
     return sub;
 }
 
-void Marschall::buildReverseMultilayerGraph(SequenceGraph grafo, string sequence) 
+void Marschall::buildReverseMultilayerGraph(SequenceGraph &grafo, const string &sequence) 
 {
     int V = grafo.getV(), m = sequence.length(), vertice_atual = 0, vertice_inicial = 0, vertice_final, vertice_atual_aux, controle;
     int m_v = m * (V + 1) + 2; // quantidade de vertice do grafo multicamadas
@@ -101,7 +102,8 @@ void Marschall::buildReverseMultilayerGraph(SequenceGraph grafo, string sequence
     int *mapeamento;
 
     mapeamento = new (nothrow) int[V];
-    this->sequenceGraphAndMulticamada = new (nothrow) vector<int>[m_v];  
+    delete[] this->sequenceGraphAndMulticamada;
+    this->sequenceGraphAndMulticamada = new (nothrow) vector<int>[m_v];
     if (mapeamento == nullptr || this->sequenceGraphAndMulticamada == nullptr)
     {
         cerr << "error allocation multlayer graph" << endl;
@@ -200,7 +202,7 @@ void Marschall::buildReverseMultilayerGraph(SequenceGraph grafo, string sequence
 }
 
 
-void Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequence)
+void Marschall::buildMultilayerGraph(SequenceGraph &grafo, const string &sequence)
 {
     int V = grafo.getV(), m = sequence.length(), vertice_atual = 0, vertice_inicial = 0, vertice_final, vertice_atual_aux, controle;
     int m_v = m * (V + 1) + 2; // quantidade de vertice do grafo multicamadas
@@ -209,7 +211,8 @@ void Marschall::buildMultilayerGraph(SequenceGraph grafo, string sequence)
     int *mapeamento;
 
     mapeamento = new (nothrow) int[V];
-    this->sequenceGraphAndMulticamada = new (nothrow) vector<int>[m_v];  
+    delete[] this->sequenceGraphAndMulticamada;
+    this->sequenceGraphAndMulticamada = new (nothrow) vector<int>[m_v];
     if (mapeamento == nullptr || this->sequenceGraphAndMulticamada == nullptr)
     {
         cerr << "error allocation multlayer graph" << endl;
@@ -441,7 +444,7 @@ pair<vector<pair<int,string>>, int> Marschall::dijkstra(SequenceGraph grafo, int
 }
 
 // Dijkstra
-pair<vector<pair<int, string>>, int> Marschall::dijkstra(SequenceGraph grafo, int orig, int dest, int limite = -1) {
+pair<vector<pair<int, string>>, int> Marschall::dijkstra(SequenceGraph &grafo, int orig, int dest, int limite = -1) {
     int V = grafo.getV();
     vector<pair<int, string>> saida;
     vector<int> dist(V, INF), prev(V, -1), visitados(V, false);
@@ -888,7 +891,7 @@ string Marschall::verificaAresta(int u, int v, int tamGraph)
     return "ins";
 }
 
-pair<list<string>, string> Marschall::showTraditionalMapping(vector<pair<int, string>> retorno, Hash deBruijnGraph, SequenceGraph traditionalGraph) {
+pair<list<string>, string> Marschall::showTraditionalMapping(const vector<pair<int, string>> &retorno, Hash &deBruijnGraph, SequenceGraph &traditionalGraph) {
     int anterior = 0, k = traditionalGraph.getK(), kmer_count = 0;
     string aux, tmp, baseAnterior, kmer_aux = "";
     list<string> kmers;
@@ -929,7 +932,7 @@ pair<list<string>, string> Marschall::showTraditionalMapping(vector<pair<int, st
     return make_pair(kmers, aux.substr(0, aux.length() - 1));
 }
 
-pair<list<string>, string> Marschall::showSimplifiedMapping(vector<pair<int,string>> retorno, Hash deBruijnGraph, SequenceGraph simplifiedGraph)
+pair<list<string>, string> Marschall::showSimplifiedMapping(const vector<pair<int,string>> &retorno, Hash &deBruijnGraph, SequenceGraph &simplifiedGraph)
 {
     int primeiro = 0, indice, anterior = 0, details = 0, k = simplifiedGraph.getK(), kmer_count = 0;
     string aux, tmp, baseAnterior, kmer_aux = "", kmerMapeado;

@@ -101,7 +101,6 @@ void MyUtils::readSequence(string archiveName)
 		myArchive.close();
         cout << "Size L.Read " << line.size() << endl;
 
-        // transform(line.begin(), line.end(), line.begin(), ::toupper);
         this->sequence = line;
     }    
 }

@@ -16,20 +16,23 @@ class SequenceGraph
 private:
 	int V; /* número de vértices */
 	int k; /* k-mer do SequenceGraph De Bruijn */
-	vector<pair<int, int> > *adj; /* Representacao do grafo */
+	vector<pair<int, int> > *adj = nullptr; /* Representacao do grafo */
 	unordered_map<int, vector<int>> incomingEdges;
     unordered_map<int, vector<int>> outcomingEdges;
 	map<int, bool> visited;
 	vector<int> iniciais;
 	bool val;
-    vector<string> *bases, *kmers;
+    vector<string> *bases = nullptr, *kmers = nullptr;
 	vector<int> level;
 
 public:
 	/* Construtor do grafo de sequências. Recebe como entrada a qtd. de vertices
 	   e o comprimento do k-mer e devolve um grafo de sequências simples vazio.*/
-	SequenceGraph(); 
-	SequenceGraph(int V, int k); 
+	SequenceGraph();
+	SequenceGraph(int V, int k);
+	SequenceGraph(const SequenceGraph &other);
+	SequenceGraph& operator=(const SequenceGraph &other);
+	~SequenceGraph();
 
 	void initilizeSequenceGraph(int V, int k);
 
@@ -128,7 +131,8 @@ SequenceGraph::SequenceGraph(int V, int k)
 	this->k = k;
 	this->V = V; // atribui o número de vértices
 	bases = new vector<string>[V];
-    this->adj = new vector<pair<int,int>>[V];	
+	kmers = new vector<string>[V];
+    this->adj = new vector<pair<int,int>>[V];
 	for(int i = 0; i < V; i++)
 	{
 		iniciais.push_back(0);
@@ -136,11 +140,67 @@ SequenceGraph::SequenceGraph(int V, int k)
 	}
 }
 
+SequenceGraph::SequenceGraph(const SequenceGraph &other)
+	: V(other.V), k(other.k), incomingEdges(other.incomingEdges), outcomingEdges(other.outcomingEdges),
+	  visited(other.visited), iniciais(other.iniciais), val(other.val), level(other.level)
+{
+	adj = other.adj ? new vector<pair<int,int>>[V] : nullptr;
+	bases = other.bases ? new vector<string>[V] : nullptr;
+	kmers = other.kmers ? new vector<string>[V] : nullptr;
+	for (int i = 0; i < V; i++)
+	{
+		if (adj) adj[i] = other.adj[i];
+		if (bases) bases[i] = other.bases[i];
+		if (kmers) kmers[i] = other.kmers[i];
+	}
+}
+
+SequenceGraph& SequenceGraph::operator=(const SequenceGraph &other)
+{
+	if (this == &other)
+		return *this;
+
+	delete[] adj;
+	delete[] bases;
+	delete[] kmers;
+
+	V = other.V;
+	k = other.k;
+	incomingEdges = other.incomingEdges;
+	outcomingEdges = other.outcomingEdges;
+	visited = other.visited;
+	iniciais = other.iniciais;
+	val = other.val;
+	level = other.level;
+
+	adj = other.adj ? new vector<pair<int,int>>[V] : nullptr;
+	bases = other.bases ? new vector<string>[V] : nullptr;
+	kmers = other.kmers ? new vector<string>[V] : nullptr;
+	for (int i = 0; i < V; i++)
+	{
+		if (adj) adj[i] = other.adj[i];
+		if (bases) bases[i] = other.bases[i];
+		if (kmers) kmers[i] = other.kmers[i];
+	}
+	return *this;
+}
+
+SequenceGraph::~SequenceGraph()
+{
+	delete[] adj;
+	delete[] bases;
+	delete[] kmers;
+}
+
 void SequenceGraph::initilizeSequenceGraph(int V, int k)
 {
     this->k = k;
     this->V = V;
-    
+
+	delete[] bases;
+	delete[] kmers;
+	delete[] adj;
+
 	bases = new vector<string>[V];
 	kmers = new vector<string>[V];
 	this->adj = new vector<pair<int,int>>[V];
@@ -630,6 +690,7 @@ void SequenceGraph::printStronglyConnectedComponents()
 			cout << endl;
 		}
 	}
+	delete[] visited;
 }
 
 //pair<list<pair<int,string>>, list<pair<int,int>>> SequenceGraph::bfs(int v, int limite)
@@ -685,14 +746,15 @@ list<int> SequenceGraph::bfs(int v, int limite)
 		else
 			break;
 	}
-	delete visitados;
-	delete level;
+	delete[] visitados;
+	delete[] level;
 	return nodes;
 }
 
 void SequenceGraph::deleteGraph()
 {
-	this->adj->clear();
+	for (int i = 0; i < this->V; i++)
+		this->adj[i].clear();
 }
 
 // Driver code
