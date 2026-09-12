@@ -22,7 +22,7 @@ int returnLengthGap(int k, int gap)
     return k;
 }
 
-tuple<int, string, int> headMapping(Hash dbg_gap, int firstPosition, Hash &h, const string &sequence, int k)
+tuple<int, string, int> headMapping(Hash &dbg_gap, int firstPosition, Hash &h, const string &sequence, int k)
 {
     int length, final, final_aux, aux, caminho_encontrado = 0, custo = 0;
     list<string> kmer_lista_aux;
@@ -89,7 +89,7 @@ tuple<int, string, int> headMapping(Hash dbg_gap, int firstPosition, Hash &h, co
     return make_tuple(caminho_encontrado, resposta, custo);
 }
 
-tuple<int, string, int> internalMapping(Hash dbg_gap, int pos, const vector<int> &positions, Hash &h, const string &sequence, int k)
+tuple<int, string, int> internalMapping(Hash &dbg_gap, int pos, const vector<int> &positions, Hash &h, const string &sequence, int k)
 {
     int caminho_encontrado = positions.size(), length, aux, posicao = positions[0], inicial_aux, final_aux, dif, custo = 0;
     string resposta = "", kmer_cabeca = "", kmer_cauda = "", sequence_aux = "";
@@ -184,7 +184,7 @@ tuple<int, string, int> internalMapping(Hash dbg_gap, int pos, const vector<int>
     return make_tuple(caminho_encontrado, resposta, custo);
 }
 
-tuple<int, string, int> tailMapping(Hash dbg_gap, int lastPosition, Hash &h, const string &sequence, int k)
+tuple<int, string, int> tailMapping(Hash &dbg_gap, int lastPosition, Hash &h, const string &sequence, int k)
 {
     int length, aux = 0, caminho_encontrado = -1, inicial_aux, dif, inicial, custo = 0;
     string resposta = "", kmer_cabeca = "", sequence_aux = "";
@@ -263,7 +263,7 @@ pair<string, int> mapeamento(Hash &h, const string &sequence, int k)
         }
     }
 
-    cout << "Qtd. Anchros " << posicoesValidas.size() << endl;
+    cout << "Quantidade de Âncoras: " << posicoesValidas.size() << endl;
 
     if (posicoesValidas.size() > 0)
     {
@@ -291,7 +291,7 @@ pair<string, int> mapeamento(Hash &h, const string &sequence, int k)
 
         int limite = posicoesValidas.size();
 
-        int pos_head = 0, pos_internal = 0, pos_internal_escolhida = 0;
+        int pos_internal = 0;
         string aux = resposta;
         int aux_custo = custo_temp;
         while (get<0>(status) < limite)
@@ -305,7 +305,6 @@ pair<string, int> mapeamento(Hash &h, const string &sequence, int k)
                 {
                     resp_temp = aux;
                     custo_temp = aux_custo;
-                    pos_internal_escolhida = pos_internal;
                 }
             }
             pos_internal = get<0>(status);
@@ -342,12 +341,12 @@ int main(int argc, char *argv[])
     {
         //utils.readSequence(utils.nameSequenceArchive);
         getline(file, line);
-        cout << "Size L.Read " << line.size() << endl;
+        cout << "Comprimento: " << line.size() << endl;
         utils.sequence = line;
         // mapeamento
         auto retorno = mapeamento(h, utils.sequence, utils.k);
-        cout << retorno.first << endl;
-        cout << "Cost: " << retorno.second << endl << endl;
+        cout << "Sequência mapeada (com as alterações aplicadas): " << retorno.first << endl;
+        cout << "Custo: " << retorno.second << endl << endl;
     }
     return 0;
 }

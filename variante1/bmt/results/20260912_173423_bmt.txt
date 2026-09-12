@@ -1,0 +1,11 @@
+ferramenta: bmt
+data: 20260912_173423
+grafo: grafo.fasta
+sequencia: sequence.fasta
+k=3 t=0 p=0
+comando: /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt/bin/bmt -s /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt/uploads/20260912_173423_sequence.fasta -g /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt/uploads/20260912_173423_grafo.fasta -k 3 -t 0 -p 0
+
+--- stdout ---
+Comprimento: 12
+Sequência mapeada (com as alterações aplicadas): ACGTACGTTGCA
+Custo: 1

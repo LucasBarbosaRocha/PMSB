@@ -5,7 +5,9 @@ Sequências em grafo de De Bruijn) da variante 1 da tese ("O Problema do
 Mapeamento de Sequências em Grafos de De Bruijn", Lucas Barbosa Rocha,
 UFMS/FACOM, 2024 — `../../Tese_doutorado.pdf`). Dados uma sequência `s` e um
 grafo de De Bruijn `G`, o objetivo é encontrar o percurso em `G` cuja
-sequência induzida seja a mais parecida possível com `s`.
+sequência induzida seja a mais parecida possível com `s`. Se você só precisa
+do **custo** do mapeamento (não da sequência mapeada em si), veja a variante
+mais leve em `../bmt_only_cost/`.
 
 Os programas desta pasta implementam o algoritmo exato (Capítulo 5.1 da
 tese, **BSMT**) e as três heurísticas propostas (Capítulo 5.2, **BSMT_h1**,
@@ -43,11 +45,29 @@ arquivos em `../utils/`) e coloca os binários em `bmt/bin/`.
 
 `bmt_h1_b` depende da biblioteca [Bifrost](https://github.com/pmelsted/bifrost)
 (código-fonte em `../utils/myBifrost/bifrost/`), que **não vem pré-compilada**
-neste repositório. O `build.sh` tenta compilar e linkar `bmt_h1_b`
-automaticamente; se a Bifrost ainda não tiver sido construída, ele avisa e
-segue sem interromper o build dos demais programas. Para habilitar
-`bmt_h1_b`, compile a Bifrost primeiro (veja
-`../utils/myBifrost/bifrost/CMakeLists.txt`) e rode `./build.sh` novamente.
+neste repositório. Compile-a primeiro:
+
+```
+cd ../utils/myBifrost/bifrost
+mkdir -p build && cd build
+cmake ..
+make -j$(nproc)
+```
+
+Depois rode `./build.sh` de novo — ele detecta `libbifrost.a` e linka
+`bmt_h1_b` automaticamente. Se a lib ainda não existir, ele avisa e segue sem
+interromper o build dos demais programas.
+
+**Atenção com `-march=native`:** o `CMakeLists.txt` da Bifrost compila a lib
+com `COMPILATION_ARCH=native` (ativa AVX2 nesta máquina). Vários headers da
+Bifrost (ex. `BlockedBloomFilter.hpp`) têm campos de struct condicionados a
+`#if defined(__AVX2__)` — se `bmt_h1_b.cpp` for compilado **sem** essa mesma
+flag, o tamanho dessas structs diverge entre o `.cpp` e a lib já compilada
+(violação de ODR), e o binário **linka normalmente mas crasha em runtime**
+com corrupção de memória silenciosa (não dá erro de compilação nem de link —
+só aparece rodando, e o sintoma parece aleatório: SEGV numa estrutura sem
+relação nenhuma com o bug real). Por isso `build.sh` já usa `-march=native`
+ao compilar `bmt_h1_b` — se compilar manualmente, use a mesma flag.
 
 ## Entrada
 
@@ -87,15 +107,17 @@ ACGTCCGTTGCA
 
 A saída varia um pouco entre os programas, mas em geral cada um imprime:
 
-* `Size L.Read <n>`: tamanho da sequência lida
-* `Qtd. Anchros <n>` (heurísticas): quantidade de k-mers da sequência que
-  batem exatamente com algum k-mer do grafo — as **sementes** usadas para
-  guiar a busca (chamado de *seeds* / conjunto `A` na tese)
-* A sequência mapeada/induzida — o resultado do algoritmo. Pode ser mais
-  curta que a entrada (mapeamento parcial) ou conter `-` no lugar de uma
-  base (gap) quando a heurística não consegue cobrir a sequência inteira.
-* `Cost: <n>` (`bmt` e `bmt_h1`) ou um inteiro na última linha (`bmt_h2` e
-  `bmt_h3`): custo do mapeamento, na mesma métrica de edição usada pelo
+* `Comprimento: <n>`: tamanho da sequência lida
+* `Quantidade de Âncoras: <n>` (heurísticas): quantidade de k-mers da
+  sequência que batem exatamente com algum k-mer do grafo — as **sementes**
+  usadas para guiar a busca (chamado de *seeds* / conjunto `A` na tese)
+* `Sequência mapeada (com as alterações aplicadas): <seq>` — o resultado do
+  algoritmo, ou seja, a sequência de entrada já com as edições
+  (substituição/inserção/deleção) aplicadas para se encaixar no grafo. Pode
+  ser mais curta que a entrada (mapeamento parcial) ou conter `-` no lugar
+  de uma base (gap) quando a heurística não consegue cobrir a sequência
+  inteira.
+* `Custo: <n>`: custo do mapeamento, na mesma métrica de edição usada pelo
   algoritmo exato (substituição/inserção/deleção = custo 1 cada). Em `bmt`
   é sempre o custo **ótimo**. Em `bmt_h1` é a soma dos custos de Dijkstra de
   cada segmento resolvido. Em `bmt_h2`/`bmt_h3` (que não usam Dijkstra) é a
@@ -141,19 +163,19 @@ A sequência de entrada (`ACGTCCGTTGCA`) tem uma base diferente de `ref1`
 
 **`bmt`** (custo ótimo):
 ```
-Size L.Read 12
-ACGTACGTTGCA
-Cost: 1
+Comprimento: 12
+Sequência mapeada (com as alterações aplicadas): ACGTACGTTGCA
+Custo: 1
 ```
 Encontra o caminho de custo mínimo no grafo e devolve exatamente `ref1`,
 com custo 1 (uma substituição) — o resultado correto e ótimo.
 
 **`bmt_h1`**:
 ```
-Size L.Read 12
-Qtd. Anchros 7
-ACG--TTGCA
-Cost: 4
+Comprimento: 12
+Quantidade de Âncoras: 7
+Sequência mapeada (com as alterações aplicadas): ACG--TTGCA
+Custo: 4
 ```
 Mapeamento parcial (2 gaps) com custo 4 — pior que o ótimo (1), como
 esperado de uma heurística, mas nunca melhor. A busca de `bmt_h1` é
@@ -162,18 +184,18 @@ tese), então nem sempre encontra o caminho completo.
 
 **`bmt_h2`**:
 ```
-Size L.Read 12
-Qtd. Anchros 7
-CGTTGCA
-5
+Comprimento: 12
+Quantidade de Âncoras: 7
+Sequência mapeada (com as alterações aplicadas): CGTTGCA
+Custo: 5
 ```
 
 **`bmt_h3`**:
 ```
-Size L.Read 12
-Qtd. Anchros 7
-TGCA
-8
+Comprimento: 12
+Quantidade de Âncoras: 7
+Sequência mapeada (com as alterações aplicadas): TGCA
+Custo: 8
 ```
 `bmt_h2` e `bmt_h3` são heurísticas *seed-and-extend* mais simples (sem
 Dijkstra): a partir de cada semente, tentam estender caractere a caractere

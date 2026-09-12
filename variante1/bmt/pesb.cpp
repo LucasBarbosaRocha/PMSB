@@ -21,7 +21,6 @@ int main(int argc, char **argv)
     if(utils.typeGraph == 0)
     {
         auto retorno = exato(h, utils.sequence, utils.k, false);
-        cout << "Exato: " << endl;
         cout << "Vamos inserir: " << retorno.first << " ";
     }
     return 0;
@@ -32,7 +31,9 @@ pair<int, list<string>> exato(Hash &cdbg, const string &kmer_sequence, int k, bo
     int qtd = 0;
     list<string> kmers;
     if (detalhes) cout << "Procurando kmers da sequência " << kmer_sequence << " no grafo" << endl;
-    for (int i = 0; i < kmer_sequence.length()-(k-1); i++)
+    if (kmer_sequence.length() < (size_t)k)
+        return make_pair(qtd, kmers);
+    for (size_t i = 0; i <= kmer_sequence.length() - k; i++)
     {
         string kmer = kmer_sequence.substr(i,k);
 

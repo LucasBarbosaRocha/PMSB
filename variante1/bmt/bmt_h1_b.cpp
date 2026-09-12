@@ -20,9 +20,9 @@ int returnLengthGap(int k, int gap)
     return k;
 }
 
-pair<int, string> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost &h, const string &sequence, int k)
+tuple<int, string, int> headMapping(my_Bifrost &dbg_gap, int firstPosition, my_Bifrost &h, const string &sequence, int k)
 {
-    int length, final, final_aux, aux, caminho_encontrado = 0;
+    int length, final, final_aux, aux, caminho_encontrado = 0, custo = 0;
     list<string> kmer_lista_aux;
     pair<int, int> inicial_final;
     string resposta = "";
@@ -45,12 +45,13 @@ pair<int, string> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost 
         auto retorno = dbg_gap.dijkstra(grafo_multicada.first, 0, grafo_multicada.second);
         mapping = dbg_gap.buildMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);   
 
-        if (retorno.second == INT_MAX)  
+        if (retorno.second == INT_MAX)
         {
             caminho_encontrado = -1;
-            return make_pair(caminho_encontrado, resposta);
+            return make_tuple(caminho_encontrado, resposta, custo);
         } else {
-            resposta = mapping.second.substr(0,firstPosition) + sequence.substr(firstPosition, k);    
+            resposta = mapping.second.substr(0,firstPosition) + sequence.substr(firstPosition, k);
+            custo = retorno.second;
         }
         // liberando memória
         dbg_gap.clear();
@@ -58,12 +59,12 @@ pair<int, string> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost 
         mapping.first.clear();
         mapping.second.clear();
     }
-    return make_pair(caminho_encontrado, resposta);
+    return make_tuple(caminho_encontrado, resposta, custo);
 }
 
-pair<int, string> internalMapping(my_Bifrost dbg_gap, int pos, const vector<int> &positions, my_Bifrost &h, const string &sequence, int k)
+tuple<int, string, int> internalMapping(my_Bifrost &dbg_gap, int pos, const vector<int> &positions, my_Bifrost &h, const string &sequence, int k)
 {
-    int caminho_encontrado = positions.size(), length, aux, posicao = positions[0], inicial_aux, final_aux, dif;
+    int caminho_encontrado = positions.size(), length, aux, posicao = positions[0], dif, custo = 0;
     string resposta = "", kmer_cabeca = "", kmer_cauda = "", sequence_aux = "";
     pair<int, int> inicial_final;
     // cout << "INTERNAL " << endl;
@@ -93,12 +94,8 @@ pair<int, string> internalMapping(my_Bifrost dbg_gap, int pos, const vector<int>
             auto inicial_final = dbg_gap.vertice_inicial_final(kmer_cabeca, kmer_cauda);
             auto inicial_teste = inicial_final.first + 2;
             auto final_teste = (inicial_final.second + 2 + (k-1)) + ((sequence_aux.size() - 1) * dbg_gap.sequenceGraph.getV()) + (sequence_aux.size() - 1);
-            inicial_aux = 0;
-            final_aux = (grafo_multicada.second + 2 + (k-1)) + ((sequence_aux.size() - 1) * dbg_gap.sequenceGraph.getV()) + (sequence_aux.size() - 1);
 
-
-            //auto retorno = dbg_gap.dijkstra(grafo_multicada.first, inicial_teste, grafo_multicada.second);           
-            auto retorno = dbg_gap.dijkstra(grafo_multicada.first, inicial_teste, final_teste);           
+            auto retorno = dbg_gap.dijkstra(grafo_multicada.first, inicial_teste, final_teste);
             mapping = dbg_gap.buildMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);   
             // cout << "retorno " << retorno.second << endl;
             // cout << "mapping " << mapping.second << endl;
@@ -110,14 +107,15 @@ pair<int, string> internalMapping(my_Bifrost dbg_gap, int pos, const vector<int>
                     resposta = resposta + kmer_cabeca;
                 else
                     resposta = resposta + kmer_cabeca[k-1];
-                return make_pair(caminho_encontrado, resposta);
+                return make_tuple(caminho_encontrado, resposta, custo);
             } else
             {
-                if (mapping.second.size() > k)      
+                if (mapping.second.size() > k)
                 {
                     // resposta = resposta + sequence.substr(positions[i], k);
-                    resposta = resposta + mapping.second.substr(k, mapping.second.length() - k);   
+                    resposta = resposta + mapping.second.substr(k, mapping.second.length() - k);
                     posicao = 1;
+                    custo += retorno.second;
                 }
             }
 
@@ -140,12 +138,12 @@ pair<int, string> internalMapping(my_Bifrost dbg_gap, int pos, const vector<int>
             posicao++;
         }
     }
-    return make_pair(caminho_encontrado, resposta);
+    return make_tuple(caminho_encontrado, resposta, custo);
 }
 
-pair<int, string> tailMapping(my_Bifrost dbg_gap, int lastPosition, my_Bifrost &h, const string &sequence, int k)
+tuple<int, string, int> tailMapping(my_Bifrost &dbg_gap, int lastPosition, my_Bifrost &h, const string &sequence, int k)
 {
-    int length, aux = 0, caminho_encontrado = -1, inicial_aux, dif, inicial;
+    int length, aux = 0, caminho_encontrado = -1, inicial_aux, dif, inicial, custo = 0;
     string resposta = "", kmer_cabeca = "", sequence_aux = "";
     pair<int, int> inicial_final;
 
@@ -167,78 +165,86 @@ pair<int, string> tailMapping(my_Bifrost dbg_gap, int lastPosition, my_Bifrost &
         auto retorno = dbg_gap.dijkstra(grafo_multicada.first, 0, grafo_multicada.second);
         mapping = dbg_gap.buildMapping(retorno.first, dbg_gap, dbg_gap.sequenceGraph);   
     
-        if (mapping.second.length() > k)      
+        if (mapping.second.length() > k)
         {
-            resposta = resposta + mapping.second.substr(k, mapping.second.length() - k); 
+            resposta = resposta + mapping.second.substr(k, mapping.second.length() - k);
             // cout << "tail: " << mapping.second.substr(k, mapping.second.length() - k);
-            caminho_encontrado = 1; 
+            caminho_encontrado = 1;
+            custo = retorno.second;
         } else {
             //for (int trash_it = lastPosition + k; trash_it < sequence.length(); trash_it++)
-            //    resposta = resposta + '-';    
-        }            
-        
+            //    resposta = resposta + '-';
+        }
+
         dbg_gap.clear();
         retorno.first.clear();
         mapping.first.clear();
         mapping.second.clear();
     }
-    return make_pair(caminho_encontrado, resposta);
+    return make_tuple(caminho_encontrado, resposta, custo);
 }
 
-string mapeamento(my_Bifrost &h, const string &sequence, int k)
+pair<string, int> mapeamento(my_Bifrost &h, const string &sequence, int k)
 {
-    int posicao = 0, length, aux, caminho_encontrado = 1;
+    int posicao = 0, length, aux, caminho_encontrado = 1, custo_total = 0;
     string resposta = "";
     vector<int> posicoesValidas;
     my_Bifrost dbg_gap(k);
-    pair<int, string> status;
+    tuple<int, string, int> status;
 
 
     posicoesValidas = h.findAnchors(sequence);
-    cout << "Qtd. Anchros " << posicoesValidas.size() << endl;
+    cout << "Quantidade de Âncoras: " << posicoesValidas.size() << endl;
     /* for (auto it : posicoesValidas)
         cout << it << " ";
     cout << endl; */
     if (posicoesValidas.size() > 0)
     {
         string resp_temp = "";
+        int custo_temp = 0;
         status = headMapping(dbg_gap, posicoesValidas[0], h, sequence, k);
-        if (status.first != -1){
-            resposta = status.second;
-            resp_temp = status.second;
+        if (get<0>(status) != -1){
+            resposta = get<1>(status);
+            resp_temp = get<1>(status);
+            custo_temp = get<2>(status);
         }
 
         int limite = posicoesValidas.size();
 
-        int pos_head = 0, pos_internal = 0, pos_internal_escolhida = 0;
+        int pos_internal = 0;
         string aux = resposta;
-        while (status.first < limite)
+        int aux_custo = custo_temp;
+        while (get<0>(status) < limite)
         {
             status = internalMapping(dbg_gap, pos_internal, posicoesValidas, h, sequence, k);
-            if (status.first < limite) 
+            if (get<0>(status) < limite)
             {
-                aux = aux + status.second;
+                aux = aux + get<1>(status);
+                aux_custo = aux_custo + get<2>(status);
                 if (resp_temp.size() < aux.size())
                 {
                     resp_temp = aux;
-                    pos_internal_escolhida = pos_internal;
+                    custo_temp = aux_custo;
                 }
-            }  
-            pos_internal = status.first;
+            }
+            pos_internal = get<0>(status);
             aux = "";
+            aux_custo = 0;
         }
 
         resposta = resp_temp;
+        custo_total = custo_temp;
         status = tailMapping(dbg_gap, posicoesValidas[posicoesValidas.size() - 1], h, sequence, k);
-        if (status.first != -1) {    
-            resposta = resposta + status.second;
-        } 
-    } 
+        if (get<0>(status) != -1) {
+            resposta = resposta + get<1>(status);
+            custo_total += get<2>(status);
+        }
+    }
 
     if (resposta.size() > 0)
-        return resposta;
+        return make_pair(resposta, custo_total);
     else
-        return "Sequência nao pode ser mapeada";
+        return make_pair("Sequência nao pode ser mapeada", custo_total);
 }
 
 int main(int argc, char *argv[])
@@ -254,12 +260,13 @@ int main(int argc, char *argv[])
     {
         //utils.readSequence(utils.nameSequenceArchive);  
         getline(file, line);
-        cout << "Kmers: " << bf.size() << endl;
-        cout << "Size L.Read " << line.size() << endl;
+        cout << "Kmers no grafo: " << bf.size() << endl;
+        cout << "Comprimento: " << line.size() << endl;
         utils.sequence = line;
         // mapeamento
-        auto retorno = mapeamento(bf, utils.sequence, utils.k); 
-        cout << retorno << endl << endl;
+        auto retorno = mapeamento(bf, utils.sequence, utils.k);
+        cout << "Sequência mapeada (com as alterações aplicadas): " << retorno.first << endl;
+        cout << "Custo: " << retorno.second << endl << endl;
     }     
     return 0;
 }

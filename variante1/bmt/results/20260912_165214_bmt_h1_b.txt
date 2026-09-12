@@ -1,0 +1,14 @@
+ferramenta: bmt_h1_b
+data: 20260912_165214
+grafo: grafo.fasta
+sequencia: sequence.fasta
+k=3 t=0 p=0
+comando: /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt/bin/bmt_h1_b -s /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt/uploads/20260912_165214_sequence.fasta -g /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt/uploads/20260912_165214_grafo.fasta -k 3 -t 0 -p 0
+
+--- stdout ---
+Kmers: 7
+Size L.Read 12
+Qtd. Anchros 7
+ACG-GTTGCA
+Cost: 4
+

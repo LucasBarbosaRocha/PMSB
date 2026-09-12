@@ -35,17 +35,32 @@ echo "Programas compilados em: $BIN_DIR"
 echo
 
 # bmt_h1_b depende da biblioteca Bifrost (utils/myBifrost/bifrost), que não
-# vem pré-compilada neste repositório. A compilação (checagem de sintaxe)
-# funciona, mas o link só funciona se a libbifrost já tiver sido construída
-# (veja utils/myBifrost/bifrost/CMakeLists.txt). Tentamos compilar e linkar;
-# se falhar, avisamos e seguimos sem interromper o build dos demais.
-echo "-> bmt_h1_b (requer Bifrost já compilado; pode falhar)"
-if "$CXX" $CXXFLAGS -o "$BIN_DIR/bmt_h1_b" bmt_h1_b.cpp -lz -lpthread 2>"$BIN_DIR/bmt_h1_b_build.log"; then
-    echo "   OK: $BIN_DIR/bmt_h1_b"
+# vem pré-compilada neste repositório. Compile-a primeiro:
+#   cd utils/myBifrost/bifrost && mkdir -p build && cd build && cmake .. && make -j
+#
+# IMPORTANTE sobre -march=native: o CMakeLists da Bifrost compila a lib com
+# COMPILATION_ARCH=native (ativa AVX2 nesta máquina). Vários headers da
+# Bifrost (ex. BlockedBloomFilter.hpp) têm campos de struct condicionados a
+# "#if defined(__AVX2__)" — se bmt_h1_b.cpp for compilado SEM -march=native/
+# -mavx2, o tamanho dessas structs diverge do que está na lib já compilada
+# (violação de ODR) e o binário CRASHA em runtime com corrupção de memória
+# silenciosa (não é erro de link nem de compilação — só aparece rodando).
+# Por isso usamos -march=native aqui também, sempre a mesma flag da lib.
+BIFROST_DIR="../utils/myBifrost/bifrost"
+BIFROST_LIB="$BIFROST_DIR/build/src/libbifrost.a"
+
+echo "-> bmt_h1_b (requer Bifrost já compilada em $BIFROST_DIR/build)"
+if [ -f "$BIFROST_LIB" ]; then
+    if "$CXX" -O2 -march=native -std=c++17 -o "$BIN_DIR/bmt_h1_b" bmt_h1_b.cpp \
+        -I "$BIFROST_DIR/src" "$BIFROST_LIB" -lpthread -lz 2>"$BIN_DIR/bmt_h1_b_build.log"; then
+        echo "   OK: $BIN_DIR/bmt_h1_b"
+    else
+        echo "   AVISO: falha ao compilar/linkar bmt_h1_b."
+        echo "   Detalhes em: $BIN_DIR/bmt_h1_b_build.log"
+    fi
 else
-    echo "   AVISO: não foi possível linkar bmt_h1_b (biblioteca Bifrost ausente)."
-    echo "   Detalhes em: $BIN_DIR/bmt_h1_b_build.log"
-    echo "   Para habilitar, compile a Bifrost em utils/myBifrost/bifrost/ antes de rodar este script."
+    echo "   AVISO: Bifrost ainda não compilada ($BIFROST_LIB não existe)."
+    echo "   Rode: cd $BIFROST_DIR && mkdir -p build && cd build && cmake .. && make -j\$(nproc)"
 fi
 
 echo

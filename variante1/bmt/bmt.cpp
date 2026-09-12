@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     while (getline(file, line))
     {
         getline(file, line);
-        cout << "Size L.Read " << line.size() << endl;
+        cout << "Comprimento: " << line.size() << endl;
         utils.sequence = line;
 
         m.buildMultilayerGraph(h.sequenceGraph, utils.sequence);
@@ -36,15 +36,15 @@ int main(int argc, char *argv[])
         if (utils.typeGraph == 0)
         {
             auto saida = m.showTraditionalMapping(retorno.first, h, h.sequenceGraph);
-            cout << saida.second << endl;
+            cout << "Sequência mapeada (com as alterações aplicadas): " << saida.second << endl;
         }
         else
         {
             auto saida = m.showSimplifiedMapping(retorno.first, h, h.sequenceGraph);
-            cout << saida.second << endl;
+            cout << "Sequência mapeada (com as alterações aplicadas): " << saida.second << endl;
             m.m_sequenceGraph.deleteGraph();
         }
-        cout << "Cost: " << retorno.second << endl;
+        cout << "Custo: " << retorno.second << endl;
     }
 
     return 0;
