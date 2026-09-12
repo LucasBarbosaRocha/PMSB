@@ -11,7 +11,7 @@ class my_Bifrost
 {
 private:
     int k;
-    vector<int> *sequenceGraphAndMulticamada;
+    vector<int> *sequenceGraphAndMulticamada = nullptr;
     CompactedDBG<myData> cdbg;
     int hammingDistance(string kmer1, string kmer2, int threshold);
     int w_sub(string caractere_grafo, string caractere_sequence);
@@ -44,7 +44,7 @@ public:
     void shortestPath(SequenceGraph grafo, int src, int dest, int W);
     pair<vector<pair<int,string>>, int> dijkstra(SequenceGraph grafo, int orig, int dest);
     string verifyEdge(int u, int v, int tamGraph);
-    pair<list<string>, string> buildMapping(vector<pair<int,string>> retorno, my_Bifrost dbg_gap, SequenceGraph graph);
+    pair<list<string>, string> buildMapping(vector<pair<int,string>> retorno, my_Bifrost &dbg_gap, SequenceGraph &graph);
     pair<int, int> vertice_inicial_final(string cabeca, string cauda);
     string findKmerByIndex(int index);
 
@@ -122,8 +122,10 @@ vector<int> my_Bifrost::findAnchors(string sequence)
 {
     vector<int> positions;
     string kmer_sequence;
-    for (int i = 0; i < sequence.length() - this->k; i++)
-    {   
+    if (sequence.length() < (size_t)this->k)
+        return positions;
+    for (size_t i = 0; i <= sequence.length() - this->k; i++)
+    {
         kmer_sequence = sequence.substr(i, this->k);
         const Kmer km = Kmer(kmer_sequence.c_str()); 
         if (this->haskmer(km))
@@ -595,7 +597,8 @@ pair<SequenceGraph, int> my_Bifrost::buildMultilayerGraph(SequenceGraph grafo, s
     int *mapeamento;
 
     mapeamento = new (nothrow) int[V + 1];
-    sequenceGraphAndMulticamada = new (nothrow) vector<int>[m_v];  
+    delete[] sequenceGraphAndMulticamada;
+    sequenceGraphAndMulticamada = new (nothrow) vector<int>[m_v];
     if (mapeamento == nullptr || sequenceGraphAndMulticamada == nullptr)
     {
         cerr << "error allocation multlayer graph" << endl;
@@ -944,7 +947,7 @@ string my_Bifrost::verifyEdge(int u, int v, int tamGraph)
     return "ins";
 }
 
-pair<list<string>, string> my_Bifrost::buildMapping(vector<pair<int,string>> retorno, my_Bifrost dbg_gap, SequenceGraph graph)
+pair<list<string>, string> my_Bifrost::buildMapping(vector<pair<int,string>> retorno, my_Bifrost &dbg_gap, SequenceGraph &graph)
 {
     int primeiro = 0, indice, anterior = 0, details = 0, k = graph.getK(), kmer_count = 0;
     string aux, tmp, baseAnterior, kmer_aux = "";
