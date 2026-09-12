@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>PMSB — Painel de execução</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>PMSB — compilar e executar</h1>
+    <p>Escolha a ferramenta, compile se precisar, suba o grafo e a sequência e aperte executar.</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <label for="tool">Ferramenta</label>
+      <select id="tool"></select>
+      <p id="toolHint" class="hint"></p>
+
+      <button id="btnCompile">🔧 Compilar</button>
+      <pre id="compileLog" class="log" hidden></pre>
+    </section>
+
+    <section class="panel">
+      <label for="graph">Arquivo do grafo (FASTA)</label>
+      <input type="file" id="graph" accept=".fasta,.fa,.txt" />
+
+      <label for="sequence">Arquivo da sequência (FASTA)</label>
+      <input type="file" id="sequence" accept=".fasta,.fa,.txt" />
+
+      <div class="row">
+        <div>
+          <label for="k">k</label>
+          <input type="number" id="k" value="3" min="1" />
+        </div>
+      </div>
+
+      <button id="btnRun">▶ Executar</button>
+    </section>
+
+    <section class="panel">
+      <h2>Resultado</h2>
+      <p id="costLine" class="cost" hidden></p>
+      <pre id="output" class="log"></pre>
+      <p id="savedLine" class="hint"></p>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

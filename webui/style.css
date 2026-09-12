@@ -1,0 +1,48 @@
+:root { color-scheme: light dark; }
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+  line-height: 1.4;
+}
+header p { color: #666; }
+.panel {
+  border: 1px solid #8884;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+label { display: block; font-weight: 600; margin: 12px 0 4px; }
+select, input[type="number"], input[type="file"] {
+  width: 100%;
+  padding: 6px 8px;
+  box-sizing: border-box;
+}
+.row { display: flex; gap: 16px; flex-wrap: wrap; }
+.row > div { flex: 1; min-width: 160px; }
+button {
+  margin-top: 16px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #8884;
+  cursor: pointer;
+}
+button:hover { background: #8882; }
+.log {
+  background: #0001;
+  border-radius: 8px;
+  padding: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 400px;
+  overflow: auto;
+  font-size: 0.85rem;
+}
+.hint { color: #666; font-size: 0.85rem; }
+.cost {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+[hidden] { display: none !important; }
