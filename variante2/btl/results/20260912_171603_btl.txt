@@ -1,0 +1,18 @@
+ferramenta: btl
+data: 20260912_171603
+grafo: grafo.fasta
+sequencia: grafo.fasta
+k=3 t=0
+comando: /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante2/btl/btl -s /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante2/btl/uploads/20260912_171603_grafo.fasta -g /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante2/btl/uploads/20260912_171603_grafo.fasta -k 3 -t 0
+
+--- stdout ---
+Kmers in Gk: 11
+Size L.Read 12
+qtd kmers in s 8
+cost: 0
+kmers after maping: 10
+Kmers in Gk: 11
+Size L.Read 12
+qtd kmers in s 8
+cost: 0
+kmers after maping: 4

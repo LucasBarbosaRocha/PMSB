@@ -18,7 +18,9 @@ pair<int, list<string>> exato(my_Bifrost bf, string kmer_sequence, int k, bool d
     auto rep = bf.findAnchors(kmer_sequence);
     cout << "Ancoras " << rep.size() << endl;
 
-    for (int i = 0; i < kmer_sequence.length()-(k-1); i++)
+    if (kmer_sequence.length() < (size_t)k)
+        return make_pair(qtd, kmers);
+    for (size_t i = 0; i <= kmer_sequence.length() - k; i++)
     {
         const Kmer kmer = Kmer(kmer_sequence.substr(i,k).c_str());
       
