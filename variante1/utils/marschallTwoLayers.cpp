@@ -13,14 +13,14 @@ using namespace std;
 class MarschallTwoLayers
 {
 private:
-    int w(SequenceGraph grafo, int layer_u, int node_u, string base_string_v, int layer_v, int node_v, string base_node_v);
-    vector<pair<int,int>> algoritmo_3(SequenceGraph sequenceGraph, vector<pair<int,int>> currentLayer, unordered_map<int, int> currentLayerBkp);
-    vector<pair<int,int>> algoritmo_2(SequenceGraph sequenceGraph, string sequence, int layer, vector<pair<int,int>> PreviousLayer, vector<pair<int,int>> CurrentLayer, unordered_map<int, int> CurrentLayerBkp);
+    int w(SequenceGraph &grafo, int layer_u, int node_u, string base_string_v, int layer_v, int node_v, string base_node_v);
+    vector<pair<int,int>> algoritmo_3(SequenceGraph &sequenceGraph, vector<pair<int,int>> currentLayer, unordered_map<int, int> currentLayerBkp);
+    vector<pair<int,int>> algoritmo_2(SequenceGraph &sequenceGraph, string sequence, int layer, vector<pair<int,int>> PreviousLayer, vector<pair<int,int>> CurrentLayer, unordered_map<int, int> CurrentLayerBkp);
 
 public:
     /* construtor da classe */
     MarschallTwoLayers(){};
-    int toCalculateTheCost(SequenceGraph sequenceGraph, string sequence);   
+    int toCalculateTheCost(SequenceGraph &sequenceGraph, string sequence);
 };
 
 bool sortbysec(const pair<int,int> &a, const pair<int,int> &b)
@@ -28,7 +28,7 @@ bool sortbysec(const pair<int,int> &a, const pair<int,int> &b)
     return (a.second < b.second);
 }
 
-int MarschallTwoLayers::w(SequenceGraph grafo, int layer_u, int node_u, string base_string_v, int layer_v, int node_v, string base_node_v)
+int MarschallTwoLayers::w(SequenceGraph &grafo, int layer_u, int node_u, string base_string_v, int layer_v, int node_v, string base_node_v)
 {
     // camada 0
     if (layer_u == 0) 
@@ -58,20 +58,18 @@ int MarschallTwoLayers::w(SequenceGraph grafo, int layer_u, int node_u, string b
     // del
     if (layer_u == layer_v - 1 && !grafo.isThereNeighbor(node_u,node_v))
     {
-            return ins;
+            return del;
     }
 
     return 1;
 }
 
-vector<pair<int,int>> MarschallTwoLayers::algoritmo_3(SequenceGraph sequenceGraph, vector<pair<int,int>> currentLayer, unordered_map<int, int> currentLayerBkp)
+vector<pair<int,int>> MarschallTwoLayers::algoritmo_3(SequenceGraph &sequenceGraph, vector<pair<int,int>> currentLayer, unordered_map<int, int> currentLayerBkp)
 {
-    int V = sequenceGraph.getV(), resolved[V], x;
+    int V = sequenceGraph.getV(), x;
+    vector<int> resolved(V, 0);
     vector<pair<int, int>>::iterator it;
     queue<int> q1, q2;
-
-    for (int i = 0; i < V; i++)
-        resolved[i] = 0;
 
     for (int i = 0; i < V; i++)
     {
@@ -117,7 +115,7 @@ vector<pair<int,int>> MarschallTwoLayers::algoritmo_3(SequenceGraph sequenceGrap
     return currentLayer;
 }
 
-vector<pair<int,int>> MarschallTwoLayers::algoritmo_2(SequenceGraph sequenceGraph, string sequence, int layer, vector<pair<int,int>> PreviousLayer, vector<pair<int,int>> CurrentLayer, unordered_map<int, int> CurrentLayerBkp)
+vector<pair<int,int>> MarschallTwoLayers::algoritmo_2(SequenceGraph &sequenceGraph, string sequence, int layer, vector<pair<int,int>> PreviousLayer, vector<pair<int,int>> CurrentLayer, unordered_map<int, int> CurrentLayerBkp)
 {
     int V = sequenceGraph.getV(), cost;
     vector<pair<int, int>>::iterator it;
@@ -154,7 +152,7 @@ vector<pair<int,int>> MarschallTwoLayers::algoritmo_2(SequenceGraph sequenceGrap
     return CurrentLayer;
 }
 
-int MarschallTwoLayers::toCalculateTheCost(SequenceGraph sequenceGraph, string sequence)
+int MarschallTwoLayers::toCalculateTheCost(SequenceGraph &sequenceGraph, string sequence)
 {
     int V = sequenceGraph.getV(), m = sequence.length();
     vector<pair<int,int>> PreviousLayer, CurrentLayer; // node and cost

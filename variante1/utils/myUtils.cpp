@@ -99,7 +99,7 @@ void MyUtils::readSequence(string archiveName)
         getline(myArchive, line);     
         getline(myArchive, line);     
 		myArchive.close();
-        cout << "Size L.Read " << line.size() << endl;
+        cout << "Comprimento da sequência: " << line.size() << endl;
 
         this->sequence = line;
     }    
