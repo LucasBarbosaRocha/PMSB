@@ -1,0 +1,17 @@
+ferramenta: oc_bmt_h1_b
+data: 20260912_171544
+grafo: grafo.fasta
+sequencia: grafo.fasta
+k=3 t=0 p=0
+comando: /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt_only_cost/bin/bmt_h1_b -s /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt_only_cost/uploads/20260912_171544_grafo.fasta -g /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt_only_cost/uploads/20260912_171544_grafo.fasta -k 3 -t 0 -p 0
+
+--- stdout ---
+Qtd G.Kmers 7
+Size L.Read 12
+Qtd. Anchros 10
+0
+
+Size L.Read 12
+Qtd. Anchros 10
+3
+

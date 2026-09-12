@@ -17,7 +17,7 @@ int returnLengthGap(int k, int gap)
     return k;
 }
 
-pair<int, int> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost h, string sequence, int k)
+pair<int, int> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost &h, string sequence, int k)
 {
     int length, aux, caminho_encontrado = 1;
     list<string> kmer_lista_aux;
@@ -58,7 +58,7 @@ pair<int, int> headMapping(my_Bifrost dbg_gap, int firstPosition, my_Bifrost h, 
     return make_pair(caminho_encontrado, cost);
 }
 
-pair<int, int> internalMapping(my_Bifrost dbg_gap, vector<int> positions, my_Bifrost h, string sequence, int k)
+pair<int, int> internalMapping(my_Bifrost dbg_gap, vector<int> positions, my_Bifrost &h, string sequence, int k)
 {
     int caminho_encontrado = 0, length, aux, posicao = positions[0];
     string resposta = "", kmer_cabeca = "", kmer_cauda = "", sequence_aux = "";
@@ -89,8 +89,7 @@ pair<int, int> internalMapping(my_Bifrost dbg_gap, vector<int> positions, my_Bif
 
             if (cost == INT_MAX)
             {
-                i = positions.size() + 1;
-                caminho_encontrado = positions[i + 1];
+                caminho_encontrado = positions[i];
                 break;
             } else
             {
@@ -106,7 +105,7 @@ pair<int, int> internalMapping(my_Bifrost dbg_gap, vector<int> positions, my_Bif
     return make_pair(caminho_encontrado, cost_aux);
 }
 
-pair<int, int> tailMapping(my_Bifrost dbg_gap, int lastPosition, my_Bifrost h, string sequence, int k)
+pair<int, int> tailMapping(my_Bifrost dbg_gap, int lastPosition, my_Bifrost &h, string sequence, int k)
 {
     int length = (sequence.length() - lastPosition) * x, aux = 0, caminho_encontrado = 0, dif;
     int cost = 0;
@@ -136,7 +135,7 @@ pair<int, int> tailMapping(my_Bifrost dbg_gap, int lastPosition, my_Bifrost h, s
     return make_pair(caminho_encontrado, cost);
 }
 
-int mapeamento(my_Bifrost h, string sequence, int k)
+int mapeamento(my_Bifrost &h, string sequence, int k)
 {
     int posicao = 0, length, aux, caminho_encontrado = 1;
     string resposta = "";
@@ -150,16 +149,16 @@ int mapeamento(my_Bifrost h, string sequence, int k)
     posicoesValidas = h.findAnchors(sequence);
 
 
-    cout << "Qtd. Anchros " << posicoesValidas.size() << endl;
+    cout << "Quantidade de Âncoras: " << posicoesValidas.size() << endl;
 
     if (posicoesValidas.size() > 0)
     {
         status = headMapping(dbg_gap, posicoesValidas[0], h, sequence, k);
-        
-        if (status.second >= INT_MAX)
-        {   
+
+        if (status.second == INT_MAX)
+        {
             int extra_cost = sequence.length() - posicoesValidas[0];
-            return status.second + extra_cost;
+            return extra_cost;
         }
 
         // cout << "Head path " << status.first << endl;
@@ -168,10 +167,10 @@ int mapeamento(my_Bifrost h, string sequence, int k)
 
         status = internalMapping(dbg_gap, posicoesValidas, h, sequence, k);
 
-        if (status.second >= INT_MAX)
+        if (status.second == INT_MAX)
         {
             int extra_cost = sequence.length() - status.first;
-            return cost_aux + status.second + extra_cost;
+            return cost_aux + extra_cost;
         }
 
         // cout << "Internal path " << status.first << endl;
@@ -180,10 +179,10 @@ int mapeamento(my_Bifrost h, string sequence, int k)
 
         status = tailMapping(dbg_gap, posicoesValidas[posicoesValidas.size() - 1], h, sequence, k);
 
-        if (status.second >= INT_MAX)
+        if (status.second == INT_MAX)
         {
             int extra_cost = sequence.length() - posicoesValidas[posicoesValidas.size() - 1];
-            return cost_aux + status.second + extra_cost;
+            return cost_aux + extra_cost;
         }
         cost_aux += status.second;
        
@@ -200,17 +199,17 @@ int main(int argc, char *argv[])
         
     ifstream file(utils.nameSequenceArchive);
     my_Bifrost bf(utils.k, utils.nameArchive);  
-    cout << "Qtd G.Kmers " << bf.size() << endl;
+    cout << "Kmers no grafo: " << bf.size() << endl;
 
     while(getline(file, line))
     {
-        //utils.readSequence(utils.nameSequenceArchive);  
+        //utils.readSequence(utils.nameSequenceArchive);
         getline(file, line);
-        cout << "Size L.Read " << line.size() << endl;
+        cout << "Comprimento: " << line.size() << endl;
         utils.sequence = line;
         // mapeamento
-        auto retorno = mapeamento(bf, utils.sequence, utils.k); 
-        cout << retorno << endl << endl;
+        auto retorno = mapeamento(bf, utils.sequence, utils.k);
+        cout << "Custo: " << retorno << endl << endl;
     }     
     return 0;
 }

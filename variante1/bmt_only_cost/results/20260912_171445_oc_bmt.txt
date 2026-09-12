@@ -1,0 +1,12 @@
+ferramenta: oc_bmt
+data: 20260912_171445
+grafo: grafo.fasta
+sequencia: grafo.fasta
+k=3 t=0 p=0
+comando: /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt_only_cost/bin/bmt -s /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt_only_cost/uploads/20260912_171445_grafo.fasta -g /home/baarbosa/Documents/Pessoal/Projetos/PMSB/variante1/bmt_only_cost/uploads/20260912_171445_grafo.fasta -k 3 -t 0 -p 0
+
+--- stdout ---
+Size L.Read 12
+Cost: 0
+Size L.Read 12
+Cost: 0

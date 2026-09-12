@@ -30,14 +30,14 @@ int main(int argc, char *argv[])
     {
         //utils.readSequence(utils.nameSequenceArchive);  
         getline(file, line);
-        cout << "Size L.Read " << line.size() << endl;
+        cout << "Comprimento: " << line.size() << endl;
         utils.sequence = line;
         // mapeamento
         int cost = m.toCalculateTheCost(h.sequenceGraph, utils.sequence);
         if (cost != INT_MAX)
-            cout << "Cost: " << cost << endl; 
+            cout << "Custo: " << cost << endl;
         else {
-            cout << "Sem mapeamento\nCost: " << cost << endl;
+            cout << "Sem mapeamento\nCusto: " << cost << endl;
         }
     }
 
